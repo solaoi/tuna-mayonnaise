@@ -1,0 +1,6 @@
+// ui
+node_modules
+build
+
+// common
+.DS_Store
