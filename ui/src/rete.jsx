@@ -25,8 +25,9 @@ import PugComponent from "./rete/components/template/PugComponent";
 import IfComponent from "./rete/components/statement/IfComponent";
 import BooleanComponent from "./rete/components/BooleanComponent";
 import EndpointComponent from "./rete/components/EndpointComponent";
-
-// import { saveAs } from "file-saver";
+import PathComponent from "./rete/components/PathComponent";
+import axios from "axios";
+import { saveAs } from "file-saver";
 
 export async function createEditor(container) {
   // 各種Socket定義
@@ -51,6 +52,7 @@ export async function createEditor(container) {
   // html
   const htmlSocket = new Rete.Socket("HTML value");
   htmlSocket.combineWith(stringSocket);
+  const pathSocket = new Rete.Socket("Path value");
 
   // 利用可能なコンポーネント一覧
   const components = [
@@ -65,7 +67,8 @@ export async function createEditor(container) {
     new PugComponent(pugSocket),
     new IfComponent(booleanSocket, stringSocket),
     new BooleanComponent(booleanSocket),
-    new EndpointComponent(booleanSocket, stringSocket),
+    new EndpointComponent(booleanSocket, stringSocket, pathSocket),
+    new PathComponent(pathSocket)
   ];
 
   const editor = new Rete.NodeEditor("demo@0.1.0", container);
@@ -101,10 +104,17 @@ export async function createEditor(container) {
         editor.trigger("redo");
       },
       Save() {
-        // var blob = new Blob(["Hello, world!"], {
-        //   type: "text/plain;charset=utf-8",
-        // });
-        // saveAs(blob, "hello world.txt");
+        axios.post("/regist", editor.toJSON()).then(function (response) {
+          console.log(response.data);
+        });
+      },
+      Download() {
+        var blob = new Blob([JSON.stringify(editor.toJSON())], {
+          type: "application/json;charset=utf-8",
+        });
+        saveAs(blob, "tuna-mayonnaise.json");
+      },
+      Debug() {
         console.log(JSON.stringify(editor.toJSON()));
       },
     },
@@ -130,7 +140,7 @@ export async function createEditor(container) {
   });
   // コネクションパスの見た目を変更（直線ではなく曲線で各Node間を結ぶ）
   editor.use(ConnectionReroutePlugin);
-  editor.use(AutoArrangePlugin, { margin: { x: 200, y: 200 }, depth: 0 });
+  editor.use(AutoArrangePlugin, { margin: { x: 200, y: 100 }, depth: 0 });
   // Crtl + z, Ctrl + yで戻る、進む
   editor.use(HistoryPlugin, { keyboard: true });
   // デフォルトではMac標準（Command + z, Command + Shift + z）に対応していないので別途実装

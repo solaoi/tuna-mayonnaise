@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "src/index.js",
   "dependencies": {
+    "axios": "^0.21.1",
     "ejs": "^3.1.5",
     "file-saver": "^2.0.5",
     "handlebars": "^4.7.6",
@@ -34,7 +35,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:binary": "npm run build && rm -rf ../command/cmd/static/* && mv build/* ../command/cmd/static/ && touch ../command/cmd/static/.gitkeep && cd ../command/ && go build -o ../tm && cd ../ui/"
   },
   "browserslist": [
     ">0.2%",

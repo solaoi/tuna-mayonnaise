@@ -2,5 +2,14 @@
 node_modules
 build
 
+// command
+go.sum
+command/cmd/static/*
+tm
+tuna-mayonnaise
+tuna-mayonnaise.json
+
 // common
 .DS_Store
+.eslintcache
+!.gitkeep

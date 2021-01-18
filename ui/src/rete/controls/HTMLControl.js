@@ -4,7 +4,7 @@ class HTMLControl extends Rete.Control {
   static component = ({ value, onChange }) => (
     <textarea
       value={value}
-      rows={5}
+      rows={10}
       ref={(ref) => {
         ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
       }}
@@ -12,28 +12,28 @@ class HTMLControl extends Rete.Control {
     />
   );
 
-  constructor(emitter, key, node, readonly = false) {
-    super(key);
+  constructor(emitter, controlName, node, readonly = false) {
+    super(controlName);
+
     this.emitter = emitter;
-    this.key = key;
+    this.keys = [];
     this.component = HTMLControl.component;
-
-    const initial = node.data[key] || "<p>出力結果HTML</p>";
-
-    node.data[key] = initial;
     this.props = {
       readonly,
-      value: initial,
-      onChange: (v) => {
-        this.setValue(v);
-        this.emitter.trigger("process");
-      },
+      value: "",
+      onChange: () => {},
     };
   }
 
-  setValue(val) {
-    this.props.value = val;
-    this.putData(this.key, val);
+  setValue(inputs, controlName, controlValue, controlType) {
+    this.props.value = controlValue;
+    this.putData(controlName, controlValue);
+    this.putData("contentType", controlType);
+    for (const key in inputs) {
+      if (inputs[key][0]) {
+        this.putData(key, inputs[key][0]);
+      }
+    }
     this.update();
   }
 }
