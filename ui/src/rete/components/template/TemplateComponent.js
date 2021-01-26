@@ -16,13 +16,13 @@ class TemplateComponent extends Rete.Component {
   }
 
   builder(node) {
-    var templateEngineInput = new Rete.Input(
+    const templateEngineInput = new Rete.Input(
       "template",
       "TemplateEngine",
       this.templateSocket
     );
-    var jsonInput = new Rete.Input("json", "Data (JSON)", this.dataSocket);
-    var out = new Rete.Output("html", "HTML", this.htmlSocket);
+    const jsonInput = new Rete.Input("json", "Data (JSON)", this.dataSocket);
+    const out = new Rete.Output("html", "HTML", this.htmlSocket);
 
     jsonInput.addControl(new JsonControl(this.editor, "json", node));
 

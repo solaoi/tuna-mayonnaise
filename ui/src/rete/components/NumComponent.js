@@ -9,7 +9,7 @@ class NumComponent extends Rete.Component {
   }
 
   builder(node) {
-    var out1 = new Rete.Output("num", "Number", this.socket);
+    const out1 = new Rete.Output("num", "Number", this.socket);
 
     return node
       .addControl(new NumControl(this.editor, "num", node))

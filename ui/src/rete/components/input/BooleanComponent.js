@@ -9,7 +9,7 @@ class BooleanComponent extends Rete.Component {
   }
 
   builder(node) {
-    var out1 = new Rete.Output("boolean", "Boolean", this.socket);
+    const out1 = new Rete.Output("boolean", "Boolean", this.socket);
 
     return node
       .addControl(new BooleanControl(this.editor, "boolean", node))

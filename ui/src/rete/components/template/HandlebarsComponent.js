@@ -9,7 +9,7 @@ class HandlebarsComponent extends Rete.Component {
   }
 
   builder(node) {
-    var out = new Rete.Output("hbs", "Handlebars", this.socket);
+    const out = new Rete.Output("hbs", "Handlebars", this.socket);
 
     return node
       .addControl(new HandlebarsControl(this.editor, "hbs", node))

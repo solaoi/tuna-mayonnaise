@@ -9,7 +9,7 @@ class JsonComponent extends Rete.Component {
   }
 
   builder(node) {
-    var out = new Rete.Output("json", "JSON", this.socket);
+    const out = new Rete.Output("json", "JSON", this.socket);
 
     return node
       .addControl(new JsonControl(this.editor, "json", node))

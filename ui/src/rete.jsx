@@ -107,7 +107,7 @@ export async function createEditor(container) {
           .catch(() => toast.error("Maybe tuna tool command is TERMINATED :("));
       },
       Download() {
-        var blob = new Blob([JSON.stringify(editor.toJSON())], {
+        const blob = new Blob([JSON.stringify(editor.toJSON())], {
           type: "application/json;charset=utf-8",
         });
         saveAs(blob, "tuna-mayonnaise.json");

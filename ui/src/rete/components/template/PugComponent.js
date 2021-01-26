@@ -9,7 +9,7 @@ class PugComponent extends Rete.Component {
   }
 
   builder(node) {
-    var out = new Rete.Output("pug", "Pug", this.socket);
+    const out = new Rete.Output("pug", "Pug", this.socket);
 
     return node
       .addControl(new PugControl(this.editor, "pug", node))

@@ -12,9 +12,9 @@ class ApiComponent extends Rete.Component {
   }
 
   builder(node) {
-    var urlInput = new Rete.Input("url", "URL", this.urlSocket);
-    var jsonInput = new Rete.Input("json", "Dummy Output (JSON)", this.jsonSocket);
-    var out = new Rete.Output("json", "JSON", this.jsonSocket);
+    const urlInput = new Rete.Input("url", "URL", this.urlSocket);
+    const jsonInput = new Rete.Input("json", "Dummy Output (JSON)", this.jsonSocket);
+    const out = new Rete.Output("json", "JSON", this.jsonSocket);
 
     return node
       .addInput(urlInput)
@@ -24,7 +24,7 @@ class ApiComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    var json = inputs["json"].length ? inputs["json"][0] : node.data.json;
+    const json = inputs["json"].length ? inputs["json"][0] : node.data.json;
 
     this.editor.nodes
       .find((n) => n.id == node.id)

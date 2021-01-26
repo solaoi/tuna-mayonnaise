@@ -9,7 +9,7 @@ class PathComponent extends Rete.Component {
   }
 
   builder(node) {
-    var out1 = new Rete.Output("path", "Path", this.socket);
+    const out1 = new Rete.Output("path", "Path", this.socket);
 
     return node
       .addControl(new TextControl(this.editor, "path", node))

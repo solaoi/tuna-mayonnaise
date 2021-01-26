@@ -14,17 +14,17 @@ class EndpointComponent extends Rete.Component {
   }
 
   builder(node) {
-    var enabledInput = new Rete.Input(
+    const enabledInput = new Rete.Input(
       "enabledFlag",
       "Enabled (Boolean)",
       this.booleanSocket
     );
-    var contentInput = new Rete.Input(
+    const contentInput = new Rete.Input(
       "content",
       "Content (JSON/HTML)",
       this.stringSocket
     );
-    var pathInput = new Rete.Input("path", "Path", this.pathSocket);
+    const pathInput = new Rete.Input("path", "Path", this.pathSocket);
 
     enabledInput.addControl(
       new BooleanControl(this.editor, "enabledFlag", node)
@@ -40,8 +40,8 @@ class EndpointComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    var content = inputs["content"].length ? inputs["content"][0] : "Rendering...";
-    var contentType = ((connection)=>{
+    const content = inputs["content"].length ? inputs["content"][0] : "Rendering...";
+    const contentType = ((connection)=>{
       if(connection){
         if (connection.output === "html"){
           return "text/html; charset=utf-8";
@@ -52,7 +52,7 @@ class EndpointComponent extends Rete.Component {
         }
       }
     })(node.inputs.content.connections[0]);
-    var enabledFlag = inputs["enabledFlag"].length ? inputs["enabledFlag"][0] : false;
+    const enabledFlag = inputs["enabledFlag"].length ? inputs["enabledFlag"][0] : false;
 
     this.editor.nodes
       .find((n) => n.id == node.id)
