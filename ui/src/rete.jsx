@@ -3,7 +3,6 @@ import Rete from "rete";
 import ReactRenderPlugin from "rete-react-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 import AreaPlugin from "rete-area-plugin";
-// import DockPlugin from "rete-dock-plugin";
 import ContextMenuPlugin from "rete-context-menu-plugin";
 import KeyboardPlugin from "rete-keyboard-plugin";
 import CommentPlugin from "rete-comment-plugin";
@@ -12,20 +11,22 @@ import ConnectionPathPlugin from "rete-connection-path-plugin";
 import ConnectionReroutePlugin from "rete-connection-reroute-plugin";
 import AutoArrangePlugin from "rete-auto-arrange-plugin";
 import HistoryPlugin from "rete-history-plugin";
+import { toast } from "react-toastify";
 
-import AddComponent from "./rete/components/operator/AddComponent";
-import SubtractComponent from "./rete/components/operator/SubtractComponent";
-import NumComponent from "./rete/components/NumComponent";
-import TextComponent from "./rete/components/TextComponent";
-import JsonComponent from "./rete/components/JsonComponent";
+// import AddComponent from "./rete/components/operator/AddComponent";
+// import SubtractComponent from "./rete/components/operator/SubtractComponent";
+// import NumComponent from "./rete/components/NumComponent";
+import TextComponent from "./rete/components/input/TextComponent";
+import JsonComponent from "./rete/components/input/JsonComponent";
 import TemplateComponent from "./rete/components/template/TemplateComponent";
-import EJSComponent from "./rete/components/template/EJSComponent";
 import HandlebarsComponent from "./rete/components/template/HandlebarsComponent";
 import PugComponent from "./rete/components/template/PugComponent";
-import IfComponent from "./rete/components/statement/IfComponent";
-import BooleanComponent from "./rete/components/BooleanComponent";
+// import IfComponent from "./rete/components/statement/IfComponent";
+import BooleanComponent from "./rete/components/input/BooleanComponent";
 import EndpointComponent from "./rete/components/EndpointComponent";
-import PathComponent from "./rete/components/PathComponent";
+import PathComponent from "./rete/components/input/PathComponent";
+import ApiComponent from "./rete/components/ApiComponent";
+import UrlComponent from "./rete/components/input/UrlComponent";
 import axios from "axios";
 import { saveAs } from "file-saver";
 
@@ -35,16 +36,15 @@ export async function createEditor(container) {
   const stringSocket = new Rete.Socket("String value");
   const booleanSocket = new Rete.Socket("Boolean value");
 
-  const numSocket = new Rete.Socket("Number value");
+  // const numSocket = new Rete.Socket("Number value");
   const textSocket = new Rete.Socket("Text value");
+  textSocket.combineWith(stringSocket);
   // json
   const jsonSocket = new Rete.Socket("Json value");
   jsonSocket.combineWith(stringSocket);
   // template
   const templateSocket = new Rete.Socket("Template value");
   templateSocket.combineWith(stringSocket);
-  const ejsSocket = new Rete.Socket("EJS value");
-  ejsSocket.combineWith(templateSocket);
   const handlebarsSocket = new Rete.Socket("Handlebars value");
   handlebarsSocket.combineWith(templateSocket);
   const pugSocket = new Rete.Socket("Pug value");
@@ -53,33 +53,30 @@ export async function createEditor(container) {
   const htmlSocket = new Rete.Socket("HTML value");
   htmlSocket.combineWith(stringSocket);
   const pathSocket = new Rete.Socket("Path value");
+  // api
+  const urlSocket = new Rete.Socket("URL value");
 
   // 利用可能なコンポーネント一覧
   const components = [
-    new NumComponent(numSocket),
-    new AddComponent(numSocket),
-    new SubtractComponent(numSocket),
+    new EndpointComponent(booleanSocket, stringSocket, pathSocket),
+    // new NumComponent(numSocket),
+    // new AddComponent(numSocket),
+    // new SubtractComponent(numSocket),
     new TextComponent(textSocket),
     new JsonComponent(jsonSocket),
     new TemplateComponent(jsonSocket, templateSocket, htmlSocket),
-    new EJSComponent(ejsSocket),
     new HandlebarsComponent(handlebarsSocket),
     new PugComponent(pugSocket),
-    new IfComponent(booleanSocket, stringSocket),
+    // new IfComponent(booleanSocket, stringSocket),
     new BooleanComponent(booleanSocket),
-    new EndpointComponent(booleanSocket, stringSocket, pathSocket),
-    new PathComponent(pathSocket)
+    new PathComponent(pathSocket),
+    new ApiComponent(urlSocket, jsonSocket),
+    new UrlComponent(urlSocket),
   ];
 
-  const editor = new Rete.NodeEditor("demo@0.1.0", container);
+  const editor = new Rete.NodeEditor("tuna-mayonnaise@0.0.1", container);
   editor.use(ConnectionPlugin);
   editor.use(ReactRenderPlugin);
-  // ドラッグ・アンド・ドロップ可能なコンポーネントの一覧を.dockクラスに表示
-  //   editor.use(DockPlugin, {
-  //     container: document.querySelector(".dock"),
-  //     itemClass: "dock-item", // default: dock-item
-  //     plugins: [ReactRenderPlugin], // render plugins
-  //   });
   // Nodeのサブメニュー（削除・複製機能）を追加
   // 及びNode外を右クリックでコンテキストメニューを表示
   editor.use(ContextMenuPlugin, {
@@ -104,9 +101,10 @@ export async function createEditor(container) {
         editor.trigger("redo");
       },
       Save() {
-        axios.post("/regist", editor.toJSON()).then(function (response) {
-          console.log(response.data);
-        });
+        axios
+          .post("/regist", editor.toJSON())
+          .then(() => toast.success("This configuration is SAVED :)"))
+          .catch(() => toast.error("Maybe tuna tool command is TERMINATED :("));
       },
       Download() {
         var blob = new Blob([JSON.stringify(editor.toJSON())], {
@@ -140,7 +138,7 @@ export async function createEditor(container) {
   });
   // コネクションパスの見た目を変更（直線ではなく曲線で各Node間を結ぶ）
   editor.use(ConnectionReroutePlugin);
-  editor.use(AutoArrangePlugin, { margin: { x: 200, y: 100 }, depth: 0 });
+  editor.use(AutoArrangePlugin, { margin: { x: 200, y: 50 }, depth: 0 });
   // Crtl + z, Ctrl + yで戻る、進む
   editor.use(HistoryPlugin, { keyboard: true });
   // デフォルトではMac標準（Command + z, Command + Shift + z）に対応していないので別途実装
@@ -163,37 +161,26 @@ export async function createEditor(container) {
     });
   }
 
-  const engine = new Rete.Engine("demo@0.1.0");
+  const engine = new Rete.Engine("tuna-mayonnaise@0.0.1");
 
   components.map((c) => {
     editor.register(c);
     engine.register(c);
   });
 
-  // 初期表示設定
-  // const n1 = await components[0].createNode({ num: 2 });
-  // const n2 = await components[0].createNode({ num: 3 });
-  // const add = await components[1].createNode();
-  // const subtract = await components[2].createNode();
-  const endpoint = await components[11].createNode();
+  const data = await axios
+    .get("/tuna-mayonnaise")
+    .then((res) => res.data)
+    .catch(() => null);
 
-  // n1.position = [80, 200];
-  // n2.position = [80, 400];
-  // add.position = [500, 240];
-  // subtract.position = [500, 480];
-  endpoint.position = [1000, 200];
-
-  // editor.addNode(n1);
-  // editor.addNode(n2);
-  // editor.addNode(add);
-  // editor.addNode(subtract);
-  editor.addNode(endpoint);
-
-  // editor.connect(n1.outputs.get("num"), add.inputs.get("num1"));
-  // editor.connect(n2.outputs.get("num"), add.inputs.get("num2"));
-
-  // editor.connect(n2.outputs.get("num"), subtract.inputs.get("num2"));
-  // editor.connect(n2.outputs.get("num"), subtract.inputs.get("num2"));
+  if (data !== null) {
+    await editor.fromJSON(data);
+    toast.success("Previous configuration is RESTORED :)")
+  } else {
+    const endpoint = await components[0].createNode();
+    endpoint.position = [1000, 200];
+    editor.addNode(endpoint);
+  }
 
   editor.on(
     "process nodecreated noderemoved connectioncreated connectionremoved",

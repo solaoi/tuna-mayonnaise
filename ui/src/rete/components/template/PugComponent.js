@@ -2,7 +2,7 @@ import Rete from "rete";
 import PugControl from "../../controls/template/PugControl";
 
 class PugComponent extends Rete.Component {
-  path = ["+ Template"];
+  path = ["[ Template ]"];
   constructor(socket) {
     super("Pug");
     this.socket = socket;
@@ -10,9 +10,10 @@ class PugComponent extends Rete.Component {
 
   builder(node) {
     var out = new Rete.Output("pug", "Pug", this.socket);
-    var ctrl = new PugControl(this.editor, "pug", node);
 
-    return node.addControl(ctrl).addOutput(out);
+    return node
+      .addControl(new PugControl(this.editor, "pug", node))
+      .addOutput(out);
   }
 
   worker(node, inputs, outputs) {

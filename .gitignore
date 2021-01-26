@@ -5,8 +5,7 @@ build
 // command
 go.sum
 command/cmd/static/*
-tm
-tuna-mayonnaise
+tuna
 tuna-mayonnaise.json
 
 // common

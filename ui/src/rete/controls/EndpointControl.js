@@ -1,6 +1,6 @@
 import Rete from "rete";
 
-class HTMLControl extends Rete.Control {
+class EndpointControl extends Rete.Control {
   static component = ({ value, onChange }) => (
     <textarea
       value={value}
@@ -17,7 +17,7 @@ class HTMLControl extends Rete.Control {
 
     this.emitter = emitter;
     this.keys = [];
-    this.component = HTMLControl.component;
+    this.component = EndpointControl.component;
     this.props = {
       readonly,
       value: "",
@@ -26,8 +26,9 @@ class HTMLControl extends Rete.Control {
     node.data["output"] = "";
   }
 
-  setValue(inputs, outputValue, contentType) {
+  setValue(inputs, outputValue, contentType, enabledFlag) {
     this.props.value = outputValue;
+    this.putData("enabledFlag", enabledFlag);
     this.putData("output", outputValue);
     this.putData("contentType", contentType);
     for (const key in inputs) {
@@ -39,4 +40,4 @@ class HTMLControl extends Rete.Control {
   }
 }
 
-export default HTMLControl;
+export default EndpointControl;

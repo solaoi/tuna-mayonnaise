@@ -1,6 +1,6 @@
 import Rete from "rete";
 import { EndpointNode } from "../nodes/EndpointNode";
-import HTMLControl from "../controls/HTMLControl";
+import EndpointControl from "../controls/EndpointControl";
 import BooleanControl from "../controls/BooleanControl";
 import TextControl from "../controls/TextControl";
 
@@ -16,12 +16,12 @@ class EndpointComponent extends Rete.Component {
   builder(node) {
     var enabledInput = new Rete.Input(
       "enabledFlag",
-      "Enabled",
+      "Enabled (Boolean)",
       this.booleanSocket
     );
     var contentInput = new Rete.Input(
       "content",
-      "Content (JSON, HTML)",
+      "Content (JSON/HTML)",
       this.stringSocket
     );
     var pathInput = new Rete.Input("path", "Path", this.pathSocket);
@@ -36,7 +36,7 @@ class EndpointComponent extends Rete.Component {
       .addInput(enabledInput)
       .addInput(contentInput)
       .addInput(pathInput)
-      .addControl(new HTMLControl(this.editor, "endpoint", node, true));
+      .addControl(new EndpointControl(this.editor, "endpoint", node, true));
   }
 
   worker(node, inputs, outputs) {
@@ -52,11 +52,12 @@ class EndpointComponent extends Rete.Component {
         }
       }
     })(node.inputs.content.connections[0]);
+    var enabledFlag = inputs["enabledFlag"].length ? inputs["enabledFlag"][0] : false;
 
     this.editor.nodes
       .find((n) => n.id == node.id)
       .controls.get("endpoint")
-      .setValue(inputs, "endpoint", content, contentType);
+      .setValue(inputs, content, contentType, enabledFlag);
   }
 }
 

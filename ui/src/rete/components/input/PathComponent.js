@@ -1,8 +1,8 @@
 import Rete from "rete";
-import TextControl from "../controls/TextControl";
+import TextControl from "../../controls/TextControl";
 
 class PathComponent extends Rete.Component {
-  path = ["+ Input"];
+  path = ["[ Input ]"];
   constructor(socket) {
     super("Path");
     this.socket = socket;
@@ -10,9 +10,10 @@ class PathComponent extends Rete.Component {
 
   builder(node) {
     var out1 = new Rete.Output("path", "Path", this.socket);
-    var ctrl = new TextControl(this.editor, "path", node);
 
-    return node.addControl(ctrl).addOutput(out1);
+    return node
+      .addControl(new TextControl(this.editor, "path", node))
+      .addOutput(out1);
   }
 
   worker(node, inputs, outputs) {

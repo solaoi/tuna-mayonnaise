@@ -4,7 +4,7 @@ import TextControl from "../../controls/TextControl";
 import { MyNode } from "../../nodes/MyNode";
 
 class IfComponent extends Rete.Component {
-  path = ["+ Statement"];
+  path = ["[ Statement ]"];
   constructor(booleanSocket, stringSocket) {
     super("If");
     this.data.component = MyNode; // optional

@@ -21,6 +21,7 @@ class NumControl extends Rete.Control {
     const initial = node.data[key] || 0;
 
     node.data[key] = initial;
+    node.data["output"] = initial;
     this.props = {
       readonly,
       value: initial,
@@ -34,6 +35,7 @@ class NumControl extends Rete.Control {
   setValue(val) {
     this.props.value = val;
     this.putData(this.key, val);
+    this.putData("output", val);
     this.update();
   }
 }

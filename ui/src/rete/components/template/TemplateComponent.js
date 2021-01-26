@@ -2,12 +2,11 @@ import Rete from "rete";
 import { TemplateNode } from "../../nodes/TemplateNode";
 import JsonControl from "../../controls/JsonControl";
 import HTMLControl from "../../controls/HTMLControl";
-import * as ejs from "ejs";
 import * as pug from "pug";
 import Handlebars from "handlebars";
 
 class TemplateComponent extends Rete.Component {
-  path = ["+ Template"];
+  path = ["[ Template ]"];
   constructor(dataSocket, templateSocket, htmlSocket) {
     super("Template");
     this.data.component = TemplateNode; // optional
@@ -22,8 +21,8 @@ class TemplateComponent extends Rete.Component {
       "TemplateEngine",
       this.templateSocket
     );
-    var jsonInput = new Rete.Input("json", "Data (JSON Format)", this.dataSocket);
-    var out = new Rete.Output("html", "Html", this.htmlSocket);
+    var jsonInput = new Rete.Input("json", "Data (JSON)", this.dataSocket);
+    var out = new Rete.Output("html", "HTML", this.htmlSocket);
 
     jsonInput.addControl(new JsonControl(this.editor, "json", node));
 
@@ -39,7 +38,6 @@ class TemplateComponent extends Rete.Component {
     const connections = node.inputs.template.connections.filter(
       (conn) =>
         conn?.output === "hbs" ||
-        conn?.output === "ejs" ||
         conn?.output === "pug"
     );
     const html = (() => {
@@ -50,9 +48,6 @@ class TemplateComponent extends Rete.Component {
       const template = inputs["template"]?.length
         ? inputs["template"][0]
         : node.data.json;
-      if (templateEngine === "ejs") {
-        return ejs.render(template, JSON.parse(json));
-      }
       if (templateEngine === "pug") {
         return pug.render(template, JSON.parse(json));
       }
@@ -65,7 +60,7 @@ class TemplateComponent extends Rete.Component {
     this.editor.nodes
       .find((n) => n.id == node.id)
       .controls.get("template")
-      .setValue(inputs, "template", html, "text/html; charset=utf-8");
+      .setValue(inputs, html, "text/html; charset=utf-8");
     outputs["html"] = html;
   }
 }

@@ -1,8 +1,8 @@
 import Rete from "rete";
-import BooleanControl from "../controls/BooleanControl";
+import BooleanControl from "../../controls/BooleanControl";
 
 class BooleanComponent extends Rete.Component {
-  path = ["+ Input"];
+  path = ["[ Input ]"];
   constructor(socket) {
     super("Boolean");
     this.socket = socket;
@@ -10,9 +10,10 @@ class BooleanComponent extends Rete.Component {
 
   builder(node) {
     var out1 = new Rete.Output("boolean", "Boolean", this.socket);
-    var ctrl = new BooleanControl(this.editor, "boolean", node);
 
-    return node.addControl(ctrl).addOutput(out1);
+    return node
+      .addControl(new BooleanControl(this.editor, "boolean", node))
+      .addOutput(out1);
   }
 
   worker(node, inputs, outputs) {

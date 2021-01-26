@@ -2,7 +2,7 @@ import Rete from "rete";
 import HandlebarsControl from "../../controls/template/HandlebarsControl";
 
 class HandlebarsComponent extends Rete.Component {
-  path = ["+ Template"];
+  path = ["[ Template ]"];
   constructor(socket) {
     super("Handlebars");
     this.socket = socket;
@@ -10,9 +10,10 @@ class HandlebarsComponent extends Rete.Component {
 
   builder(node) {
     var out = new Rete.Output("hbs", "Handlebars", this.socket);
-    var ctrl = new HandlebarsControl(this.editor, "hbs", node);
 
-    return node.addControl(ctrl).addOutput(out);
+    return node
+      .addControl(new HandlebarsControl(this.editor, "hbs", node))
+      .addOutput(out);
   }
 
   worker(node, inputs, outputs) {

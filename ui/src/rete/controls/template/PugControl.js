@@ -22,6 +22,7 @@ class PugControl extends Rete.Control {
       node.data[key] || "div #{name}";
 
     node.data[key] = initial;
+    node.data["output"] = initial;
     this.props = {
       readonly,
       value: initial,
@@ -35,6 +36,7 @@ class PugControl extends Rete.Control {
   setValue(val) {
     this.props.value = val;
     this.putData(this.key, val);
+    this.putData("output", val);
     this.update();
   }
 }

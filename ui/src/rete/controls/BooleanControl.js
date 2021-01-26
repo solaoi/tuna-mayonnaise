@@ -21,19 +21,21 @@ class BooleanControl extends Rete.Control {
     const initial = node.data[key] || false;
 
     node.data[key] = initial;
+    node.data["output"] = initial;
     this.props = {
       readonly,
-      value: initial,
+      checked: initial,
       onChange: (v) => {
-        this.setValue(v);
+        this.setValue(!!v);
         this.emitter.trigger("process");
       },
     };
   }
 
   setValue(val) {
-    this.props.value = val;
+    this.props.checked = val;
     this.putData(this.key, val);
+    this.putData("output", val);
     this.update();
   }
 }

@@ -1,22 +1,13 @@
 import Rete from "rete";
 
-class JsonControl extends Rete.Control {
-  static component = ({ value, onChange }) => (
-    <textarea
-      value={value}
-      rows={10}
-      ref={(ref) => {
-        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-      }}
-      onChange={(e) => onChange(String(e.target.value))}
-    />
-  );
+class ApiControl extends Rete.Control {
+  static component = () => null;
 
   constructor(emitter, key, node, readonly = false) {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = JsonControl.component;
+    this.component = ApiControl.component;
 
     const initial = node.data[key] || `{"name": "value"}`;
 
@@ -33,11 +24,10 @@ class JsonControl extends Rete.Control {
   }
 
   setValue(val) {
-    this.props.value = val;
     this.putData(this.key, val);
-    this.putData("output", val);
+    this.putData("output", null);
     this.update();
   }
 }
 
-export default JsonControl;
+export default ApiControl;

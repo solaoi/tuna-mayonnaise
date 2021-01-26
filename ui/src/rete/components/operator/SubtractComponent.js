@@ -3,7 +3,7 @@ import NumControl from "../../controls/NumControl";
 import { MyNode } from "../../nodes/MyNode";
 
 class SubtractComponent extends Rete.Component {
-  path = ["+ Operator"];
+  path = ["[ Operator ]"];
   constructor(socket) {
     super("Subtract");
     this.data.component = MyNode; // optional
