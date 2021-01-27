@@ -30,9 +30,11 @@ api command serves `http://localhost:8080/example` .
 
 ### Save your flow on Edit-Tool
 
-right-click shows you context menu.
+right-click shows you context menu, then you should choose save option!
 
-you should choose save option!
+you get configuration file(tuna-mayonnaise.json) on current dir.
+
+this file is all to manage this tool.
 
 ### Run API with Tool-Data
 
