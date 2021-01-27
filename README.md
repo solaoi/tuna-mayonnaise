@@ -10,7 +10,8 @@ This application is a tool to generate and serve JSON/HTML with flow model.
 
 ### Run Edit-Tool
 
-this commnad open browser on `http://localhost:3000`,
+this commnad opens browser on `http://localhost:3000`,
+
 then you could use edit-tool.
 
 ```
@@ -25,17 +26,18 @@ ex)
 
 if you connect Path(/example) to Endpoint,
 
-api command serve `http://localhost:8080/example` .
+api command serves `http://localhost:8080/example` .
 
 ### Save your flow on Edit-Tool
 
-right-click show you context menu.
+right-click shows you context menu.
 
 you should choose save option!
 
 ### Run API with Tool-Data
 
 this commnad serves endpoints you saved.
+
 let's access your endpoints :)
 
 ```
