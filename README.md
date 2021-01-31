@@ -6,15 +6,15 @@ This application is a tool to generate and serve JSON/HTML with flow model.
 
 [UI Sample](https://solaoi.github.io/tuna-mayonnaise)
 
-\* Sample does not support `Save` menu, but we could `Download` a configuration editted.
+\* this sample does not support `Save` menu, but we could `Download` a configuration editted.
 
 ## Get Started
 
-[Install here](https://github.com/solaoi/tuna-mayonnaise/releases/tag/v0.0.2-alpha)
+You can download binary from [release page](https://github.com/solaoi/tuna-mayonnaise/releases/tag/v0.0.2-alpha) and place it in $PATH directory.
 
 ### Run Edit-Tool
 
-this commnad opens browser on `http://localhost:3000`,
+this commnad opens a browser on `http://localhost:3000`,
 
 then you could use edit-tool.
 
@@ -24,7 +24,7 @@ tuna tool
 
 ### Connect inputs to Endpoint on Edit-Tool
 
-this endpoint is served on api command.
+this endpoint is served with api command.
 
 ex)
 
@@ -34,7 +34,7 @@ api command serves `http://localhost:8080/example` .
 
 ### Save your flow on Edit-Tool
 
-right-click shows you context menu, then you should choose save option!
+right-click shows you context menu, then you should choose Save option!
 
 you get configuration file(tuna-mayonnaise.json) on current dir.
 
