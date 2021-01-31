@@ -53,3 +53,20 @@ archives:
       dragonfly: DragonFlyBSD
 release:
   prerelease: auto
+brews:
+  -
+    name: tuna
+    tap:
+      owner: solaoi
+      name: homebrew-tuna
+    url_template: "https://github.com/solaoi/tuna-mayonnaise/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    commit_author:
+      name: goreleaserbot
+      email: mail@aota.blog
+    homepage: "https://github.com/solaoi/tuna-mayonnaise"
+    description: "Software to generate and serve JSON/HTML with flow model"
+    license: "MIT"
+    test: |
+      system "#{bin}/tuna help"
+    install: |
+      bin.install "tuna"
