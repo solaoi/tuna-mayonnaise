@@ -3,7 +3,6 @@ node_modules
 build
 
 // command
-go.sum
 command/cmd/static/*
 tuna
 tuna-mayonnaise.json
