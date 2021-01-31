@@ -169,7 +169,7 @@ export async function createEditor(container) {
   });
 
   const data = await axios
-    .get("/tuna-mayonnaise")
+    .get("/tuna-configuration")
     .then((res) => res.data)
     .catch(() => null);
 

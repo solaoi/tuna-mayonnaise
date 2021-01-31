@@ -79,7 +79,7 @@ func tool(cmd *cobra.Command, args []string) {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
-	e.File("/tuna-mayonnaise", "tuna-mayonnaise.json")
+	e.File("/tuna-configuration", "tuna-mayonnaise.json")
 	e.GET("/*", contentHandler, contentRewrite)
 	e.POST("/regist", jsonExportHandler)
 	openbrowser("http://localhost:3000")
