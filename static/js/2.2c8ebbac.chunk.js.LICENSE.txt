@@ -1,0 +1,126 @@
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+/*!
+ * Pug
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
+ */
+
+/*!
+ * Vue.js v2.6.10
+ * (c) 2014-2019 Evan You
+ * Released under the MIT License.
+ */
+
+/*!
+* rete v1.4.5-rc.1 
+* (c) 2020 Vitaliy Stoliarov 
+* Released under the MIT license.
+*/
+
+/*!
+* rete-area-plugin v0.2.1 
+* (c) 2019  
+* Released under the ISC license.
+*/
+
+/*!
+* rete-auto-arrange-plugin v0.4.0 
+* (c) 2019 Vitaliy Stoliarov 
+* Released under the MIT license.
+*/
+
+/*!
+* rete-comment-plugin v0.7.0-rc.1 
+* (c) 2020 Vitaliy Stoliarov 
+* Released under the MIT license.
+*/
+
+/*!
+* rete-connection-path-plugin v0.3.1 
+* (c) 2019 Vitaliy Stoliarov 
+* Released under the MIT license.
+*/
+
+/*!
+* rete-connection-plugin v0.9.0 
+* (c) 2019 Vitaliy Stoliarov 
+* Released under the MIT license.
+*/
+
+/*!
+* rete-connection-reroute-plugin v0.4.0 
+* (c) 2019 Vitaliy Stoliarov 
+* Released under the MIT license.
+*/
+
+/*!
+* rete-history-plugin v0.2.1 
+* (c) 2019 Vitaliy Stoliarov 
+* Released under the MIT license.
+*/
+
+/*!
+* rete-keyboard-plugin v0.1.2 
+* (c) 2018  License 
+* Released under the ISC license.
+*/
+
+/*!
+* rete-minimap-plugin v0.3.1 
+* (c) 2019 Vitaliy Stoliarov 
+* Released under the MIT license.
+*/
+
+/*!
+* rete-react-render-plugin v0.2.1 
+* (c) 2020  
+* Released under the ISC license.
+*/
+
+/** @license React v0.20.1
+ * scheduler.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/** @license React v17.0.1
+ * react-dom.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/** @license React v17.0.1
+ * react-jsx-runtime.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/** @license React v17.0.1
+ * react.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
