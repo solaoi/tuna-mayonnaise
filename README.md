@@ -1,6 +1,7 @@
 # TUNA-Mayonnaise
 
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
+![CodeQL](https://github.com/solaoi/tuna-mayonnaise/workflows/CodeQL/badge.svg)
 
 This is a Low Layer CMS.
 
