@@ -22,27 +22,15 @@ place it in $PATH directory.
 brew install solaoi/tap/tuna
 ```
 
-### Run Edit-Tool
-
-this commnad opens a browser on `http://localhost:3000`,
-
-then you could use edit-tool.
+## Create your API on Edit-Tool
 
 ```
 tuna tool
 ```
 
-### Connect inputs to Endpoint on Edit-Tool
+this commnad opens a edit-tool on `http://localhost:3000`.
 
-this endpoint is served with api command.
-
-ex)
-
-if you connect Path(/example) to Endpoint,
-
-api command serves `http://localhost:8080/example` .
-
-### Save your flow on Edit-Tool
+## Save your API on Edit-Tool
 
 right-click shows you context menu, then you should choose Save option!
 
@@ -50,15 +38,15 @@ you get configuration file(tuna-mayonnaise.json) on current dir.
 
 this file is all to manage this tool.
 
-### Run API with Tool-Data
-
-this commnad serves endpoints you saved.
-
-let's access your endpoints :)
+## Serve your API
 
 ```
 tuna api
 ```
+
+this commnad require tuna-mayonnaise.json on current dir.
+
+let's access your endpoints :)
 
 ## Dependencies
 
