@@ -1,5 +1,7 @@
 # TUNA-Mayonnaise
 
+![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
+
 This is a Low Layer CMS.
 
 This application is a tool to generate and serve JSON/HTML with flow model.
