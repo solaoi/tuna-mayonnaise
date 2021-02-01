@@ -58,7 +58,7 @@ brews:
     name: tuna
     tap:
       owner: solaoi
-      name: homebrew-tuna
+      name: homebrew-tap
     url_template: "https://github.com/solaoi/tuna-mayonnaise/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     commit_author:
       name: goreleaserbot
