@@ -10,7 +10,17 @@ This application is a tool to generate and serve JSON/HTML with flow model.
 
 ## Get Started
 
-You can download binary from [release page](https://github.com/solaoi/tuna-mayonnaise/releases) and place it in $PATH directory.
+### Binary Releases
+
+you can download a binary release [here](https://github.com/solaoi/tuna-mayonnaise/releases).
+
+place it in $PATH directory.
+
+### Homebrew
+
+```
+brew install solaoi/tap/tuna
+```
 
 ### Run Edit-Tool
 
