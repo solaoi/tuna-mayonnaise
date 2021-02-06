@@ -11,6 +11,7 @@ jobs:
   generateTOC:
     name: TOC Generator
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
       - uses: technote-space/toc-generator@v3
         with:

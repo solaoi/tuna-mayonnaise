@@ -20,10 +20,7 @@ var toolCmd = &cobra.Command{
 	Short: "Open TUNA-Mayonnaise Tool",
 	Long: `Open TUNA-Mayonnaise Tool
 
-This command open TUNA-Mayonnaise Tool UI.
-this tool simplify your workflow on Landing Page and API.
-
-open localhost:3000`,
+This command launch a browser and you get a power to generate JSON/HTML APIs`,
 	Run: tool,
 }
 

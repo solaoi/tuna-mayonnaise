@@ -3,7 +3,7 @@
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
 ![CodeQL](https://github.com/solaoi/tuna-mayonnaise/workflows/CodeQL/badge.svg)
 
-*他の言語で読む: [English](README.md)、[日本語](README.ja.md)*
+*他の言語で読む：[English](README.md)、[日本語](README.ja.md)*
 
 TUNA-Mayonnaise（ツナマヨ）は、ビジュアルプログラミング環境でJSONやHTMLを作成・API提供するコマンドラインツールです。
 
