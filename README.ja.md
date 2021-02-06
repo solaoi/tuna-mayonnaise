@@ -3,53 +3,53 @@
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
 ![CodeQL](https://github.com/solaoi/tuna-mayonnaise/workflows/CodeQL/badge.svg)
 
-*Read this in other languages: [English](README.md), [日本語](README.ja.md).*
+*他の言語で読む: [English](README.md)、[日本語](README.ja.md)*
 
-TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual Programming.
+TUNA-Mayonnaise（ツナマヨ）は、ビジュアルプログラミング環境でJSONやHTMLを作成・API提供するコマンドラインツールです。
 
 <!-- START doctoc -->
-<!-- param::title::'**Table of Contents**':: -->
+<!-- param::title::'**目次**':: -->
 <!-- END doctoc -->
 
-## Get Started
+## インストール方法
 
-### Binary Releases
+### 実行ファイルを直接ダウンロード
 
-you can download a binary release [here](https://github.com/solaoi/tuna-mayonnaise/releases).
+[こちらから](https://github.com/solaoi/tuna-mayonnaise/releases) 各OSごとの実行ファイルをダウンロードできます。
 
-### Homebrew
+### Homebrewを利用
 
 ```
 brew install solaoi/tap/tuna
 ```
 
-## 2 STEP Usage
+## 使い方
 
-### 1. Create a configuration
+### 1. 設定ファイルを作成
 
-`tuna tool` command launch a browser like below.
+`tuna tool` コマンドを実行すると、下記のようにブラウザが起動します。
 
-this ui generate a configuration with `Save` menu.
+このUI上で、 `Save` メニューから設定ファイルを作成できます。
 
 ![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
 
-[UI Sample](https://solaoi.github.io/tuna-mayonnaise)
+[UI サンプル](https://solaoi.github.io/tuna-mayonnaise)
 
-\* this sample does not support `Save` menu, but we could `Download` a configuration editted.
+※ このサンプルは `Save` メニューをサポートしてませんが、 `Download` メニューから編集した設定を取得できます。 
 
-### 2. Use a configuration
+### 2. 設定ファイルを利用
 
-`tuna api` command use a configuration named `tuna-mayonnaise.json` on current directory.
+`tuna api` コマンドを実行すると、実行ディレクトリ内の`tuna-mayonnaise.json` を参照します。
 
-this command serve your endpoints on `http://localhost:8080` .
+このコマンドで `http://localhost:8080` にて、作成したAPIを提供することができます。
 
-## Dependencies
+## 依存関係
 
-TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in lexical order:
+TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立ってます。
 
-### BACKEND Dependencies
+### バックエンドの依存関係
 
- | Dependency  | License |
+ | ライブラリ  | ライセンス |
  | :------------- | :------------- |
  | [github.com/aymerick/raymond](https://github.com/aymerick/raymond) | MIT License |
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
@@ -58,9 +58,9 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [github.com/spf13/cobra](https://github.com/spf13/cobra) | Apache License 2.0 |
  | [github.com/spf13/viper](https://github.com/spf13/viper) | MIT License |
 
-### FRONTEND Dependencies
+### フロントエンドの依存関係
 
- | Dependency  | License |
+ | ライブラリ  | ライセンス |
  | :------------- | :------------- |
  | [axios](https://www.npmjs.com/package/axios) | MIT License |
  | [file-saver](https://www.npmjs.com/package/file-saver) | MIT License |
@@ -82,9 +82,9 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [rete-minimap-plugin](https://www.npmjs.com/package/rete-minimap-plugin) | MIT License |
  | [rete-react-render-plugin](https://www.npmjs.com/package/rete-react-render-plugin) | ISC |
 
-### FRONTEND DEV Dependencies
+### フロントエンド（開発用）の依存関係
 
- | Dependency  | License |
+ | ライブラリ  | ライセンス |
  | :------------- | :------------- |
  | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
  | [react-app-rewired](https://www.npmjs.com/package/react-app-rewired) | MIT License |
