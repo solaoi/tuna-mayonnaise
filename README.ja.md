@@ -9,8 +9,24 @@ TUNA-Mayonnaise（ツナマヨ）は、ビジュアルプログラミング環�
 
 ## 目次
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<details>
+<summary>CLICK</summary>
+
+- [インストール方法](#%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%96%B9%E6%B3%95)
+  - [実行ファイルを直接ダウンロード](#%E5%AE%9F%E8%A1%8C%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E7%9B%B4%E6%8E%A5%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89)
+  - [Homebrewを利用](#homebrew%E3%82%92%E5%88%A9%E7%94%A8)
+- [使い方](#%E4%BD%BF%E3%81%84%E6%96%B9)
+  - [1. 設定ファイルを作成](#1-%E8%A8%AD%E5%AE%9A%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E6%88%90)
+  - [2. 設定ファイルを利用](#2-%E8%A8%AD%E5%AE%9A%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E5%88%A9%E7%94%A8)
+- [依存関係](#%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82)
+  - [バックエンドの依存関係](#%E3%83%90%E3%83%83%E3%82%AF%E3%82%A8%E3%83%B3%E3%83%89%E3%81%AE%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82)
+  - [フロントエンドの依存関係](#%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E3%81%AE%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82)
+  - [フロントエンド（開発用）の依存関係](#%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E9%96%8B%E7%99%BA%E7%94%A8%E3%81%AE%E4%BE%9D%E5%AD%98%E9%96%A2%E4%BF%82)
+
+</details>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## インストール方法
 

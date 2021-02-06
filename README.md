@@ -9,8 +9,24 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual
 
 ## Table of Contents
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<details>
+<summary>CLICK</summary>
+
+- [Get Started](#get-started)
+  - [Binary Releases](#binary-releases)
+  - [Homebrew](#homebrew)
+- [2 STEP Usage](#2-step-usage)
+  - [1. Create a configuration](#1-create-a-configuration)
+  - [2. Use a configuration](#2-use-a-configuration)
+- [Dependencies](#dependencies)
+  - [BACKEND Dependencies](#backend-dependencies)
+  - [FRONTEND Dependencies](#frontend-dependencies)
+  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+
+</details>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Get Started
 
