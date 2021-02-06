@@ -3,13 +3,27 @@
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
 ![CodeQL](https://github.com/solaoi/tuna-mayonnaise/workflows/CodeQL/badge.svg)
 
-TUNA-Mayonnaise is a Low Layer CMS.
+TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual Programming.
 
-This application is a tool to generate and serve JSON/HTML with flow model.
+## 2 STEP Usage
+
+### 1. Create a configuration
+
+`tuna tool` command launch a browser like below.
+
+this ui generate a configuration with `Save` menu.
+
+![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
 
 [UI Sample](https://solaoi.github.io/tuna-mayonnaise)
 
 \* this sample does not support `Save` menu, but we could `Download` a configuration editted.
+
+### 2. Use a configuration
+
+`tuna api` command use a configuration named `tuna-mayonnaise.json` on current directory.
+
+this command serve your endpoints on `http://localhost:8080` .
 
 ## Get Started
 
@@ -24,32 +38,6 @@ place it in $PATH directory.
 ```
 brew install solaoi/tap/tuna
 ```
-
-## Create your API on Edit-Tool
-
-```
-tuna tool
-```
-
-this commnad opens a edit-tool on `http://localhost:3000`.
-
-## Save your API on Edit-Tool
-
-right-click shows you context menu, then you should choose Save option!
-
-you get configuration file(tuna-mayonnaise.json) on current dir.
-
-this file is all to manage this tool.
-
-## Serve your API
-
-```
-tuna api
-```
-
-this commnad require tuna-mayonnaise.json on current dir.
-
-let's access your endpoints :)
 
 ## Dependencies
 
@@ -76,7 +64,6 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [pug](https://www.npmjs.com/package/pug) | MIT License |
  | [react](https://www.npmjs.com/package/react) | MIT License |
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
- | [react-scripts](https://www.npmjs.com/package/react-scripts) | MIT License |
  | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
  | [rete-area-plugin](https://www.npmjs.com/package/rete-area-plugin) | ISC |
@@ -97,4 +84,5 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | :------------- | :------------- |
  | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
  | [react-app-rewired](https://www.npmjs.com/package/react-app-rewired) | MIT License |
+ | [react-scripts](https://www.npmjs.com/package/react-scripts) | MIT License |
  | [typescript](https://www.npmjs.com/package/typescript) | Apache License 2.0 |
