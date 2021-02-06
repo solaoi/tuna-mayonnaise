@@ -5,6 +5,18 @@
 
 TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual Programming.
 
+## Get Started
+
+### Binary Releases
+
+you can download a binary release [here](https://github.com/solaoi/tuna-mayonnaise/releases).
+
+### Homebrew
+
+```
+brew install solaoi/tap/tuna
+```
+
 ## 2 STEP Usage
 
 ### 1. Create a configuration
@@ -24,20 +36,6 @@ this ui generate a configuration with `Save` menu.
 `tuna api` command use a configuration named `tuna-mayonnaise.json` on current directory.
 
 this command serve your endpoints on `http://localhost:8080` .
-
-## Get Started
-
-### Binary Releases
-
-you can download a binary release [here](https://github.com/solaoi/tuna-mayonnaise/releases).
-
-place it in $PATH directory.
-
-### Homebrew
-
-```
-brew install solaoi/tap/tuna
-```
 
 ## Dependencies
 
