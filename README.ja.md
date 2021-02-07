@@ -46,7 +46,7 @@ brew install solaoi/tap/tuna
 
 `tuna tool` コマンドを実行すると、下記のようにブラウザが起動します。
 
-このUI上で、 `Save` メニューから設定ファイルを作成できます。
+このUI上で、 `Save` メニューから設定ファイル（ `tuna-mayonnaise.json` ）を作成できます。
 
 ![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
 
@@ -56,7 +56,7 @@ brew install solaoi/tap/tuna
 
 ### 2. 設定ファイルを利用
 
-`tuna api` コマンドを実行すると、実行ディレクトリ内の`tuna-mayonnaise.json` を参照します。
+`tuna api` コマンドを実行すると、実行ディレクトリ内の設定ファイル（ `tuna-mayonnaise.json` ）を参照します。
 
 このコマンドで `http://localhost:8080` にて、作成したAPIを提供することができます。
 
