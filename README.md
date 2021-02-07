@@ -14,16 +14,18 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual
 <details>
 <summary>CLICK</summary>
 
-- [Get Started](#get-started)
-  - [Binary Releases](#binary-releases)
-  - [Homebrew](#homebrew)
-- [2 STEP Usage](#2-step-usage)
-  - [1. Create a configuration](#1-create-a-configuration)
-  - [2. Use a configuration](#2-use-a-configuration)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Get Started](#get-started)
+    - [Binary Releases](#binary-releases)
+    - [Homebrew](#homebrew)
+  - [2 STEP Usage](#2-step-usage)
+    - [1. Create a configuration](#1-create-a-configuration)
+    - [2. Use a configuration](#2-use-a-configuration)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -106,4 +108,3 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
  | [react-app-rewired](https://www.npmjs.com/package/react-app-rewired) | MIT License |
  | [react-scripts](https://www.npmjs.com/package/react-scripts) | MIT License |
- | [typescript](https://www.npmjs.com/package/typescript) | Apache License 2.0 |

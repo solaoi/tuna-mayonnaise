@@ -3,7 +3,7 @@ import { Node, Socket, Control } from "rete-react-render-plugin";
 
 export class TemplateNode extends Node {
   render() {
-    const { node, bindSocket, bindControl } = this.props;
+    const { bindSocket, bindControl } = this.props;
     const { outputs, controls, inputs, selected } = this.state;
 
     return (

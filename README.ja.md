@@ -106,4 +106,3 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
  | [react-app-rewired](https://www.npmjs.com/package/react-app-rewired) | MIT License |
  | [react-scripts](https://www.npmjs.com/package/react-scripts) | MIT License |
- | [typescript](https://www.npmjs.com/package/typescript) | Apache License 2.0 |

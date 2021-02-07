@@ -27,7 +27,7 @@ class ApiComponent extends Rete.Component {
     const json = inputs["json"].length ? inputs["json"][0] : node.data.json;
 
     this.editor.nodes
-      .find((n) => n.id == node.id)
+      .find((n) => n.id === node.id)
       .controls.get("json")
       .setValue(json);
     outputs["json"] = json;

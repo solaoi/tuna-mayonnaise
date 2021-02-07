@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/aymerick/raymond"
 	"github.com/eknkc/pug"
@@ -29,19 +30,25 @@ Let's access http://localhost:8080 with your paths :)`,
 
 var endpoints map[string]map[string]string
 
-type stringAndFn struct {
-	String string
-	Fn     func() string
+type body struct {
+	StatusCode int
+	Content string
 }
 
-var dynamicEndpoints map[string]stringAndFn
+type response struct {
+	ContentType string
+	ContentBuilder func() body
+}
+
+var dynamicEndpoints map[string]response
 
 func endpointHandler(c echo.Context) error {
 	return c.Blob(http.StatusOK, endpoints[c.Path()]["contentType"], []byte(endpoints[c.Path()]["content"]))
 }
 
 func dynamicEndpointHandler(c echo.Context) error {
-	return c.Blob(http.StatusOK, dynamicEndpoints[c.Path()].String, []byte(dynamicEndpoints[c.Path()].Fn()))
+	body := dynamicEndpoints[c.Path()].ContentBuilder()
+	return c.Blob(body.StatusCode, dynamicEndpoints[c.Path()].ContentType, []byte(body.Content))
 }
 
 func findNext(node map[string]interface{}) (name string, content interface{}, nexts []string) {
@@ -81,8 +88,8 @@ func setContents(nodes map[string]interface{}, id string, depth int, parent stri
 	}
 }
 
-func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (content string) {
-	return func() (content string) {
+func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (content body) {
+	return func() (content body) {
 		copy := deepcopy.Copy(contents).(map[int]map[string]map[string]interface{})
 		for i := len(copy) - 1; i >= 0; i-- {
 			for k, v := range copy[i] {
@@ -95,8 +102,9 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						}
 					}
 					resp, err := http.Get(url)
-					if err != nil {
-						log.Fatal("API error...")
+					if err != nil || resp.StatusCode >= 400 {
+						copy[i][k]["content"] = "##ERROR##"
+						continue
 					}
 					defer resp.Body.Close()
 					byteArray, _ := ioutil.ReadAll(resp.Body)
@@ -132,19 +140,23 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 				} else if v["name"] == "Endpoint" {
 					for _, v3 := range copy[i+1] {
 						if v3["parent"] == k && (v3["name"] == "JSON" || v3["name"] == "API" || v3["name"] == "Template") {
-							return v3["content"].(string)
+							content := v3["content"].(string)
+							if(strings.Contains(content, "##ERROR##")){
+								return body{http.StatusInternalServerError, ""}
+							}
+							return body{http.StatusOK, content}
 						}
 					}
 				}
 			}
 		}
-		return "{}"
+		return body{http.StatusNotFound, ""}
 	}
 }
 
 func api(cmd *cobra.Command, args []string) {
 	endpoints = map[string]map[string]string{}
-	dynamicEndpoints = map[string]stringAndFn{}
+	dynamicEndpoints = map[string]response{}
 	bytes, err := ioutil.ReadFile("tuna-mayonnaise.json")
 	if err != nil {
 		log.Fatal(err)
@@ -166,13 +178,12 @@ func api(cmd *cobra.Command, args []string) {
 			id := fmt.Sprint(node["id"])
 			setContents(nodes, id, 0, "0", contents, &isDynamic)
 
-			log.Println(data["enabledFlag"])
 			if data["enabledFlag"].(bool) {
 				if !isDynamic {
 					content := data["content"].(string)
 					endpoints[path] = map[string]string{"content": content, "contentType": contentType}
 				} else {
-					dynamicEndpoints[path] = stringAndFn{contentType, contentBuilder(contents)}
+					dynamicEndpoints[path] = response{contentType, contentBuilder(contents)}
 				}
 			}
 		}

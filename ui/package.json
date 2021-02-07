@@ -33,8 +33,7 @@
   "devDependencies": {
     "customize-cra": "1.0.0",
     "react-app-rewired": "2.1.8",
-    "react-scripts": "4.0.2",
-    "typescript": "4.1.3"
+    "react-scripts": "4.0.2"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -43,6 +42,11 @@
     "eject": "react-scripts eject",
     "build:binary": "npm run build && rm -rf ../command/cmd/static/* && mv build/* ../command/cmd/static/ && touch ../command/cmd/static/.gitkeep && cd ../command/ && go build -o ../tuna && cd ../ui/",
     "build:binary:win": "npm run build && rm -rf ../command/cmd/static/* && mv build/* ../command/cmd/static/ && touch ../command/cmd/static/.gitkeep && cd ../command/ && GOOS=windows GOARCH=amd64 go build -o ../tuna.exe && cd ../ui/"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
   },
   "browserslist": [
     ">0.2%",
