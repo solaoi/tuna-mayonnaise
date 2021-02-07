@@ -73,7 +73,6 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
  | [github.com/spf13/cobra](https://github.com/spf13/cobra) | Apache License 2.0 |
- | [github.com/spf13/viper](https://github.com/spf13/viper) | MIT License |
 
 ### FRONTEND Dependencies
 
