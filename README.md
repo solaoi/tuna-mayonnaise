@@ -46,7 +46,7 @@ brew install solaoi/tap/tuna
 
 `tuna tool` command launch a browser like below.
 
-this ui generate a configuration with `Save` menu.
+this ui generate a configuration( `tuna-mayonnaise.json` ) with `Save` menu.
 
 ![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
 
@@ -56,7 +56,7 @@ this ui generate a configuration with `Save` menu.
 
 ### 2. Use a configuration
 
-`tuna api` command use a configuration named `tuna-mayonnaise.json` on current directory.
+`tuna api` command use a configuration( `tuna-mayonnaise.json` ) on current directory.
 
 this command serve your endpoints on `http://localhost:8080` .
 
