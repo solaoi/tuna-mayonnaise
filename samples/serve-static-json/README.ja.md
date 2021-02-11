@@ -11,7 +11,7 @@
 
 ### 1. 設定ファイルをダウンロード
 
-[こちら](https://raw.githubusercontent.com/solaoi/tuna-mayonnaise/samples/serve-static-json/tuna-mayonnaise.json)から設定ファイルをダウンロードし、`tuna-mayonnaise.json` という名前で保存します。
+[こちら](https://raw.githubusercontent.com/solaoi/tuna-mayonnaise/main/samples/serve-static-json/tuna-mayonnaise.json)から設定ファイルをダウンロードし、`tuna-mayonnaise.json` という名前で保存します。
 
 ### 2. 設定を編集
 
@@ -46,7 +46,7 @@ Pathコンポーネントのテキストボックスを編集してください�
 デフォルト）
 
 ```
-http://localhost:8080/serve-static-json
+/serve-static-json
 ```
 
 ### 3. 設定を元にサーバーを作成
@@ -58,3 +58,9 @@ tuna api
 ```
 
 設定したパスとともに `http://localhost:8080` にアクセスしてみましょう。
+
+デフォルト）
+
+```
+http://localhost:8080/serve-static-json
+```

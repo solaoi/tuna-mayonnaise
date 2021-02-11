@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'README*.md'
+      - 'samples/**/README*.md'
 
 jobs:
   generateTOC:
@@ -15,6 +16,7 @@ jobs:
     steps:
       - uses: technote-space/toc-generator@v3
         with:
+          TARGET_PATHS: 'README*.md,samples/**/README*.md'
           MAX_HEADER_LEVEL: 3
           FOLDING: true
           TOC_TITLE: 'CLICK'

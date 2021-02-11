@@ -11,7 +11,7 @@
 
 ### 1. Download a configuration
 
-download [this](https://raw.githubusercontent.com/solaoi/tuna-mayonnaise/samples/serve-static-json/tuna-mayonnaise.json), and save as `tuna-mayonnaise.json` .
+download [this](https://raw.githubusercontent.com/solaoi/tuna-mayonnaise/main/samples/serve-static-json/tuna-mayonnaise.json), and save as `tuna-mayonnaise.json` .
 
 ### 2. Edit a configuration
 
@@ -46,7 +46,7 @@ you should edit text on this Path Component.
 default)
 
 ```
-http://localhost:8080/serve-static-json
+/serve-static-json
 ```
 
 ### 3. Serve APIs on a configuration
@@ -58,3 +58,9 @@ tuna api
 ```
 
 Let's access `http://localhost:8080` with your paths :)
+
+default)
+
+```
+http://localhost:8080/serve-static-json
+```
