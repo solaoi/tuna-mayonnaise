@@ -14,6 +14,7 @@ import (
 	"github.com/eknkc/pug"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/mohae/deepcopy"
 	"github.com/spf13/cobra"
 )
@@ -155,6 +156,14 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 	}
 }
 
+// urlSkipper ignores metrics route on some middleware
+func urlSkipper(c echo.Context) bool {
+	if strings.HasPrefix(c.Path(), "/favicon.ico") {
+		return true
+	}
+	return false
+}
+
 func api(cmd *cobra.Command, args []string) {
 	endpoints = map[string]map[string]string{}
 	dynamicEndpoints = map[string]response{}
@@ -196,6 +205,8 @@ func api(cmd *cobra.Command, args []string) {
 	e.HidePort = true
 
 	// Middleware
+    p := prometheus.NewPrometheus("echo", urlSkipper)
+    p.Use(e)
 	logger := middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: logFormat(),
 		Output: os.Stdout,
