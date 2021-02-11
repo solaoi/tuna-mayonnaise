@@ -14,16 +14,18 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual
 <details>
 <summary>CLICK</summary>
 
-- [Get Started](#get-started)
-  - [Binary Releases](#binary-releases)
-  - [Homebrew](#homebrew)
-- [2 STEP Usage](#2-step-usage)
-  - [1. Create a configuration](#1-create-a-configuration)
-  - [2. Use a configuration](#2-use-a-configuration)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Get Started](#get-started)
+    - [Binary Releases](#binary-releases)
+    - [Homebrew](#homebrew)
+  - [2 STEP Usage](#2-step-usage)
+    - [1. Create a configuration](#1-create-a-configuration)
+    - [2. Use a configuration](#2-use-a-configuration)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -44,7 +46,7 @@ brew install solaoi/tap/tuna
 
 ### 1. Create a configuration
 
-`tuna tool` command launch a browser like below.
+`tuna tool` command launches a browser like below.
 
 this ui generate a configuration( `tuna-mayonnaise.json` ) with `Save` menu.
 
@@ -52,13 +54,31 @@ this ui generate a configuration( `tuna-mayonnaise.json` ) with `Save` menu.
 
 [UI Sample](https://solaoi.github.io/tuna-mayonnaise)
 
-\* this sample does not support `Save` menu, but we could `Download` a configuration editted.
+\* this sample does not support the `Save` menu, but we could `Download` a configuration edited.
 
 ### 2. Use a configuration
 
 `tuna api` command use a configuration( `tuna-mayonnaise.json` ) on current directory.
 
-this command serve your endpoints on `http://localhost:8080` .
+this command serves your endpoints on `http://localhost:8080` .
+
+## UseCases
+
+### 1. Serve Static JSON
+
+see [here](samples/serve-static-json/README.md).
+
+### 2. Serve Static HTML
+
+see [here](samples/serve-static-html/README.md).
+
+### 3. Serve Dynamic JSON
+
+see [here](samples/serve-dynamic-json/README.md).
+
+### 4. Serve Dynamic HTML
+
+see [here](samples/serve-dynamic-html/README.md).
 
 ## Dependencies
 

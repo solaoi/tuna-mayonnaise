@@ -55,7 +55,7 @@ class EndpointComponent extends Rete.Component {
     const enabledFlag = inputs["enabledFlag"].length ? inputs["enabledFlag"][0] : false;
 
     this.editor.nodes
-      .find((n) => n.id == node.id)
+      .find((n) => n.id === node.id)
       .controls.get("endpoint")
       .setValue(inputs, content, contentType, enabledFlag);
   }

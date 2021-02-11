@@ -31,7 +31,7 @@ class SubtractComponent extends Rete.Component {
     const diff = n1 - n2;
 
     this.editor.nodes
-      .find((n) => n.id == node.id)
+      .find((n) => n.id === node.id)
       .controls.get("preview")
       .setValue(diff);
     outputs["num"] = diff;

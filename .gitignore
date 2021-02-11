@@ -7,6 +7,9 @@ command/cmd/static/*
 tuna
 tuna-mayonnaise.json
 
+// documentation
+!samples/**/tuna-mayonnaise.json
+
 // common
 .DS_Store
 .eslintcache

@@ -60,6 +60,24 @@ brew install solaoi/tap/tuna
 
 このコマンドで `http://localhost:8080` にて、作成したAPIを提供することができます。
 
+## 活用例
+
+### 1. 静的なJSONを返すサーバー作成
+
+詳しくは[こちら](samples/serve-static-json/README.ja.md)
+
+### 2. 静的なHTMLを返すサーバー作成
+
+詳しくは[こちら](samples/serve-static-html/README.ja.md)
+
+### 3. 外部APIからのレスポンスを元に、動的なJSONを返すサーバー作成
+
+詳しくは[こちら](samples/serve-dynamic-json/README.ja.md)
+
+### 4. 外部APIからのレスポンスを元に、動的なHTMLを返すサーバー作成
+
+詳しくは[こちら](samples/serve-dynamic-html/README.ja.md)
+
 ## 依存関係
 
 TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立ってます。

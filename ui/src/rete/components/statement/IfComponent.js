@@ -45,7 +45,7 @@ class IfComponent extends Rete.Component {
     const output = boolean ? string1 : string2;
 
     this.editor.nodes
-      .find((n) => n.id == node.id)
+      .find((n) => n.id === node.id)
       .controls.get("preview")
       .setValue(output);
     outputs["string3"] = output;

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import Rete from "rete";
 import ReactRenderPlugin from "rete-react-render-plugin";
@@ -157,13 +158,15 @@ export async function createEditor(container) {
             editor.trigger("undo");
           }
           break;
+        default:
+          break;
       }
     });
   }
 
   const engine = new Rete.Engine("tuna-mayonnaise@0.0.1");
 
-  components.map((c) => {
+  components.forEach((c) => {
     editor.register(c);
     engine.register(c);
   });

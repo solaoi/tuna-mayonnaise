@@ -31,7 +31,7 @@ class AddComponent extends Rete.Component {
     const sum = n1 + n2;
 
     this.editor.nodes
-      .find((n) => n.id == node.id)
+      .find((n) => n.id === node.id)
       .controls.get("preview")
       .setValue(sum);
     outputs["num"] = sum;

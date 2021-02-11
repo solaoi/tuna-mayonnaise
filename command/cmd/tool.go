@@ -13,6 +13,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/spf13/cobra"
+	"github.com/common-nighthawk/go-figure"
 )
 
 var toolCmd = &cobra.Command{
@@ -72,14 +73,28 @@ func jsonExportHandler(c echo.Context) error {
 }
 
 func tool(cmd *cobra.Command, args []string) {
+	// Show this tool name
+	myFigure := figure.NewFigure("TUNA", "", true)
+  	myFigure.Print()
+
+	// Echo instance
 	e := echo.New()
-	e.Use(middleware.Logger())
+	e.HideBanner = true
+
+	// Middleware
+	// e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
+
+	// Route => handler
 	e.File("/tuna-configuration", "tuna-mayonnaise.json")
 	e.GET("/*", contentHandler, contentRewrite)
 	e.POST("/regist", jsonExportHandler)
+
+	// Open browser
 	openbrowser("http://localhost:3000")
+
+	// Start server
 	e.Logger.Fatal(e.Start(":3000"))
 }
 

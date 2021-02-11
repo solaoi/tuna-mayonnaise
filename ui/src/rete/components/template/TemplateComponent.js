@@ -58,7 +58,7 @@ class TemplateComponent extends Rete.Component {
     })();
 
     this.editor.nodes
-      .find((n) => n.id == node.id)
+      .find((n) => n.id === node.id)
       .controls.get("template")
       .setValue(inputs, html, "text/html; charset=utf-8");
     outputs["html"] = html;
