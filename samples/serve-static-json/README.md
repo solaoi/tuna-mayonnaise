@@ -4,8 +4,18 @@
 
 ## Table of Contents
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<details>
+<summary>CLICK</summary>
+
+- [3 STEP Usage](#3-step-usage)
+  - [1. Download a configuration](#1-download-a-configuration)
+  - [2. Edit a configuration](#2-edit-a-configuration)
+  - [3. Serve APIs on a configuration](#3-serve-apis-on-a-configuration)
+
+</details>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 3 STEP Usage
 
