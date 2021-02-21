@@ -33,6 +33,20 @@ TUNA-Mayonnaise（ツナマヨ）は、ビジュアルプログラミング環�
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## API提供の特徴
+
+### 監視
+
+1. TUNA-Mayonnaise（ツナマヨ）は、Prometheusのメトリクスを `/metrics` で提供します。
+
+メトリクスは、２つの統計情報を含みます。
+
+- Echoライブラリ標準のPrometheusのメトリクス
+- TUNA-Mayonnaise（ツナマヨ）で提供されるAPIコンポーネントのステータスコード、メソッド、URL
+
+2. TUNA-Mayonnaise（ツナマヨ）は、ヘルスチェックを `/health` で提供します。
+3. TUNA-Mayonnaise（ツナマヨ）は、Labeled Tab-separated Values ( `LTSV` ) フォーマット形式でログ出力します。
+
 ## インストール方法
 
 ### 実行ファイルを直接ダウンロード
@@ -94,7 +108,9 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [github.com/aymerick/raymond](https://github.com/aymerick/raymond) | MIT License |
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
+ | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
+ | [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) | Apache License 2.0 |
  | [github.com/spf13/cobra](https://github.com/spf13/cobra) | Apache License 2.0 |
 
 ### フロントエンドの依存関係

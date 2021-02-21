@@ -1,21 +1,24 @@
 package cmd
 
 import (
-	"os"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/aymerick/raymond"
 	"github.com/eknkc/pug"
+	prom "github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/mohae/deepcopy"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/cobra"
 )
 
@@ -30,11 +33,18 @@ Let's access http://localhost:8080 with your paths :)`,
 	Run: api,
 }
 
-var endpoints map[string]map[string]string
+var client *http.Client
+
+type apiResponse struct {
+	Method string
+	URL string
+	StatusCode string
+}
 
 type body struct {
 	StatusCode int
 	Content string
+	APIResponses []apiResponse
 }
 
 type response struct {
@@ -42,14 +52,19 @@ type response struct {
 	ContentBuilder func() body
 }
 
-var dynamicEndpoints map[string]response
-
+var endpoints map[string]map[string]string
 func endpointHandler(c echo.Context) error {
 	return c.Blob(http.StatusOK, endpoints[c.Path()]["contentType"], []byte(endpoints[c.Path()]["content"]))
 }
 
+var dynamicEndpoints map[string]response
+var dynamicEndpointCounter *prometheus.CounterVec
 func dynamicEndpointHandler(c echo.Context) error {
 	body := dynamicEndpoints[c.Path()].ContentBuilder()
+	for _, v := range body.APIResponses {
+		dynamicEndpointCounter.WithLabelValues(v.StatusCode, v.Method, v.URL).Inc()
+	}
+
 	return c.Blob(body.StatusCode, dynamicEndpoints[c.Path()].ContentType, []byte(body.Content))
 }
 
@@ -91,6 +106,7 @@ func setContents(nodes map[string]interface{}, id string, depth int, parent stri
 }
 
 func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (content body) {
+	var apiResponses []apiResponse
 	return func() (content body) {
 		copy := deepcopy.Copy(contents).(map[int]map[string]map[string]interface{})
 		for i := len(copy) - 1; i >= 0; i-- {
@@ -103,7 +119,21 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 							break
 						}
 					}
-					resp, err := http.Get(url)
+					
+					method := "GET"
+					req, _ := http.NewRequest(method, url, nil)
+					resp, err := client.Do(req)
+					if err == nil {
+						apiResponses = append(apiResponses, apiResponse{method, url, strconv.Itoa(resp.StatusCode)})
+					} else {
+						if os.IsTimeout(err) {
+							apiResponses = append(apiResponses, apiResponse{method, url, "timeout"})
+						} else {
+							apiResponses = append(apiResponses, apiResponse{method, url, "unknown"})
+						}
+						return body{http.StatusInternalServerError, "", apiResponses}
+					}
+
 					if err != nil || resp.StatusCode >= 400 {
 						copy[i][k]["content"] = "##ERROR##"
 						continue
@@ -143,16 +173,13 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					for _, v3 := range copy[i+1] {
 						if v3["parent"] == k && (v3["name"] == "JSON" || v3["name"] == "API" || v3["name"] == "Template") {
 							content := v3["content"].(string)
-							if(strings.Contains(content, "##ERROR##")){
-								return body{http.StatusInternalServerError, ""}
-							}
-							return body{http.StatusOK, content}
+							return body{http.StatusOK, content, apiResponses}
 						}
 					}
 				}
 			}
 		}
-		return body{http.StatusNotFound, ""}
+		return body{http.StatusNotFound, "", apiResponses}
 	}
 }
 
@@ -204,18 +231,37 @@ func api(cmd *cobra.Command, args []string) {
 	e.HideBanner = true
 	e.HidePort = true
 
-	// Middleware
-    p := prometheus.NewPrometheus("echo", urlSkipper)
-    p.Use(e)
+	// restClient initialize
+	client = &http.Client{
+		Timeout: time.Second * 5,
+	}
+
+	// Prometheus
+	reqAPICnt := &prom.Metric{
+		ID:          "reqAPICnt",
+		Name:        "requests_api_total",
+		Description: "How many HTTP requests to APIs processed, partitioned by status code and HTTP method.",
+		Type:        "counter_vec",
+		Args:        []string{"code", "method", "url"}}
+	p := prom.NewPrometheus("tuna", urlSkipper, []*prom.Metric{reqAPICnt})
+	dynamicEndpointCounter = reqAPICnt.MetricCollector.(*prometheus.CounterVec)
+	p.Use(e)
+
+	// LTSV Logger
 	logger := middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: logFormat(),
 		Output: os.Stdout,
 	})
 	e.Use(logger)
+
+	// Middlewares
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 
 	// Route => handler
+	e.GET("/health", func(ctx echo.Context) error {
+		return ctx.String(http.StatusOK, "OK")
+	})
 	for path := range endpoints {
 		e.GET(path, endpointHandler)
 	}

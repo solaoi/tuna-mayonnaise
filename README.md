@@ -14,24 +14,41 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual
 <details>
 <summary>CLICK</summary>
 
-- [Get Started](#get-started)
-  - [Binary Releases](#binary-releases)
-  - [Homebrew](#homebrew)
-- [2 STEP Usage](#2-step-usage)
-  - [1. Create a configuration](#1-create-a-configuration)
-  - [2. Use a configuration](#2-use-a-configuration)
-- [UseCases](#usecases)
-  - [1. Serve Static JSON](#1-serve-static-json)
-  - [2. Serve Static HTML](#2-serve-static-html)
-  - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
-  - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Get Started](#get-started)
+    - [Binary Releases](#binary-releases)
+    - [Homebrew](#homebrew)
+  - [2 STEP Usage](#2-step-usage)
+    - [1. Create a configuration](#1-create-a-configuration)
+    - [2. Use a configuration](#2-use-a-configuration)
+  - [UseCases](#usecases)
+    - [1. Serve Static JSON](#1-serve-static-json)
+    - [2. Serve Static HTML](#2-serve-static-html)
+    - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
+    - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## API Features
+
+### Monitoring
+
+1. TUNA-Mayonnaise exposes Prometheus metrics at `/metrics` endpoint.
+
+List of metrics includes two stats.
+
+- basic http stats collected via Echo Prometheus library.
+- TUNA-Mayonnaise API Component stats with status, method, url.
+
+2. TUNA-Mayonnaise exposes health endpoint at `/health` .
+
+3. TUNA-Mayonnaise Logging with Labeled Tab-separated Values ( `LTSV` ) format.
 
 ## Get Started
 
@@ -94,7 +111,9 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [github.com/aymerick/raymond](https://github.com/aymerick/raymond) | MIT License |
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
+ | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
+ | [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) | Apache License 2.0 |
  | [github.com/spf13/cobra](https://github.com/spf13/cobra) | Apache License 2.0 |
 
 ### FRONTEND Dependencies
