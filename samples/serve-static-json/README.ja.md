@@ -4,8 +4,18 @@
 
 ## 目次
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<details>
+<summary>CLICK</summary>
+
+- [手順](#%E6%89%8B%E9%A0%86)
+  - [1. 設定ファイルをダウンロード](#1-%E8%A8%AD%E5%AE%9A%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89)
+  - [2. 設定を編集](#2-%E8%A8%AD%E5%AE%9A%E3%82%92%E7%B7%A8%E9%9B%86)
+  - [3. 設定を元にサーバーを作成](#3-%E8%A8%AD%E5%AE%9A%E3%82%92%E5%85%83%E3%81%AB%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%82%92%E4%BD%9C%E6%88%90)
+
+</details>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 手順
 
