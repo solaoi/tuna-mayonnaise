@@ -6,6 +6,7 @@ before:
     - go mod tidy
 builds:
   - main: .
+    id: uncompressed
     binary: tuna
     ldflags:
       - -s -w
@@ -31,6 +32,7 @@ builds:
       - goos: darwin
         goarch: 386
   - main: .
+    id: compressed
     binary: tuna
     ldflags:
       - -s -w
