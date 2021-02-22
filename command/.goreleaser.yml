@@ -15,7 +15,6 @@ builds:
       - CGO_ENABLED=0
     goos:
       - darwin
-      - linux
       - windows
       - freebsd
       - netbsd
@@ -31,6 +30,23 @@ builds:
     ignore:
       - goos: darwin
         goarch: 386
+  - main: .
+    binary: tuna
+    ldflags:
+      - -s -w
+      - -X main.Version={{.Version}}
+      - -X main.Revision={{.ShortCommit}}
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - 386
+      - arm
+      - arm64
+    goarm:
+      - 7
     hooks:
       post: upx --lzma '{{ .Path }}'
 
