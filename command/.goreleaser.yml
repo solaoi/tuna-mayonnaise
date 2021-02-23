@@ -16,7 +16,6 @@ builds:
       - CGO_ENABLED=0
     goos:
       - darwin
-      - windows
       - freebsd
       - netbsd
       - openbsd
@@ -41,6 +40,7 @@ builds:
     env:
       - CGO_ENABLED=0
     goos:
+      - windows
       - linux
     goarch:
       - amd64
