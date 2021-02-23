@@ -39,8 +39,7 @@ TUNA-Mayonnaise（ツナマヨ）は、ビジュアルプログラミング環�
 
 ### 監視
 
-1. TUNA-Mayonnaise（ツナマヨ）は、Prometheusのメトリクスを `/metrics` で提供します。
-
+1. TUNA-Mayonnaise（ツナマヨ）は、Prometheusのメトリクスを `/metrics` で提供します。   
 メトリクスは、２つの統計情報を含みます。
 
 - Echoライブラリ標準のPrometheusのメトリクス
@@ -48,6 +47,16 @@ TUNA-Mayonnaise（ツナマヨ）は、ビジュアルプログラミング環�
 
 2. TUNA-Mayonnaise（ツナマヨ）は、ヘルスチェックを `/health` で提供します。
 3. TUNA-Mayonnaise（ツナマヨ）は、Labeled Tab-separated Values ( `LTSV` ) フォーマット形式でログ出力します。
+
+### オプション
+
+1. Port   
+デフォルトのPortは、8080です。   
+他のPortを設定したい場合は、下記のように環境変数を渡してください。
+
+```
+PORT=9999 tuna api
+```
 
 ## インストール方法
 

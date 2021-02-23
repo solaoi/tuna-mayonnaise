@@ -14,23 +14,25 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual
 <details>
 <summary>CLICK</summary>
 
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-- [Get Started](#get-started)
-  - [Binary Releases](#binary-releases)
-  - [Homebrew](#homebrew)
-- [2 STEP Usage](#2-step-usage)
-  - [1. Create a configuration](#1-create-a-configuration)
-  - [2. Use a configuration](#2-use-a-configuration)
-- [UseCases](#usecases)
-  - [1. Serve Static JSON](#1-serve-static-json)
-  - [2. Serve Static HTML](#2-serve-static-html)
-  - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
-  - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+  - [Get Started](#get-started)
+    - [Binary Releases](#binary-releases)
+    - [Homebrew](#homebrew)
+  - [2 STEP Usage](#2-step-usage)
+    - [1. Create a configuration](#1-create-a-configuration)
+    - [2. Use a configuration](#2-use-a-configuration)
+  - [UseCases](#usecases)
+    - [1. Serve Static JSON](#1-serve-static-json)
+    - [2. Serve Static HTML](#2-serve-static-html)
+    - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
+    - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -39,8 +41,7 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual
 
 ### Monitoring
 
-1. TUNA-Mayonnaise exposes Prometheus metrics at `/metrics` endpoint.
-
+1. TUNA-Mayonnaise exposes Prometheus metrics at `/metrics` endpoint.   
 List of metrics includes two stats.
 
 - basic http stats collected via Echo Prometheus library.
@@ -49,6 +50,16 @@ List of metrics includes two stats.
 2. TUNA-Mayonnaise exposes health endpoint at `/health` .
 
 3. TUNA-Mayonnaise Logging with Labeled Tab-separated Values ( `LTSV` ) format.
+
+### Options
+
+1. Port   
+Defalut port is 8080.   
+We could set other port with a environment variable like below.
+
+```
+PORT=9999 tuna api
+```
 
 ## Get Started
 

@@ -36,29 +36,31 @@ Let's access http://localhost:8080 with your paths :)`,
 var client *http.Client
 
 type apiResponse struct {
-	Method string
-	URL string
+	Method     string
+	URL        string
 	StatusCode string
 }
 
 type body struct {
-	StatusCode int
-	Content string
+	StatusCode   int
+	Content      string
 	APIResponses []apiResponse
 }
 
 type response struct {
-	ContentType string
+	ContentType    string
 	ContentBuilder func() body
 }
 
 var endpoints map[string]map[string]string
+
 func endpointHandler(c echo.Context) error {
 	return c.Blob(http.StatusOK, endpoints[c.Path()]["contentType"], []byte(endpoints[c.Path()]["content"]))
 }
 
 var dynamicEndpoints map[string]response
 var dynamicEndpointCounter *prometheus.CounterVec
+
 func dynamicEndpointHandler(c echo.Context) error {
 	body := dynamicEndpoints[c.Path()].ContentBuilder()
 	for _, v := range body.APIResponses {
@@ -119,7 +121,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 							break
 						}
 					}
-					
+
 					method := "GET"
 					req, _ := http.NewRequest(method, url, nil)
 					resp, err := client.Do(req)
@@ -270,7 +272,11 @@ func api(cmd *cobra.Command, args []string) {
 	}
 
 	// Start server
-	e.Logger.Fatal(e.Start(":8080"))
+	port, ret := os.LookupEnv("PORT")
+	if ret == false {
+		port = "8080"
+	}
+	e.Logger.Fatal(e.Start(":" + port))
 }
 
 func logFormat() string {
