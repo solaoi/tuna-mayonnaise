@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -141,7 +141,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						continue
 					}
 					defer resp.Body.Close()
-					byteArray, _ := ioutil.ReadAll(resp.Body)
+					byteArray, _ := io.ReadAll(resp.Body)
 					res := string(byteArray)
 					copy[i][k]["content"] = res
 				} else if v["name"] == "Template" {
@@ -196,7 +196,7 @@ func urlSkipper(c echo.Context) bool {
 func api(cmd *cobra.Command, args []string) {
 	endpoints = map[string]map[string]string{}
 	dynamicEndpoints = map[string]response{}
-	bytes, err := ioutil.ReadFile("tuna-mayonnaise.json")
+	bytes, err := os.ReadFile("tuna-mayonnaise.json")
 	if err != nil {
 		log.Fatal(err)
 	}
