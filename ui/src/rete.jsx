@@ -59,7 +59,7 @@ export async function createEditor(container) {
 
   // 利用可能なコンポーネント一覧
   const components = [
-    new EndpointComponent(stringSocket, pathSocket),
+    new EndpointComponent(stringSocket),
     // new NumComponent(numSocket),
     // new AddComponent(numSocket),
     // new SubtractComponent(numSocket),

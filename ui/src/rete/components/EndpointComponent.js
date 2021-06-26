@@ -6,11 +6,10 @@ import TextControl from "../controls/TextControl";
 
 class EndpointComponent extends Rete.Component {
   path = ["[ Endpoint ]"];
-  constructor(stringSocket, pathSocket) {
+  constructor(stringSocket) {
     super("Endpoint");
     this.data.component = EndpointNode; // optional
     this.stringSocket = stringSocket;
-    this.pathSocket = pathSocket;
   }
 
   builder(node) {
@@ -20,15 +19,12 @@ class EndpointComponent extends Rete.Component {
       "Content (JSON/HTML)",
       this.stringSocket
     );
-    const pathInput = new Rete.Input("path", "Path", this.pathSocket);
-
     contentInput.addControl(new TextControl(this.editor, "content", node));
-    pathInput.addControl(new TextControl(this.editor, "path", node));
 
     return node
       .addInput(contentInput)
-      .addInput(pathInput)
       .addControl(new BooleanControl(this.editor, "enabledFlag", node))
+      .addControl(new TextControl(this.editor, "path", node))
       .addControl(new EndpointControl(this.editor, "endpoint", node, true));
   }
 
@@ -40,17 +36,18 @@ class EndpointComponent extends Rete.Component {
           return "text/html; charset=utf-8";
         } else if(connection.output === "json"){
           return "application/json; charset=utf-8";
-        }else{
+        } else {
           return "text/plain; charset=utf-8"
         }
       }
     })(node.inputs.content.connections[0]);
     const enabledFlag = node.data.enabledFlag;
+    const path = node.data.path;
 
     this.editor.nodes
       .find((n) => n.id === node.id)
       .controls.get("endpoint")
-      .setValue(inputs, content, contentType, enabledFlag);
+      .setValue(inputs, content, contentType, enabledFlag, path);
   }
 }
 
