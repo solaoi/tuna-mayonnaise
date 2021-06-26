@@ -125,9 +125,11 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					method := "GET"
 					req, _ := http.NewRequest(method, url, nil)
 					resp, err := client.Do(req)
-					if err == nil {
+					if err == nil && resp.StatusCode >= 400 {
 						apiResponses = append(apiResponses, apiResponse{method, url, strconv.Itoa(resp.StatusCode)})
-					} else {
+						return body{http.StatusInternalServerError, "", apiResponses}
+					}
+					if err != nil {
 						if os.IsTimeout(err) {
 							apiResponses = append(apiResponses, apiResponse{method, url, "timeout"})
 						} else {
@@ -135,11 +137,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						}
 						return body{http.StatusInternalServerError, "", apiResponses}
 					}
-
-					if err != nil || resp.StatusCode >= 400 {
-						copy[i][k]["content"] = "##ERROR##"
-						continue
-					}
+					apiResponses = append(apiResponses, apiResponse{method, url, strconv.Itoa(resp.StatusCode)})
 					defer resp.Body.Close()
 					byteArray, _ := io.ReadAll(resp.Body)
 					res := string(byteArray)
