@@ -2,14 +2,18 @@ import Rete from "rete";
 
 class HTMLControl extends Rete.Control {
   static component = ({ value, onChange }) => (
-    <textarea
-      value={value}
-      rows={10}
-      ref={(ref) => {
-        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-      }}
-      onChange={(e) => onChange(String(e.target.value))}
-    />
+    <>
+      <label style={{color: 'white', display: 'block', textAlign: 'left'}}>Preview</label>
+      <textarea
+        value={value}
+        rows={10}
+        ref={(ref) => {
+          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
+        }}
+        onChange={(e) => onChange(String(e.target.value))}
+        disabled
+      />
+    </>
   );
 
   constructor(emitter, controlName, node, readonly = false) {
