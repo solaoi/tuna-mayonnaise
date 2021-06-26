@@ -6,20 +6,15 @@ import TextControl from "../controls/TextControl";
 
 class EndpointComponent extends Rete.Component {
   path = ["[ Endpoint ]"];
-  constructor(booleanSocket, stringSocket, pathSocket) {
+  constructor(stringSocket, pathSocket) {
     super("Endpoint");
     this.data.component = EndpointNode; // optional
-    this.booleanSocket = booleanSocket;
     this.stringSocket = stringSocket;
     this.pathSocket = pathSocket;
   }
 
   builder(node) {
-    const enabledInput = new Rete.Input(
-      "enabledFlag",
-      "Enabled (Boolean)",
-      this.booleanSocket
-    );
+    node.data.enabledFlag = node.data.enabledFlag ?? true;
     const contentInput = new Rete.Input(
       "content",
       "Content (JSON/HTML)",
@@ -27,16 +22,13 @@ class EndpointComponent extends Rete.Component {
     );
     const pathInput = new Rete.Input("path", "Path", this.pathSocket);
 
-    enabledInput.addControl(
-      new BooleanControl(this.editor, "enabledFlag", node)
-    );
     contentInput.addControl(new TextControl(this.editor, "content", node));
     pathInput.addControl(new TextControl(this.editor, "path", node));
 
     return node
-      .addInput(enabledInput)
       .addInput(contentInput)
       .addInput(pathInput)
+      .addControl(new BooleanControl(this.editor, "enabledFlag", node))
       .addControl(new EndpointControl(this.editor, "endpoint", node, true));
   }
 
@@ -53,7 +45,7 @@ class EndpointComponent extends Rete.Component {
         }
       }
     })(node.inputs.content.connections[0]);
-    const enabledFlag = inputs["enabledFlag"].length ? inputs["enabledFlag"][0] : false;
+    const enabledFlag = node.data.enabledFlag;
 
     this.editor.nodes
       .find((n) => n.id === node.id)
