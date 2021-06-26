@@ -1,18 +1,21 @@
 import Rete from "rete";
 
 class BooleanControl extends Rete.Control {
-  static component = ({ checked, onChange }) => (
-    <input
-      type="checkbox"
-      checked={checked}
-      ref={(ref) => {
-        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-      }}
-      onChange={(e) => onChange(+e.target.checked)}
-    />
+  static component = ({ checked, onChange, title }) => (
+    <>
+      {title && <label style={{color: 'white', display: 'block', textAlign: 'left'}}>{title}</label>}
+      <input
+        type="checkbox"
+        checked={checked}
+        ref={(ref) => {
+          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
+        }}
+        onChange={(e) => onChange(+e.target.checked)}
+      />
+    </>
   );
 
-  constructor(emitter, key, node, readonly = false) {
+  constructor(emitter, key, node, readonly = false, title = "") {
     super(key);
     this.emitter = emitter;
     this.key = key;
@@ -25,6 +28,7 @@ class BooleanControl extends Rete.Control {
     this.props = {
       readonly,
       checked: initial,
+      title,
       onChange: (v) => {
         this.setValue(!!v);
         this.emitter.trigger("process");

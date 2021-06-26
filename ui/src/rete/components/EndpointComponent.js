@@ -23,9 +23,9 @@ class EndpointComponent extends Rete.Component {
 
     return node
       .addInput(contentInput)
-      .addControl(new BooleanControl(this.editor, "enabledFlag", node))
-      .addControl(new TextControl(this.editor, "path", node))
-      .addControl(new EndpointControl(this.editor, "endpoint", node, true));
+      .addControl(new EndpointControl(this.editor, "endpoint", node, true))
+      .addControl(new BooleanControl(this.editor, "enabledFlag", node, false, "Enabled"))
+      .addControl(new TextControl(this.editor, "path", node, false, "Path", "/foo"));
   }
 
   worker(node, inputs, outputs) {
