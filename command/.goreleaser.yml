@@ -20,6 +20,7 @@ builds:
       - netbsd
       - openbsd
       - dragonfly
+      - windows
     goarch:
       - amd64
       - 386
@@ -40,7 +41,6 @@ builds:
     env:
       - CGO_ENABLED=0
     goos:
-      - windows
       - linux
     goarch:
       - amd64
