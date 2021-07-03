@@ -2,7 +2,7 @@ import Rete from "rete";
 import HandlebarsControl from "../../controls/template/HandlebarsControl";
 
 class HandlebarsComponent extends Rete.Component {
-  path = ["[ Template ]"];
+  path = ["New"];
   constructor(socket) {
     super("Handlebars");
     this.socket = socket;

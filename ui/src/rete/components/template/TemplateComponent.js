@@ -6,7 +6,7 @@ import * as pug from "pug";
 import Handlebars from "handlebars";
 
 class TemplateComponent extends Rete.Component {
-  path = ["[ Template ]"];
+  path = ["New"];
   constructor(dataSocket, templateSocket, htmlSocket) {
     super("Template");
     this.data.component = TemplateNode; // optional

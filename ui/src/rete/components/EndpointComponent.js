@@ -5,7 +5,7 @@ import BooleanControl from "../controls/BooleanControl";
 import TextControl from "../controls/TextControl";
 
 class EndpointComponent extends Rete.Component {
-  path = ["[ Endpoint ]"];
+  path = ["New"];
   constructor(stringSocket) {
     super("Endpoint");
     this.data.component = EndpointNode; // optional

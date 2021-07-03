@@ -166,7 +166,10 @@ export async function createEditor(container) {
   const data = await axios
     .get("/tuna-configuration")
     .then((res) => res.data)
-    .catch(() => null);
+    .catch(() => {
+      document.getElementsByClassName("rightClick")[0].style.display = "block";
+      return null;
+    });
 
   if (data !== null) {
     await editor.fromJSON(data);
@@ -176,6 +179,11 @@ export async function createEditor(container) {
     endpoint.position = [1000, 200];
     editor.addNode(endpoint);
   }
+
+  editor.on('showcontextmenu', ({ e, node }) => {
+    document.getElementsByClassName("rightClick")[0].style.display = "none";
+    return true;
+  });
 
   editor.on(
     "process nodecreated noderemoved connectioncreated connectionremoved",

@@ -3,7 +3,7 @@ import TextControl from "../controls/TextControl";
 import { ApiNode } from "../nodes/ApiNode";
 
 class ApiComponent extends Rete.Component {
-  path = ["[ Seed ]"];
+  path = ["New"];
   constructor(urlSocket, jsonSocket) {
     super("API");
     this.data.component = ApiNode; // optional

@@ -2,7 +2,7 @@ import Rete from "rete";
 import JsonControl from "../../controls/JsonControl";
 
 class JsonComponent extends Rete.Component {
-  path = ["[ Input ]"];
+  path = ["New"];
   constructor(socket) {
     super("JSON");
     this.socket = socket;
