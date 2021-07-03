@@ -14,15 +14,11 @@ import AutoArrangePlugin from "rete-auto-arrange-plugin";
 import HistoryPlugin from "rete-history-plugin";
 import { toast } from "react-toastify";
 
-// import AddComponent from "./rete/components/operator/AddComponent";
-// import SubtractComponent from "./rete/components/operator/SubtractComponent";
-// import NumComponent from "./rete/components/NumComponent";
 import TextComponent from "./rete/components/input/TextComponent";
 import JsonComponent from "./rete/components/input/JsonComponent";
 import TemplateComponent from "./rete/components/template/TemplateComponent";
 import HandlebarsComponent from "./rete/components/template/HandlebarsComponent";
 import PugComponent from "./rete/components/template/PugComponent";
-// import IfComponent from "./rete/components/statement/IfComponent";
 import BooleanComponent from "./rete/components/input/BooleanComponent";
 import EndpointComponent from "./rete/components/EndpointComponent";
 import PathComponent from "./rete/components/input/PathComponent";
@@ -60,15 +56,11 @@ export async function createEditor(container) {
   // 利用可能なコンポーネント一覧
   const components = [
     new EndpointComponent(stringSocket),
-    // new NumComponent(numSocket),
-    // new AddComponent(numSocket),
-    // new SubtractComponent(numSocket),
     new TextComponent(textSocket),
     new JsonComponent(jsonSocket),
     new TemplateComponent(jsonSocket, templateSocket, htmlSocket),
     new HandlebarsComponent(handlebarsSocket),
     new PugComponent(pugSocket),
-    // new IfComponent(booleanSocket, stringSocket),
     new BooleanComponent(booleanSocket),
     new PathComponent(pathSocket),
     new ApiComponent(urlSocket, jsonSocket),

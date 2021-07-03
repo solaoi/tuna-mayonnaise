@@ -2,7 +2,6 @@ import Rete from "rete";
 import BooleanControl from "../../controls/BooleanControl";
 
 class BooleanComponent extends Rete.Component {
-  path = ["[ Input ]"];
   constructor(socket) {
     super("Boolean");
     this.socket = socket;

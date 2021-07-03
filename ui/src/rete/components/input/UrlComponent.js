@@ -2,7 +2,6 @@ import Rete from "rete";
 import TextControl from "../../controls/TextControl";
 
 class UrlComponent extends Rete.Component {
-  path = ["[ Input ]"];
   constructor(socket) {
     super("URL");
     this.socket = socket;
