@@ -119,6 +119,10 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					method := "GET"
 					req, _ := http.NewRequest(method, url, nil)
 					resp, err := client.Do(req)
+					defer func() {
+						io.Copy(io.Discard, resp.Body)
+						resp.Body.Close()
+					}()
 					if err == nil && resp.StatusCode >= 400 {
 						apiResponses = append(apiResponses, apiResponse{method, url, strconv.Itoa(resp.StatusCode)})
 						return body{http.StatusInternalServerError, "", apiResponses}
@@ -132,7 +136,6 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						return body{http.StatusInternalServerError, "", apiResponses}
 					}
 					apiResponses = append(apiResponses, apiResponse{method, url, strconv.Itoa(resp.StatusCode)})
-					defer resp.Body.Close()
 					byteArray, _ := io.ReadAll(resp.Body)
 					res := string(byteArray)
 					copy[i][k]["content"] = res
@@ -227,7 +230,8 @@ func api(cmd *cobra.Command, args []string) {
 
 	// restClient initialize
 	client = &http.Client{
-		Timeout: time.Second * 5,
+		Transport: &http.Transport{MaxIdleConnsPerHost: 32},
+		Timeout:   time.Second * 5,
 	}
 
 	// Prometheus
