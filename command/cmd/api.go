@@ -114,13 +114,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 		for i := len(copy) - 1; i >= 0; i-- {
 			for k, v := range copy[i] {
 				if v["name"] == "API" {
-					url := ""
-					for _, v1 := range copy[i+1] {
-						if v1["parent"] == k && v1["name"] == "URL" {
-							url = v1["content"].(string)
-							break
-						}
-					}
+					url := v["content"].(string)
 
 					method := "GET"
 					req, _ := http.NewRequest(method, url, nil)

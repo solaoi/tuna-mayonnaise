@@ -1,5 +1,5 @@
 import Rete from "rete";
-import ApiControl from "../controls/ApiControl";
+import TextControl from "../controls/TextControl";
 import { ApiNode } from "../nodes/ApiNode";
 
 class ApiComponent extends Rete.Component {
@@ -12,25 +12,18 @@ class ApiComponent extends Rete.Component {
   }
 
   builder(node) {
-    const urlInput = new Rete.Input("url", "URL", this.urlSocket);
     const jsonInput = new Rete.Input("json", "Dummy Output (JSON)", this.jsonSocket);
     const out = new Rete.Output("json", "JSON", this.jsonSocket);
 
     return node
-      .addInput(urlInput)
       .addInput(jsonInput)
-      .addControl(new ApiControl(this.editor, "json", node, true))
+      .addControl(new TextControl(this.editor, "url", node, false, "URL", "https://example.com/bar"))
       .addOutput(out);
   }
 
   worker(node, inputs, outputs) {
-    const json = inputs["json"].length ? inputs["json"][0] : node.data.json;
-
-    this.editor.nodes
-      .find((n) => n.id === node.id)
-      .controls.get("json")
-      .setValue(json);
-    outputs["json"] = json;
+    outputs["json"] = inputs["json"].length ? inputs["json"][0] : node.data.json;
+    outputs["url"] = node.data.url;
   }
 }
 

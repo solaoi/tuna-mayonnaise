@@ -20,7 +20,6 @@ class EndpointControl extends Rete.Control {
     super(controlName);
 
     this.emitter = emitter;
-    this.keys = [];
     this.component = EndpointControl.component;
     this.props = {
       readonly,
