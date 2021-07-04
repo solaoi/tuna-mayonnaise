@@ -1,26 +1,22 @@
 import Rete from "rete";
 
-class TextControl extends Rete.Control {
-  static component = ({ value, onChange, title, placeHolder }) => (
-    <>
-      {title && <label style={{color: 'white', display: 'block', textAlign: 'left'}}>{title}</label>}
-      <input
-        type="text"
-        value={value}
-        placeholder={placeHolder}
-        ref={(ref) => {
-          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-        }}
-        onChange={(e) => onChange(String(e.target.value))}
-      />
-    </>
+class SqlControl extends Rete.Control {
+  static component = ({ value, onChange }) => (
+    <textarea
+      value={value}
+      rows={10}
+      ref={(ref) => {
+        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
+      }}
+      onChange={(e) => onChange(String(e.target.value))}
+    />
   );
 
-  constructor(emitter, key, node, readonly = false, title = "", placeHolder = "") {
+  constructor(emitter, key, node, readonly = false) {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = TextControl.component;
+    this.component = SqlControl.component;
 
     const initial = node.data[key] || "";
 
@@ -29,8 +25,6 @@ class TextControl extends Rete.Control {
     this.props = {
       readonly,
       value: initial,
-      title,
-      placeHolder,
       onChange: (v) => {
         this.setValue(v);
         this.emitter.trigger("process");
@@ -46,4 +40,4 @@ class TextControl extends Rete.Control {
   }
 }
 
-export default TextControl;
+export default SqlControl;

@@ -1,6 +1,6 @@
 import Rete from "rete";
 
-class SqlControl extends Rete.Control {
+class TextControl extends Rete.Control {
   static component = ({ value, onChange, title, placeHolder }) => (
     <>
       {title && <label style={{color: 'white', display: 'block', textAlign: 'left'}}>{title}</label>}
@@ -20,7 +20,7 @@ class SqlControl extends Rete.Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = SqlControl.component;
+    this.component = TextControl.component;
 
     const initial = node.data[key] || "";
 
@@ -46,4 +46,4 @@ class SqlControl extends Rete.Control {
   }
 }
 
-export default SqlControl;
+export default TextControl;
