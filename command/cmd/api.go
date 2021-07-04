@@ -2,18 +2,21 @@ package cmd
 
 import (
 	"bytes"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/aymerick/raymond"
 	"github.com/eknkc/pug"
+	_ "github.com/go-sql-driver/mysql"
 	prom "github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -73,8 +76,14 @@ func dynamicEndpointHandler(c echo.Context) error {
 func findNext(node map[string]interface{}) (name string, content interface{}, nexts []string) {
 	name = node["name"].(string)
 	data := node["data"].(map[string]interface{})
-	content = data["output"]
 
+	if name == "API" {
+		content = data["url"]
+	} else if name == "DB" {
+		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"]}
+	} else {
+		content = data["output"]
+	}
 	inputs := node["inputs"].(map[string]interface{})
 	for _, v := range inputs {
 		input := v.(map[string]interface{})
@@ -89,7 +98,7 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 func setContents(nodes map[string]interface{}, id string, depth int, parent string, contents map[int]map[string]map[string]interface{}, isDynamic *bool) {
 	node := nodes[id].(map[string]interface{})
 	name, content, nexts := findNext(node)
-	if !*isDynamic && name == "API" {
+	if !*isDynamic && (name == "API" || name == "DB") {
 		*isDynamic = true
 	}
 	if _, exist := contents[depth]; !exist {
@@ -110,19 +119,15 @@ func setContents(nodes map[string]interface{}, id string, depth int, parent stri
 func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (content body) {
 	var apiResponses []apiResponse
 	return func() (content body) {
-		copy := deepcopy.Copy(contents).(map[int]map[string]map[string]interface{})
-		for i := len(copy) - 1; i >= 0; i-- {
-			for k, v := range copy[i] {
+		c := deepcopy.Copy(contents).(map[int]map[string]map[string]interface{})
+		for i := len(c) - 1; i >= 0; i-- {
+			for k, v := range c[i] {
 				if v["name"] == "API" {
 					url := v["content"].(string)
 
 					method := "GET"
 					req, _ := http.NewRequest(method, url, nil)
 					resp, err := client.Do(req)
-					defer func() {
-						io.Copy(io.Discard, resp.Body)
-						resp.Body.Close()
-					}()
 					if err == nil && resp.StatusCode >= 400 {
 						apiResponses = append(apiResponses, apiResponse{method, url, strconv.Itoa(resp.StatusCode)})
 						return body{http.StatusInternalServerError, "", apiResponses}
@@ -135,40 +140,140 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						}
 						return body{http.StatusInternalServerError, "", apiResponses}
 					}
+					defer func() {
+						io.Copy(io.Discard, resp.Body)
+						resp.Body.Close()
+					}()
 					apiResponses = append(apiResponses, apiResponse{method, url, strconv.Itoa(resp.StatusCode)})
 					byteArray, _ := io.ReadAll(resp.Body)
 					res := string(byteArray)
-					copy[i][k]["content"] = res
+					c[i][k]["content"] = res
+				} else if v["name"] == "DB" {
+					content := v["content"].(map[string]interface{})
+					user := fmt.Sprintf("%v", content["user"])
+					host := fmt.Sprintf("%v", content["host"])
+					port := fmt.Sprintf("%v", content["port"])
+					dbName := fmt.Sprintf("%v", content["db"])
+
+					query := ""
+					dummyJson := ""
+					for _, v1 := range c[i+1] {
+						if v1["parent"] == k {
+							if v1["name"] == "SQL" {
+								query = v1["content"].(string)
+							} else if v1["name"] == "JSON" {
+								dummyJson = v1["content"].(string)
+							}
+						}
+					}
+					if query == "" || dummyJson == "" {
+						log.Fatal("set sql params on tool...")
+					}
+					// TODO: move this checking to initialize
+					passEnv := strings.ToUpper(dbName) + "_PASS"
+					pass, ret := os.LookupEnv(passEnv)
+					if ret == false {
+						log.Fatal(passEnv + " is not found, set this env.")
+					}
+					dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, pass, host, port, dbName)
+					db, err := sql.Open("mysql", dsn)
+					if err != nil {
+						log.Fatal(err.Error())
+					}
+					defer db.Close()
+					rows, err := db.Query(query)
+					if err != nil {
+						log.Fatal(err.Error())
+					}
+					defer rows.Close()
+					dummy := []map[string]string{}
+					errJson := json.Unmarshal([]byte(dummyJson), &dummy)
+					if errJson != nil {
+						log.Fatal(errJson)
+					}
+					keys := []string{}
+					for k := range dummy[0] {
+						keys = append(keys, k)
+					}
+					sort.Strings(keys)
+					count := len(keys)
+					results := []map[string]string{}
+					for rows.Next() {
+						result := map[string]string{}
+						containers := make([]string, count)
+						copy(containers, keys)
+						pointers := make([]interface{}, count)
+						for i := 0; i < count; i++ {
+							pointers[i] = &containers[i]
+						}
+						err := rows.Scan(pointers...)
+						if err != nil {
+							log.Fatal(err.Error())
+						}
+						for i := 0; i < count; i++ {
+							result[keys[i]] = containers[i]
+						}
+						results = append(results, result)
+					}
+					err = rows.Err()
+					if err != nil {
+						log.Fatal(err.Error())
+					}
+					json, err := json.Marshal(results)
+					if err != nil {
+						log.Fatal(err)
+					}
+					c[i][k]["content"] = string(json)
 				} else if v["name"] == "Template" {
 					engine := ""
 					tmpl := ""
 					ctx := map[string]interface{}{}
-					for _, v2 := range copy[i+1] {
+					ctxs := []map[string]interface{}{}
+					for _, v2 := range c[i+1] {
 						if v2["parent"] == k && v2["name"] == "Handlebars" {
 							engine = "Handlebars"
 							tmpl = v2["content"].(string)
 						} else if v2["parent"] == k && v2["name"] == "Pug" {
 							engine = "Pug"
 							tmpl = v2["content"].(string)
-						} else if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API") {
-							json.Unmarshal([]byte(v2["content"].(string)), &ctx)
+						} else if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "DB") {
+							if strings.HasPrefix(v2["content"].(string), "[") {
+								json.Unmarshal([]byte(v2["content"].(string)), &ctxs)
+							} else {
+								json.Unmarshal([]byte(v2["content"].(string)), &ctx)
+							}
 						}
 					}
-					if engine == "Handlebars" {
-						result, err := raymond.Render(tmpl, ctx)
-						if err != nil {
-							log.Fatal("template handling error...")
+					if len(ctxs) == 0 {
+						if engine == "Handlebars" {
+							result, err := raymond.Render(tmpl, ctx)
+							if err != nil {
+								log.Fatal("template handling error...")
+							}
+							c[i][k]["content"] = result
+						} else if engine == "Pug" {
+							var tpl bytes.Buffer
+							goTpl, _ := pug.CompileString(tmpl)
+							goTpl.Execute(&tpl, ctx)
+							c[i][k]["content"] = tpl.String()
 						}
-						copy[i][k]["content"] = result
-					} else if engine == "Pug" {
-						var tpl bytes.Buffer
-						goTpl, _ := pug.CompileString(tmpl)
-						goTpl.Execute(&tpl, ctx)
-						copy[i][k]["content"] = tpl.String()
+					} else {
+						if engine == "Handlebars" {
+							result, err := raymond.Render(tmpl, ctxs)
+							if err != nil {
+								log.Fatal("template handling error...")
+							}
+							c[i][k]["content"] = result
+						} else if engine == "Pug" {
+							var tpl bytes.Buffer
+							goTpl, _ := pug.CompileString(tmpl)
+							goTpl.Execute(&tpl, ctxs)
+							c[i][k]["content"] = tpl.String()
+						}
 					}
 				} else if v["name"] == "Endpoint" {
-					for _, v3 := range copy[i+1] {
-						if v3["parent"] == k && (v3["name"] == "JSON" || v3["name"] == "API" || v3["name"] == "Template") {
+					for _, v3 := range c[i+1] {
+						if v3["parent"] == k && (v3["name"] == "JSON" || v3["name"] == "API" || v3["name"] == "DB" || v3["name"] == "Template") {
 							content := v3["content"].(string)
 							return body{http.StatusOK, content, apiResponses}
 						}
