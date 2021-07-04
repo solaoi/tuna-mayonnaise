@@ -14,16 +14,14 @@ import AutoArrangePlugin from "rete-auto-arrange-plugin";
 import HistoryPlugin from "rete-history-plugin";
 import { toast } from "react-toastify";
 
-import TextComponent from "./rete/components/input/TextComponent";
 import JsonComponent from "./rete/components/input/JsonComponent";
+import SqlComponent from "./rete/components/input/SqlComponent";
 import TemplateComponent from "./rete/components/template/TemplateComponent";
 import HandlebarsComponent from "./rete/components/template/HandlebarsComponent";
 import PugComponent from "./rete/components/template/PugComponent";
-import BooleanComponent from "./rete/components/input/BooleanComponent";
 import EndpointComponent from "./rete/components/EndpointComponent";
-import PathComponent from "./rete/components/input/PathComponent";
 import ApiComponent from "./rete/components/ApiComponent";
-import UrlComponent from "./rete/components/input/UrlComponent";
+import DbComponent from "./rete/components/DbComponent";
 import axios from "axios";
 import { saveAs } from "file-saver";
 
@@ -31,11 +29,7 @@ export async function createEditor(container) {
   // 各種Socket定義
   // primitive
   const stringSocket = new Rete.Socket("String value");
-  const booleanSocket = new Rete.Socket("Boolean value");
 
-  // const numSocket = new Rete.Socket("Number value");
-  const textSocket = new Rete.Socket("Text value");
-  textSocket.combineWith(stringSocket);
   // json
   const jsonSocket = new Rete.Socket("Json value");
   jsonSocket.combineWith(stringSocket);
@@ -49,22 +43,19 @@ export async function createEditor(container) {
   // html
   const htmlSocket = new Rete.Socket("HTML value");
   htmlSocket.combineWith(stringSocket);
-  const pathSocket = new Rete.Socket("Path value");
-  // api
-  const urlSocket = new Rete.Socket("URL value");
+  // sql
+  const sqlSocket = new Rete.Socket("SQL value");
 
   // 利用可能なコンポーネント一覧
   const components = [
     new EndpointComponent(stringSocket),
-    new TextComponent(textSocket),
     new JsonComponent(jsonSocket),
     new TemplateComponent(jsonSocket, templateSocket, htmlSocket),
     new HandlebarsComponent(handlebarsSocket),
     new PugComponent(pugSocket),
-    new BooleanComponent(booleanSocket),
-    new PathComponent(pathSocket),
-    new ApiComponent(urlSocket, jsonSocket),
-    new UrlComponent(urlSocket),
+    new SqlComponent(sqlSocket),
+    new ApiComponent(jsonSocket),
+    new DbComponent(jsonSocket, sqlSocket),
   ];
 
   const editor = new Rete.NodeEditor("tuna-mayonnaise@0.0.1", container);
@@ -121,10 +112,13 @@ export async function createEditor(container) {
   // コネクションパスの見た目を変更（矢印有表記へ）
   editor.use(ConnectionPathPlugin, {
     type: ConnectionPathPlugin.DEFAULT, // DEFAULT or LINEAR transformer
-    transformer: () => ([x1, y1, x2, y2]) => [
-      [x1, y1],
-      [x2, y2],
-    ], // optional, custom transformer
+    transformer:
+      () =>
+      ([x1, y1, x2, y2]) =>
+        [
+          [x1, y1],
+          [x2, y2],
+        ], // optional, custom transformer
     curve: ConnectionPathPlugin.curveBundle, // curve id
     options: { vertical: false, curvature: 0.4 }, // optional
     arrow: { color: "steelblue", marker: "M-5,-10 L-5,10 L20,0 z" },
@@ -173,14 +167,14 @@ export async function createEditor(container) {
 
   if (data !== null) {
     await editor.fromJSON(data);
-    toast.success("Previous configuration is RESTORED :)")
+    toast.success("Previous configuration is RESTORED :)");
   } else {
     const endpoint = await components[0].createNode();
     endpoint.position = [1000, 200];
     editor.addNode(endpoint);
   }
 
-  editor.on('showcontextmenu', ({ e, node }) => {
+  editor.on("showcontextmenu", ({ e, node }) => {
     document.getElementsByClassName("rightClick")[0].style.display = "none";
     return true;
   });

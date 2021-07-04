@@ -4,10 +4,9 @@ import { ApiNode } from "../nodes/ApiNode";
 
 class ApiComponent extends Rete.Component {
   path = ["New"];
-  constructor(urlSocket, jsonSocket) {
+  constructor(jsonSocket) {
     super("API");
     this.data.component = ApiNode; // optional
-    this.urlSocket = urlSocket;
     this.jsonSocket = jsonSocket;
   }
 
