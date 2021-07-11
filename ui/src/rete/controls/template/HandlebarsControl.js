@@ -1,15 +1,18 @@
 import Rete from "rete";
+import EditableHandlebarsComponent from "./EditableHandlebarsComponent";
 
 class HandlebarsControl extends Rete.Control {
   static component = ({ value, onChange }) => (
-    <textarea
-      value={value}
-      rows={10}
+    <div
       ref={(ref) => {
         ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
       }}
-      onChange={(e) => onChange(String(e.target.value))}
-    />
+    >
+      <EditableHandlebarsComponent
+        value={value}
+        onChange={(v) => onChange(v)}
+      />
+    </div>
   );
 
   constructor(emitter, key, node, readonly = false) {

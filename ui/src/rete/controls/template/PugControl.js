@@ -1,15 +1,15 @@
 import Rete from "rete";
+import EditablePugComponent from "./EditablePugComponent";
 
 class PugControl extends Rete.Control {
   static component = ({ value, onChange }) => (
-    <textarea
-      value={value}
-      rows={10}
+    <div
       ref={(ref) => {
         ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
       }}
-      onChange={(e) => onChange(String(e.target.value))}
-    />
+    >
+      <EditablePugComponent value={value} onChange={(v) => onChange(v)} />
+    </div>
   );
 
   constructor(emitter, key, node, readonly = false) {
@@ -18,8 +18,7 @@ class PugControl extends Rete.Control {
     this.key = key;
     this.component = PugControl.component;
 
-    const initial =
-      node.data[key] || "div #{name}";
+    const initial = node.data[key] || "div #{name}";
 
     node.data[key] = initial;
     node.data["output"] = initial;

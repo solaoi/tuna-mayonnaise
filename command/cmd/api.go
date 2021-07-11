@@ -186,7 +186,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						log.Fatal(err.Error())
 					}
 					defer rows.Close()
-					dummy := []map[string]string{}
+					dummy := []map[string]json.RawMessage{}
 					errJson := json.Unmarshal([]byte(dummyJson), &dummy)
 					if errJson != nil {
 						log.Fatal(errJson)
