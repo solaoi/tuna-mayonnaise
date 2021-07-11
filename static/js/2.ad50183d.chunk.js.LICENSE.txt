@@ -49,12 +49,6 @@ object-assign
 */
 
 /*!
-* rete-comment-plugin v0.7.0-rc.1 
-* (c) 2020 Vitaliy Stoliarov 
-* Released under the MIT license.
-*/
-
-/*!
 * rete-connection-path-plugin v0.3.1 
 * (c) 2019 Vitaliy Stoliarov 
 * Released under the MIT license.
@@ -79,12 +73,6 @@ object-assign
 */
 
 /*!
-* rete-keyboard-plugin v0.1.2 
-* (c) 2018  License 
-* Released under the ISC license.
-*/
-
-/*!
 * rete-minimap-plugin v0.3.1 
 * (c) 2019 Vitaliy Stoliarov 
 * Released under the MIT license.
@@ -97,6 +85,15 @@ object-assign
 */
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
+/**
+ * Prism: Lightweight, robust, elegant syntax highlighting
+ *
+ * @license MIT <https://opensource.org/licenses/MIT>
+ * @author Lea Verou <https://lea.verou.me>
+ * @namespace
+ * @public
+ */
 
 /** @license React v0.20.2
  * scheduler.production.min.js
