@@ -5,8 +5,6 @@ import ReactRenderPlugin from "rete-react-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin from "rete-context-menu-plugin";
-import KeyboardPlugin from "rete-keyboard-plugin";
-import CommentPlugin from "rete-comment-plugin";
 import MinimapPlugin from "rete-minimap-plugin";
 import ConnectionPathPlugin from "rete-connection-path-plugin";
 import ConnectionReroutePlugin from "rete-connection-reroute-plugin";
@@ -58,6 +56,12 @@ export async function createEditor(container) {
     new DbComponent(jsonSocket, sqlSocket),
   ];
 
+  const ua = window.navigator.userAgent.toLowerCase();
+  const isMacOS = ua.indexOf("mac os x") !== -1;
+  const isInputFocused = () => {
+    const nodeName = document.activeElement.nodeName;
+    return nodeName === "TEXTAREA" || nodeName === "INPUT";
+  };
   const editor = new Rete.NodeEditor("tuna-mayonnaise@0.0.1", container);
   editor.use(ConnectionPlugin);
   editor.use(ReactRenderPlugin);
@@ -87,8 +91,8 @@ export async function createEditor(container) {
       Save() {
         axios
           .post("/regist", editor.toJSON())
-          .then(() => toast.success("This configuration is SAVED :)"))
-          .catch(() => toast.error("Maybe tuna tool command is TERMINATED :("));
+          .then(() => toast.success("SAVED :)"))
+          .catch(() => toast.error("NOT CONNECTED :("));
       },
       Download() {
         const blob = new Blob([JSON.stringify(editor.toJSON())], {
@@ -101,11 +105,55 @@ export async function createEditor(container) {
       },
     },
   });
-  // DeleteキーでNodeを削除・Spaceキーでコンテキストメニューを表示
-  editor.use(KeyboardPlugin);
-  // Shift + c および Shift + f でコメント追加
-  editor.use(CommentPlugin, {
-    margin: 20, // default indent for new frames is 30px
+  // ダブルクリックおよび入力エリアでのズームを無効化
+  editor.on("zoom", ({ source }) => {
+    return source !== "dblclick" && source === "wheel" && !isInputFocused();
+  });
+  // ショートカットキー設定
+  // Crtl + z, Ctrl + yで戻る、進む
+  editor.use(HistoryPlugin, { keyboard: true });
+  editor.on("keydown", (e) => {
+    // テキスト入力時は単体キー無効
+    if (!isInputFocused()) {
+      switch (e.code) {
+        // DeleteキーでNodeを削除
+        case "Delete":
+        case "Backspace":
+          editor.selected.each((n) => {
+            editor.removeNode(n);
+          });
+          editor.selected.clear();
+          return;
+        // Spaceキーでメニュー表示
+        case "Space":
+          const rect = editor.view.container.getBoundingClientRect();
+          const event = new MouseEvent("contextmenu", {
+            clientX: rect.left + rect.width / 2,
+            clientY: rect.top + rect.height / 2,
+          });
+          editor.trigger("contextmenu", { e: event, view: editor.view });
+          return;
+        default:
+          break;
+      }
+    }
+    // MacOSの場合は、Ctrlに加えCommandキーでの入力に対応
+    if (isMacOS && e.metaKey) {
+      switch (e.code) {
+        case "KeyY":
+          editor.trigger("redo");
+          return;
+        case "KeyZ":
+          if (e.shiftKey) {
+            editor.trigger("redo");
+          } else {
+            editor.trigger("undo");
+          }
+          return;
+        default:
+          break;
+      }
+    }
   });
   // 右下にミニマップを表示
   editor.use(MinimapPlugin);
@@ -126,29 +174,6 @@ export async function createEditor(container) {
   // コネクションパスの見た目を変更（直線ではなく曲線で各Node間を結ぶ）
   editor.use(ConnectionReroutePlugin);
   editor.use(AutoArrangePlugin, { margin: { x: 200, y: 50 }, depth: 0 });
-  // Crtl + z, Ctrl + yで戻る、進む
-  editor.use(HistoryPlugin, { keyboard: true });
-  // デフォルトではMac標準（Command + z, Command + Shift + z）に対応していないので別途実装
-  const ua = window.navigator.userAgent.toLowerCase();
-  if (ua.indexOf("mac os x") !== -1) {
-    document.addEventListener("keydown", (e) => {
-      if (!e.metaKey) return;
-      switch (e.code) {
-        case "KeyY":
-          editor.trigger("redo");
-          break;
-        case "KeyZ":
-          if (e.shiftKey) {
-            editor.trigger("redo");
-          } else {
-            editor.trigger("undo");
-          }
-          break;
-        default:
-          break;
-      }
-    });
-  }
 
   const engine = new Rete.Engine("tuna-mayonnaise@0.0.1");
 
@@ -167,7 +192,7 @@ export async function createEditor(container) {
 
   if (data !== null) {
     await editor.fromJSON(data);
-    toast.success("Previous configuration is RESTORED :)");
+    toast.success("RESUMED :)");
   } else {
     const endpoint = await components[0].createNode();
     endpoint.position = [1000, 200];
@@ -182,7 +207,14 @@ export async function createEditor(container) {
   editor.on(
     "process nodecreated noderemoved connectioncreated connectionremoved",
     async () => {
-      console.log("process");
+      // テキスト入力欄のスクロールを有効化
+      document.querySelectorAll(".editorTextarea").forEach((area) => {
+        area.addEventListener("wheel", (e) => {
+          if (isInputFocused()) {
+            area.parentElement.parentElement.scrollTop += e.deltaY;
+          }
+        });
+      });
       await engine.abort();
       await engine.process(editor.toJSON());
     }

@@ -1,15 +1,15 @@
 import Rete from "rete";
+import EditableSqlComponent from "./EditableSqlComponent";
 
 class SqlControl extends Rete.Control {
   static component = ({ value, onChange }) => (
-    <textarea
-      value={value}
-      rows={10}
+    <div
       ref={(ref) => {
         ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
       }}
-      onChange={(e) => onChange(String(e.target.value))}
-    />
+    >
+      <EditableSqlComponent value={value} onChange={(v) => onChange(v)} />
+    </div>
   );
 
   constructor(emitter, key, node, readonly = false) {

@@ -14,27 +14,70 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual
 <details>
 <summary>CLICK</summary>
 
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-  - [Options](#options)
-- [Get Started](#get-started)
-  - [Binary Releases](#binary-releases)
-  - [Homebrew](#homebrew)
-- [2 STEP Usage](#2-step-usage)
-  - [1. Create a configuration](#1-create-a-configuration)
-  - [2. Use a configuration](#2-use-a-configuration)
-- [UseCases](#usecases)
-  - [1. Serve Static JSON](#1-serve-static-json)
-  - [2. Serve Static HTML](#2-serve-static-html)
-  - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
-  - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+    - [Options](#options)
+  - [Get Started](#get-started)
+    - [Binary Releases](#binary-releases)
+    - [Homebrew](#homebrew)
+  - [2 STEP Usage](#2-step-usage)
+    - [1. Create a configuration](#1-create-a-configuration)
+    - [2. Use a configuration](#2-use-a-configuration)
+  - [UseCases](#usecases)
+    - [1. Serve Static JSON](#1-serve-static-json)
+    - [2. Serve Static HTML](#2-serve-static-html)
+    - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
+    - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Get Started
+
+### Install
+
+#### For MacOS (Homebrew)
+
+```sh
+# Install
+brew install solaoi/tap/tuna
+# Update
+brew upgrade tuna
+```
+
+#### For Others (Binary Releases)
+
+you can download a binary release [here](https://github.com/solaoi/tuna-mayonnaise/releases).
+
+### Usage
+
+#### 1. Launch a tool on your browser
+
+`tuna tool` command launches a browser like below.
+
+this tool generate a configuration( `tuna-mayonnaise.json` ) with `Save` menu.
+
+![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
+
+[Tool Sample](https://solaoi.github.io/tuna-mayonnaise)
+
+\* this sample does not support the `Save` menu, but we could `Download` a configuration edited.
+
+#### 2. Serve your JSON/HTML
+
+`tuna api` command serves your JSON/HTML on `http://localhost:8080` .
+
+this command use a configuration( `tuna-mayonnaise.json` ) on current directory.
+
+## Tool Features
+
+TBD...
 
 ## API Features
 
@@ -59,38 +102,6 @@ We could set other port with a environment variable like below.
 ```
 PORT=9999 tuna api
 ```
-
-## Get Started
-
-### Binary Releases
-
-you can download a binary release [here](https://github.com/solaoi/tuna-mayonnaise/releases).
-
-### Homebrew
-
-```
-brew install solaoi/tap/tuna
-```
-
-## 2 STEP Usage
-
-### 1. Create a configuration
-
-`tuna tool` command launches a browser like below.
-
-this ui generate a configuration( `tuna-mayonnaise.json` ) with `Save` menu.
-
-![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
-
-[UI Sample](https://solaoi.github.io/tuna-mayonnaise)
-
-\* this sample does not support the `Save` menu, but we could `Download` a configuration edited.
-
-### 2. Use a configuration
-
-`tuna api` command use a configuration( `tuna-mayonnaise.json` ) on current directory.
-
-this command serves your endpoints on `http://localhost:8080` .
 
 ## UseCases
 
@@ -140,13 +151,11 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
  | [rete-area-plugin](https://www.npmjs.com/package/rete-area-plugin) | ISC |
  | [rete-auto-arrange-plugin](https://www.npmjs.com/package/rete-auto-arrange-plugin) | MIT License |
- | [rete-comment-plugin](https://www.npmjs.com/package/rete-comment-plugin) | MIT License |
  | [rete-connection-path-plugin](https://www.npmjs.com/package/rete-connection-path-plugin) | MIT License |
  | [rete-connection-plugin](https://www.npmjs.com/package/rete-connection-plugin) | MIT License |
  | [rete-connection-reroute-plugin](https://www.npmjs.com/package/rete-connection-reroute-plugin) | MIT License |
  | [rete-context-menu-plugin](https://www.npmjs.com/package/rete-context-menu-plugin) | MIT License |
  | [rete-history-plugin](https://www.npmjs.com/package/rete-history-plugin) | MIT License |
- | [rete-keyboard-plugin](https://www.npmjs.com/package/rete-keyboard-plugin) | ISC |
  | [rete-minimap-plugin](https://www.npmjs.com/package/rete-minimap-plugin) | MIT License |
  | [rete-react-render-plugin](https://www.npmjs.com/package/rete-react-render-plugin) | ISC |
 
