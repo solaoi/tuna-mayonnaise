@@ -56,6 +56,7 @@ type response struct {
 }
 
 var endpoints map[string]map[string]string
+var dbs map[string]*sql.DB
 
 func endpointHandler(c echo.Context) error {
 	return c.Blob(http.StatusOK, endpoints[c.Path()]["contentType"], []byte(endpoints[c.Path()]["content"]))
@@ -154,6 +155,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					host := fmt.Sprintf("%v", content["host"])
 					port := fmt.Sprintf("%v", content["port"])
 					dbName := fmt.Sprintf("%v", content["db"])
+					uniqueKey := fmt.Sprintf("%s_%s_%s_%s", user, host, port, dbName)
 
 					query := ""
 					dummyJson := ""
@@ -169,21 +171,13 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					if query == "" || dummyJson == "" {
 						log.Fatal("set sql params on tool...")
 					}
-					// TODO: move this checking to initialize
-					passEnv := strings.ToUpper(dbName) + "_PASS"
-					pass, ret := os.LookupEnv(passEnv)
-					if ret == false {
-						log.Fatal(passEnv + " is not found, set this env.")
-					}
-					dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, pass, host, port, dbName)
-					db, err := sql.Open("mysql", dsn)
-					if err != nil {
-						log.Fatal(err.Error())
-					}
-					defer db.Close()
+
+					db := dbs[uniqueKey]
 					rows, err := db.Query(query)
 					if err != nil {
-						log.Fatal(err.Error())
+						// TODO: set Application Metrics
+						// fmt.Println(err.Error())
+						return body{http.StatusInternalServerError, "", []apiResponse{}}
 					}
 					defer rows.Close()
 					dummy := []map[string]json.RawMessage{}
@@ -295,6 +289,7 @@ func urlSkipper(c echo.Context) bool {
 
 func api(cmd *cobra.Command, args []string) {
 	endpoints = map[string]map[string]string{}
+	dbs = map[string]*sql.DB{}
 	dynamicEndpoints = map[string]response{}
 	bytes, err := os.ReadFile("tuna-mayonnaise.json")
 	if err != nil {
@@ -325,6 +320,29 @@ func api(cmd *cobra.Command, args []string) {
 					dynamicEndpoints[path] = response{contentType, contentBuilder(contents)}
 				}
 			}
+		}
+		if node["name"] == "DB" {
+			data := node["data"].(map[string]interface{})
+			user := data["user"].(string)
+			host := data["host"].(string)
+			port := data["port"].(string)
+			dbName := data["db"].(string)
+
+			passEnv := strings.ToUpper(dbName) + "_PASS"
+			pass, ret := os.LookupEnv(passEnv)
+			if ret == false {
+				log.Fatal(passEnv + " is not found, set this env.")
+			}
+			dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, pass, host, port, dbName)
+			uniqueKey := fmt.Sprintf("%s_%s_%s_%s", user, host, port, dbName)
+			if _, ok := dbs[uniqueKey]; ok {
+				continue
+			}
+			db, err := sql.Open("mysql", dsn)
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			dbs[uniqueKey] = db
 		}
 	}
 
@@ -378,6 +396,10 @@ func api(cmd *cobra.Command, args []string) {
 		port = "8080"
 	}
 	e.Logger.Fatal(e.Start(":" + port))
+
+	for _, db := range dbs {
+		defer db.Close()
+	}
 }
 
 func logFormat() string {
