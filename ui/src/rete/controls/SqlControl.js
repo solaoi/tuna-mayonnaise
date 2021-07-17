@@ -18,7 +18,7 @@ class SqlControl extends Rete.Control {
     this.key = key;
     this.component = SqlControl.component;
 
-    const initial = node.data[key] || "";
+    const initial = node.data[key] || `SELECT * FROM users`;
 
     node.data[key] = initial;
     node.data["output"] = initial;
