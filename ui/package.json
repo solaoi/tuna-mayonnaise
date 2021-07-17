@@ -14,6 +14,7 @@
     "axios": "^0.21.1",
     "file-saver": "^2.0.5",
     "handlebars": "^4.7.7",
+    "js-sql-parser": "1.4.1",
     "jsonlint-mod": "1.7.6",
     "prismjs": "1.24.1",
     "pug": "^3.0.2",

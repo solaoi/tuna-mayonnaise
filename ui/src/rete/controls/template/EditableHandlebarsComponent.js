@@ -32,11 +32,9 @@ const EditableHandlebarsComponent = ({ value, onChange }) => {
         onValueChange={(code) => {
           try {
             Handlebars.precompile(code);
-            console.log("a")
             setWarn(false);
             setStack(null);
           } catch (e) {
-            console.log("ddddddddd")
             setStack(e.message);
             setWarn(true);
           }
