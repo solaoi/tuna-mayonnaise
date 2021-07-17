@@ -109,36 +109,36 @@ export async function createEditor(container) {
   editor.on("zoom", ({ source }) => {
     return source !== "dblclick" && source === "wheel" && !isInputFocused();
   });
+  // 履歴機能を追加
+  editor.use(HistoryPlugin, { keyboard: false });
   // ショートカットキー設定
-  // Crtl + z, Ctrl + yで戻る、進む
-  editor.use(HistoryPlugin, { keyboard: true });
   editor.on("keydown", (e) => {
-    // テキスト入力時は単体キー無効
-    if (!isInputFocused()) {
-      switch (e.code) {
-        // DeleteキーでNodeを削除
-        case "Delete":
-        case "Backspace":
-          editor.selected.each((n) => {
-            editor.removeNode(n);
-          });
-          editor.selected.clear();
-          return;
-        // Spaceキーでメニュー表示
-        case "Space":
-          const rect = editor.view.container.getBoundingClientRect();
-          const event = new MouseEvent("contextmenu", {
-            clientX: rect.left + rect.width / 2,
-            clientY: rect.top + rect.height / 2,
-          });
-          editor.trigger("contextmenu", { e: event, view: editor.view });
-          return;
-        default:
-          break;
-      }
+    // テキスト入力時はキー無効
+    if (isInputFocused()) return;
+    switch (e.code) {
+      // DeleteキーでNodeを削除
+      case "Delete":
+      case "Backspace":
+        editor.selected.each((n) => {
+          editor.removeNode(n);
+        });
+        editor.selected.clear();
+        return;
+      // Spaceキーでメニュー表示
+      case "Space":
+        const rect = editor.view.container.getBoundingClientRect();
+        const event = new MouseEvent("contextmenu", {
+          clientX: rect.left + rect.width / 2,
+          clientY: rect.top + rect.height / 2,
+        });
+        editor.trigger("contextmenu", { e: event, view: editor.view });
+        return;
+      default:
+        break;
     }
+
     // MacOSの場合は、Ctrlに加えCommandキーでの入力に対応
-    if (isMacOS && e.metaKey) {
+    if (e.ctrlKey || (isMacOS && e.metaKey)) {
       switch (e.code) {
         case "KeyY":
           editor.trigger("redo");
