@@ -17,6 +17,7 @@ const EditableJsonComponent = ({ value, onChange }) => {
       setStack(null);
     }
   }, 10000);
+
   return (
     <Editor
       value={code}
@@ -37,7 +38,7 @@ const EditableJsonComponent = ({ value, onChange }) => {
       style={{
         fontFamily: '"Fira code", "Fira Mono", monospace',
         fontSize: 12,
-        background: warn ? "rgba(255, 110, 136, 0.8)" : "#FFF",
+        background: warn ? "rgba(255, 0, 80, 0.7)" : "#FFF",
         maxWidth: "300px",
       }}
     />
