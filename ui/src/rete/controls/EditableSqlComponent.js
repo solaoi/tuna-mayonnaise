@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 
 const EditableSqlComponent = ({ value, onChange }) => {
-  const [code, setCode] = React.useState(value);
+  const [code, setCode] = useState(value);
   const [warn, setWarn] = useState(false);
   const [stack, setStack] = useState(null);
   useInterval(() => {
