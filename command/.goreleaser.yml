@@ -12,7 +12,7 @@ builds:
       - -s -w
       - -X main.Version={{.Version}}
       - -X main.Revision={{.ShortCommit}}
-      - -X github.com/solaoi/tuna-mayonnaise/cmd.version={{.Tag}}
+      - -X github.com/solaoi/tuna-mayonnaise/cmd.version={{.Version}}
       - -X github.com/solaoi/tuna-mayonnaise/cmd.commit={{.FullCommit}}
       - -X github.com/solaoi/tuna-mayonnaise/cmd.date={{.Date}}
     env:
