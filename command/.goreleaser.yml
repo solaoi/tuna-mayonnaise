@@ -12,6 +12,9 @@ builds:
       - -s -w
       - -X main.Version={{.Version}}
       - -X main.Revision={{.ShortCommit}}
+      - -X github.com/solaoi/tuna-mayonnaise/command/cmd.version={{.Tag}}
+      - -X github.com/b4b4r07/tuna-mayonnaise/command/cmd.commit={{.FullCommit}}
+      - -X github.com/b4b4r07/tuna-mayonnaise/command/cmd.date={{.Date}
     env:
       - CGO_ENABLED=0
     goos:
