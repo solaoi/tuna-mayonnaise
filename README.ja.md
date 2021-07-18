@@ -5,7 +5,7 @@
 
 *他の言語で読む：[English](README.md)、[日本語](README.ja.md)*
 
-TUNA-Mayonnaise（ツナマヨ）は、ビジュアルプログラミング環境でJSONやHTMLを作成・API提供するコマンドラインツールです。
+TUNA-Mayonnaise（ツナマヨ）は、ノードベースエディタ上でJSONやHTMLを作成し、APIとして提供するコマンドラインツールです。
 
 ## 目次
 
@@ -36,7 +36,84 @@ TUNA-Mayonnaise（ツナマヨ）は、ビジュアルプログラミング環�
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## API提供の特徴
+## 始め方
+
+### インストール方法
+
+#### MacOSの場合 (Homebrew)
+
+```sh
+# インストール
+brew install solaoi/tap/tuna
+# アップデート
+brew upgrade tuna
+```
+
+#### その他OSの場合 (実行ファイルを直接ダウンロード)
+
+[こちらから](https://github.com/solaoi/tuna-mayonnaise/releases) 各OSごとの実行ファイルをダウンロードできます。
+
+### 使い方
+
+#### 1. ツールをブラウザで開く
+
+`tuna tool` コマンドを実行すると、下記のようにブラウザが起動します。
+
+このUI上で、 `Save` メニューから設定ファイル（ `tuna-mayonnaise.json` ）を作成できます。
+
+![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
+
+[UI サンプル](https://solaoi.github.io/tuna-mayonnaise)
+
+※ このサンプルは `Save` メニューをサポートしてませんが、 `Download` メニューから編集した設定を取得できます。 
+
+#### 2. 作成したJSONや、HTMLをAPIとして提供する
+
+`tuna api` コマンドを実行すると、 `http://localhost:8080` でJSONや、HTMLをAPIとして提供します。
+
+このコマンドは、実行ディレクトリ内の設定ファイル（ `tuna-mayonnaise.json` ）を参照します。
+
+## ツールの機能
+
+### テンプレートエンジン
+
+HTMLを作成する際に、テンプレートエンジンとして下記を利用できます。
+
+- Pug
+- Handlebars
+
+### API
+
+WEB APIにリクエストし、そのレスポンスを利用できます。
+
+### データベース
+
+このツールは下記データベースをサポートしてます。
+
+- MySQL
+- PostgreSQL (WIP
+
+データは、JSON形式で利用できます。
+
+例）
+
+仮に下記テーブルがあった場合、
+
+ | id  | name |
+ | :------------- | :------------- |
+ | 1 | foo |
+ | 2 | bar |
+
+次のようなレスポンスを取得できます。
+
+```json
+[
+  {"id":1, "name":"foo"},
+  {"id":2, "name":"bar"}
+]
+```
+
+## APIの機能
 
 ### 監視
 
@@ -58,38 +135,6 @@ TUNA-Mayonnaise（ツナマヨ）は、ビジュアルプログラミング環�
 ```
 PORT=9999 tuna api
 ```
-
-## インストール方法
-
-### 実行ファイルを直接ダウンロード
-
-[こちらから](https://github.com/solaoi/tuna-mayonnaise/releases) 各OSごとの実行ファイルをダウンロードできます。
-
-### Homebrewを利用
-
-```
-brew install solaoi/tap/tuna
-```
-
-## 使い方
-
-### 1. 設定ファイルを作成
-
-`tuna tool` コマンドを実行すると、下記のようにブラウザが起動します。
-
-このUI上で、 `Save` メニューから設定ファイル（ `tuna-mayonnaise.json` ）を作成できます。
-
-![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
-
-[UI サンプル](https://solaoi.github.io/tuna-mayonnaise)
-
-※ このサンプルは `Save` メニューをサポートしてませんが、 `Download` メニューから編集した設定を取得できます。 
-
-### 2. 設定ファイルを利用
-
-`tuna api` コマンドを実行すると、実行ディレクトリ内の設定ファイル（ `tuna-mayonnaise.json` ）を参照します。
-
-このコマンドで `http://localhost:8080` にて、作成したAPIを提供することができます。
 
 ## 活用例
 
@@ -118,7 +163,9 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | ライブラリ  | ライセンス |
  | :------------- | :------------- |
  | [github.com/aymerick/raymond](https://github.com/aymerick/raymond) | MIT License |
+ | [github.com/common-nighthawk/go-figure](https://github.com/common-nighthawk/go-figure) | MIT License |
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
+ | [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) | MPL-2.0 License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
@@ -132,20 +179,23 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [axios](https://www.npmjs.com/package/axios) | MIT License |
  | [file-saver](https://www.npmjs.com/package/file-saver) | MIT License |
  | [handlebars](https://www.npmjs.com/package/handlebars) | MIT License |
+ | [js-sql-parser](https://github.com/JavaScriptor/js-sql-parser) | MIT License |
+ | [jsonlint-mod](https://github.com/circlecell/jsonlint-mod) | MIT License |
+ | [prismjs](https://www.npmjs.com/package/prismjs) | MIT License |
  | [pug](https://www.npmjs.com/package/pug) | MIT License |
  | [react](https://www.npmjs.com/package/react) | MIT License |
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
+ | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
+ | [react-use](https://www.npmjs.com/package/react-use) | Unlicense License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
  | [rete-area-plugin](https://www.npmjs.com/package/rete-area-plugin) | ISC |
  | [rete-auto-arrange-plugin](https://www.npmjs.com/package/rete-auto-arrange-plugin) | MIT License |
- | [rete-comment-plugin](https://www.npmjs.com/package/rete-comment-plugin) | MIT License |
  | [rete-connection-path-plugin](https://www.npmjs.com/package/rete-connection-path-plugin) | MIT License |
  | [rete-connection-plugin](https://www.npmjs.com/package/rete-connection-plugin) | MIT License |
  | [rete-connection-reroute-plugin](https://www.npmjs.com/package/rete-connection-reroute-plugin) | MIT License |
  | [rete-context-menu-plugin](https://www.npmjs.com/package/rete-context-menu-plugin) | MIT License |
  | [rete-history-plugin](https://www.npmjs.com/package/rete-history-plugin) | MIT License |
- | [rete-keyboard-plugin](https://www.npmjs.com/package/rete-keyboard-plugin) | ISC |
  | [rete-minimap-plugin](https://www.npmjs.com/package/rete-minimap-plugin) | MIT License |
  | [rete-react-render-plugin](https://www.npmjs.com/package/rete-react-render-plugin) | ISC |
 

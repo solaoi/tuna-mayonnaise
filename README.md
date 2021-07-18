@@ -5,7 +5,7 @@
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 
-TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual Programming.
+TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node-based editor.
 
 ## Table of Contents
 
@@ -14,22 +14,28 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML with Visual
 <details>
 <summary>CLICK</summary>
 
-- [Get Started](#get-started)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Tool Features](#tool-features)
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-  - [Options](#options)
-- [UseCases](#usecases)
-  - [1. Serve Static JSON](#1-serve-static-json)
-  - [2. Serve Static HTML](#2-serve-static-html)
-  - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
-  - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Get Started](#get-started)
+    - [Install](#install)
+      - [For MacOS (Homebrew)](#for-macos-homebrew)
+      - [For Others (Binary Releases)](#for-others-binary-releases)
+    - [Usage](#usage)
+      - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
+      - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
+  - [Tool Features](#tool-features)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+    - [Options](#options)
+  - [UseCases](#usecases)
+    - [1. Serve Static JSON](#1-serve-static-json)
+    - [2. Serve Static HTML](#2-serve-static-html)
+    - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
+    - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -73,7 +79,43 @@ this command use a configuration( `tuna-mayonnaise.json` ) on current directory.
 
 ## Tool Features
 
-TBD...
+### Template Engine
+
+When you generate your HTML, you could use Template Engines below.
+
+- Pug
+- Handlebars
+
+### API
+
+You could request WEB APIs and use responses.
+
+### Database
+
+This tool supports databases below.
+
+- MySQL
+- PostgreSQL (WIP
+
+You could access the data in JSON format.
+
+ex)
+
+If there is a table like below, 
+
+ | id  | name |
+ | :------------- | :------------- |
+ | 1 | foo |
+ | 2 | bar |
+
+You get the response like below.
+
+```json
+[
+  {"id":1, "name":"foo"},
+  {"id":2, "name":"bar"}
+]
+```
 
 ## API Features
 
@@ -126,7 +168,9 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | Dependency  | License |
  | :------------- | :------------- |
  | [github.com/aymerick/raymond](https://github.com/aymerick/raymond) | MIT License |
+ | [github.com/common-nighthawk/go-figure](https://github.com/common-nighthawk/go-figure) | MIT License |
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
+ | [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) | MPL-2.0 License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
@@ -140,10 +184,15 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [axios](https://www.npmjs.com/package/axios) | MIT License |
  | [file-saver](https://www.npmjs.com/package/file-saver) | MIT License |
  | [handlebars](https://www.npmjs.com/package/handlebars) | MIT License |
+ | [js-sql-parser](https://github.com/JavaScriptor/js-sql-parser) | MIT License |
+ | [jsonlint-mod](https://github.com/circlecell/jsonlint-mod) | MIT License |
+ | [prismjs](https://www.npmjs.com/package/prismjs) | MIT License |
  | [pug](https://www.npmjs.com/package/pug) | MIT License |
  | [react](https://www.npmjs.com/package/react) | MIT License |
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
+ | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
+ | [react-use](https://www.npmjs.com/package/react-use) | Unlicense License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
  | [rete-area-plugin](https://www.npmjs.com/package/rete-area-plugin) | ISC |
  | [rete-auto-arrange-plugin](https://www.npmjs.com/package/rete-auto-arrange-plugin) | MIT License |
