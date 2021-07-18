@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/blang/semver"
 	"github.com/rhysd/go-github-selfupdate/selfupdate"
@@ -29,7 +30,8 @@ func confirmAndSelfUpdate(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	v := semver.MustParse(version)
+    trimmed := strings.TrimPrefix(version, "v")
+	v := semver.MustParse(trimmed)
 	if !found || latest.Version.LTE(v) {
 		log.Println("Current version is the latest")
 		return

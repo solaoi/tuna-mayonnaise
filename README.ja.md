@@ -54,6 +54,25 @@ brew upgrade tuna
 
 [こちらから](https://github.com/solaoi/tuna-mayonnaise/releases) 各OSごとの実行ファイルをダウンロードできます。
 
+```sh
+# wget または curl でインストール
+## releasesタブの最新のバージョンを先頭のvなしで指定してください。
+VERSION=0.2.8-alpha
+## 利用OSを指定してください。
+OS=linux_amd64
+## wget経由の場合
+wget https://github.com/solaoi/tuna-mayonnaise/releases/download/v$VERSION/tuna_${VERSION}_${OS}.tar.gz
+## curl経由の場合
+curl -LO  https://github.com/solaoi/tuna-mayonnaise/releases/download/v$VERSION/tuna_${VERSION}_${OS}.tar.gz
+## 解凍
+tar xvf ./tuna_${VERSION}_${OS}.tar.gz
+## /usr/local/binなどのPATHの通った場所に移動してください。
+mv ./tuna /usr/local/bin/
+
+# アップデート
+tuna update
+```
+
 ### 使い方
 
 #### 1. ツールをブラウザで開く
