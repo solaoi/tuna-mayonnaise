@@ -173,6 +173,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | Dependency  | License |
  | :------------- | :------------- |
  | [github.com/aymerick/raymond](https://github.com/aymerick/raymond) | MIT License |
+ | [github.com/christopherhein/go-version](https://github.com/christopherhein/go-version) | Apache License 2.0 |
  | [github.com/common-nighthawk/go-figure](https://github.com/common-nighthawk/go-figure) | MIT License |
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
  | [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) | MPL-2.0 License |
