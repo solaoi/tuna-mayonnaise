@@ -172,6 +172,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | ライブラリ  | ライセンス |
  | :------------- | :------------- |
  | [github.com/aymerick/raymond](https://github.com/aymerick/raymond) | MIT License |
+ | [github.com/blang/semver](https://github.com/blang/semver) | MIT License |
  | [github.com/christopherhein/go-version](https://github.com/christopherhein/go-version) | Apache License 2.0 |
  | [github.com/common-nighthawk/go-figure](https://github.com/common-nighthawk/go-figure) | MIT License |
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
@@ -180,6 +181,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
  | [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) | Apache License 2.0 |
+ | [github.com/rhysd/go-github-selfupdate](https://github.com/rhysd/go-github-selfupdate) | MIT License |
  | [github.com/spf13/cobra](https://github.com/spf13/cobra) | Apache License 2.0 |
 
 ### フロントエンドの依存関係
