@@ -12,4 +12,7 @@ require (
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826
 	github.com/prometheus/client_golang v1.9.0 // indirect
 	github.com/spf13/cobra v1.1.1
+	go.hein.dev/go-version v0.1.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
+	sigs.k8s.io/yaml v1.2.0 // indirect
 )
