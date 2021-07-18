@@ -64,13 +64,16 @@ func endpointHandler(c echo.Context) error {
 
 var dynamicEndpoints map[string]response
 var dynamicEndpointCounter *prometheus.CounterVec
+var isPromEnabled string
+var promRet bool
 
 func dynamicEndpointHandler(c echo.Context) error {
 	body := dynamicEndpoints[c.Path()].ContentBuilder()
-	for _, v := range body.APIResponses {
-		dynamicEndpointCounter.WithLabelValues(v.StatusCode, v.Method, v.URL).Inc()
+	if isPromEnabled != "OFF" {
+		for _, v := range body.APIResponses {
+			dynamicEndpointCounter.WithLabelValues(v.StatusCode, v.Method, v.URL).Inc()
+		}
 	}
-
 	return c.Blob(body.StatusCode, dynamicEndpoints[c.Path()].ContentType, []byte(body.Content))
 }
 
@@ -358,15 +361,21 @@ func api(cmd *cobra.Command, args []string) {
 	}
 
 	// Prometheus
-	reqAPICnt := &prom.Metric{
-		ID:          "reqAPICnt",
-		Name:        "requests_api_total",
-		Description: "How many HTTP requests to APIs processed, partitioned by status code and HTTP method.",
-		Type:        "counter_vec",
-		Args:        []string{"code", "method", "url"}}
-	p := prom.NewPrometheus("tuna", urlSkipper, []*prom.Metric{reqAPICnt})
-	dynamicEndpointCounter = reqAPICnt.MetricCollector.(*prometheus.CounterVec)
-	p.Use(e)
+	isPromEnabled, promRet = os.LookupEnv("PROM")
+	if promRet == false {
+		isPromEnabled = "ON"
+	}
+	if isPromEnabled != "OFF" {
+		reqAPICnt := &prom.Metric{
+			ID:          "reqAPICnt",
+			Name:        "requests_api_total",
+			Description: "How many HTTP requests to APIs processed, partitioned by status code and HTTP method.",
+			Type:        "counter_vec",
+			Args:        []string{"code", "method", "url"}}
+		p := prom.NewPrometheus("tuna", urlSkipper, []*prom.Metric{reqAPICnt})
+		dynamicEndpointCounter = reqAPICnt.MetricCollector.(*prometheus.CounterVec)
+		p.Use(e)
+	}
 
 	// LTSV Logger
 	logger := middleware.LoggerWithConfig(middleware.LoggerConfig{
