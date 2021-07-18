@@ -19,7 +19,8 @@ import HandlebarsComponent from "./rete/components/template/HandlebarsComponent"
 import PugComponent from "./rete/components/template/PugComponent";
 import EndpointComponent from "./rete/components/EndpointComponent";
 import ApiComponent from "./rete/components/ApiComponent";
-import DbComponent from "./rete/components/DbComponent";
+import MySQLComponent from "./rete/components/MySQLComponent";
+import PostgreSQLComponent from "./rete/components/PostgreSQLComponent";
 import axios from "axios";
 import { saveAs } from "file-saver";
 
@@ -53,7 +54,8 @@ export async function createEditor(container) {
     new PugComponent(pugSocket),
     new SqlComponent(sqlSocket),
     new ApiComponent(jsonSocket),
-    new DbComponent(jsonSocket, sqlSocket),
+    new MySQLComponent(jsonSocket, sqlSocket),
+    new PostgreSQLComponent(jsonSocket, sqlSocket),
   ];
 
   const ua = window.navigator.userAgent.toLowerCase();

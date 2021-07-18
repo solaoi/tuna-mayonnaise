@@ -20,6 +20,7 @@ import (
 	prom "github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	_ "github.com/lib/pq"
 	"github.com/mohae/deepcopy"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/cobra"
@@ -83,7 +84,7 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 
 	if name == "API" {
 		content = data["url"]
-	} else if name == "DB" {
+	} else if name == "MySQL" || name == "PostgreSQL" {
 		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"]}
 	} else {
 		content = data["output"]
@@ -102,7 +103,7 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 func setContents(nodes map[string]interface{}, id string, depth int, parent string, contents map[int]map[string]map[string]interface{}, isDynamic *bool) {
 	node := nodes[id].(map[string]interface{})
 	name, content, nexts := findNext(node)
-	if !*isDynamic && (name == "API" || name == "DB") {
+	if !*isDynamic && (name == "API" || name == "MySQL" || name == "PostgreSQL") {
 		*isDynamic = true
 	}
 	if _, exist := contents[depth]; !exist {
@@ -152,7 +153,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					byteArray, _ := io.ReadAll(resp.Body)
 					res := string(byteArray)
 					c[i][k]["content"] = res
-				} else if v["name"] == "DB" {
+				} else if v["name"] == "MySQL" || v["name"] == "PostgreSQL" {
 					content := v["content"].(map[string]interface{})
 					user := fmt.Sprintf("%v", content["user"])
 					host := fmt.Sprintf("%v", content["host"])
@@ -233,7 +234,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						} else if v2["parent"] == k && v2["name"] == "Pug" {
 							engine = "Pug"
 							tmpl = v2["content"].(string)
-						} else if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "DB") {
+						} else if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "MySQL" || v2["name"] == "PostgreSQL") {
 							if strings.HasPrefix(v2["content"].(string), "[") {
 								json.Unmarshal([]byte(v2["content"].(string)), &ctxs)
 							} else {
@@ -270,7 +271,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					}
 				} else if v["name"] == "Endpoint" {
 					for _, v3 := range c[i+1] {
-						if v3["parent"] == k && (v3["name"] == "JSON" || v3["name"] == "API" || v3["name"] == "DB" || v3["name"] == "Template") {
+						if v3["parent"] == k && (v3["name"] == "JSON" || v3["name"] == "API" || v3["name"] == "MySQL" || v3["name"] == "PostgreSQL" || v3["name"] == "Template") {
 							content := v3["content"].(string)
 							return body{http.StatusOK, content, apiResponses}
 						}
@@ -324,24 +325,33 @@ func api(cmd *cobra.Command, args []string) {
 				}
 			}
 		}
-		if node["name"] == "DB" {
+		if node["name"] == "MySQL" || node["name"] == "PostgreSQL" {
 			data := node["data"].(map[string]interface{})
 			user := data["user"].(string)
 			host := data["host"].(string)
 			port := data["port"].(string)
 			dbName := data["db"].(string)
 
-			passEnv := strings.ToUpper(dbName) + "_PASS"
+			passEnv := strings.ToUpper(dbName) + "_PASS_ON_" + strings.ToUpper(user)
 			pass, ret := os.LookupEnv(passEnv)
 			if ret == false {
 				log.Fatal(passEnv + " is not found, set this env.")
 			}
-			dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, pass, host, port, dbName)
 			uniqueKey := fmt.Sprintf("%s_%s_%s_%s", user, host, port, dbName)
 			if _, ok := dbs[uniqueKey]; ok {
 				continue
 			}
-			db, err := sql.Open("mysql", dsn)
+			var db *sql.DB
+			var err error
+			if node["name"] == "MySQL" {
+				tls := data["tls"].(string)
+				dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?tls=%s", user, pass, host, port, dbName, tls)
+				db, err = sql.Open("mysql", dsn)
+			} else {
+				sslmode := data["sslmode"].(string)
+				dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", host, port, user, pass, dbName, sslmode)
+				db, err = sql.Open("postgres", dsn)
+			}
 			if err != nil {
 				log.Fatal(err.Error())
 			}

@@ -111,7 +111,7 @@ WEB APIにリクエストし、そのレスポンスを利用できます。
 このツールは下記データベースをサポートしてます。
 
 - MySQL
-- PostgreSQL (WIP
+- PostgreSQL
 
 データは、JSON形式で利用できます。
 
@@ -198,6 +198,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) | MPL-2.0 License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
+ | [github.com/lib/pq](https://github.com/lib/pq) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
  | [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) | Apache License 2.0 |
  | [github.com/rhysd/go-github-selfupdate](https://github.com/rhysd/go-github-selfupdate) | MIT License |
