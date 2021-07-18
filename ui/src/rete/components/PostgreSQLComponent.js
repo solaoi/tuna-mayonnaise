@@ -2,10 +2,10 @@ import Rete from "rete";
 import TextControl from "../controls/TextControl";
 import { DbNode } from "../nodes/DbNode";
 
-class DbComponent extends Rete.Component {
+class PostgreSQLComponent extends Rete.Component {
   path = ["New"];
   constructor(jsonSocket, sqlSocket) {
-    super("DB");
+    super("PostgreSQL");
     this.data.component = DbNode; // optional
     this.jsonSocket = jsonSocket;
     this.sqlSocket = sqlSocket;
@@ -19,6 +19,7 @@ class DbComponent extends Rete.Component {
     return node
       .addInput(sqlInput)
       .addInput(jsonInput)
+      .addControl(new TextControl(this.editor, "sslmode", node, false, "SSLMODE", "disable"))
       .addControl(new TextControl(this.editor, "host", node, false, "HOST", "127.0.0.1"))
       .addControl(new TextControl(this.editor, "port", node, false, "PORT", "3306"))
       .addControl(new TextControl(this.editor, "user", node, false, "USER", "guest"))
@@ -29,6 +30,7 @@ class DbComponent extends Rete.Component {
   worker(node, inputs, outputs) {
     outputs["json"] = inputs["json"].length ? inputs["json"][0] : node.data.json;
     outputs["sql"] = inputs["sql"].length ? inputs["sql"][0] : node.data.sql;
+    outputs["sslmode"] = node.data.sslmode;
     outputs["host"] = node.data.host;
     outputs["port"] = node.data.port;
     outputs["user"] = node.data.user;
@@ -36,4 +38,4 @@ class DbComponent extends Rete.Component {
   }
 }
 
-export default DbComponent;
+export default PostgreSQLComponent;

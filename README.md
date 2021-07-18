@@ -117,7 +117,7 @@ You could request WEB APIs and use responses.
 This tool supports databases below.
 
 - MySQL
-- PostgreSQL (WIP
+- PostgreSQL
 
 You could access the data in JSON format.
 
@@ -205,6 +205,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) | MPL-2.0 License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
+ | [github.com/lib/pq](https://github.com/lib/pq) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
  | [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) | Apache License 2.0 |
  | [github.com/rhysd/go-github-selfupdate](https://github.com/rhysd/go-github-selfupdate) | MIT License |

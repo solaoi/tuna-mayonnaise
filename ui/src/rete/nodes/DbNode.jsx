@@ -5,6 +5,17 @@ export class DbNode extends Node {
   render() {
     const { node, bindSocket, bindControl } = this.props;
     const { outputs, controls, inputs, selected } = this.state;
+    const db = controls
+      .filter((c) => c.key === "db")
+      .map((c) =>
+        c.props.value === "" ? "DB" : c.props.value.toUpperCase()
+      )[0];
+    const user = controls
+      .filter((c) => c.key === "user")
+      .map((c) =>
+        c.props.value === "" ? "USER" : c.props.value.toUpperCase()
+      )[0];
+    const pass = `${db}_PASS_ON_${user}`;
 
     return (
       <div className={`node ${selected}`} style={{ background: "grey" }}>
@@ -43,11 +54,7 @@ export class DbNode extends Node {
                 </label>
                 <textarea
                   rows="3"
-                  placeholder={`set ${
-                    control.props.value === ""
-                      ? "DB"
-                      : control.props.value.toUpperCase()
-                  }_PASS when tuna api starting`}
+                  placeholder={`set ${pass} when tuna api starting`}
                   value=""
                   disabled
                 />
