@@ -30,7 +30,7 @@ func confirmAndSelfUpdate(cmd *cobra.Command, args []string) {
 		return
 	}
 
-    trimmed := strings.TrimPrefix(version, "v")
+	trimmed := strings.TrimPrefix(version, "v")
 	v := semver.MustParse(trimmed)
 	if !found || latest.Version.LTE(v) {
 		log.Println("Current version is the latest")
