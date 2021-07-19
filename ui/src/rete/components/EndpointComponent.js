@@ -3,6 +3,7 @@ import { EndpointNode } from "../nodes/EndpointNode";
 import EndpointControl from "../controls/EndpointControl";
 import BooleanControl from "../controls/BooleanControl";
 import TextControl from "../controls/TextControl";
+import PathControl from "../controls/PathControl";
 
 class EndpointComponent extends Rete.Component {
   path = ["New"];
@@ -25,7 +26,7 @@ class EndpointComponent extends Rete.Component {
       .addInput(contentInput)
       .addControl(new EndpointControl(this.editor, "endpoint", node, true))
       .addControl(new BooleanControl(this.editor, "enabledFlag", node, false, "Enabled"))
-      .addControl(new TextControl(this.editor, "path", node, false, "Path", "/foo"));
+      .addControl(new PathControl(this.editor, "path", node, false, "Path", "/foo"));
   }
 
   worker(node, inputs, outputs) {
