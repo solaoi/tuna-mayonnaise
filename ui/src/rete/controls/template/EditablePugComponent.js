@@ -15,7 +15,7 @@ const EditablePugComponent = ({ value, onChange }) => {
   const [stack, setStack] = useState(null);
   useInterval(() => {
     if (stack !== null) {
-      toast.warn(stack);
+      toast.error(stack);
       setStack(null);
     }
   }, 10000);
