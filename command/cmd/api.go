@@ -86,7 +86,7 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 	if name == "API" {
 		content = map[string]interface{}{"url": data["url"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "MySQL" || name == "PostgreSQL" {
-		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"]}
+		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else {
 		content = data["output"]
 	}
@@ -185,6 +185,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					port := fmt.Sprintf("%v", content["port"])
 					dbName := fmt.Sprintf("%v", content["db"])
 					uniqueKey := fmt.Sprintf("%s_%s_%s_%s", user, host, port, dbName)
+					cached := fmt.Sprintf("%v", content["cached"])
 
 					query := ""
 					dummyJson := ""
@@ -199,6 +200,15 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					}
 					if query == "" || dummyJson == "" {
 						log.Fatal("set sql params on tool...")
+					}
+					cacheKey := fmt.Sprintf("%s_%s", uniqueKey, query)
+
+					if cached == "true" {
+						v, ok := gache.Get(cacheKey)
+						if ok {
+							c[i][k]["content"] = v
+							continue
+						}
 					}
 
 					db := dbs[uniqueKey]
@@ -246,7 +256,21 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					if err != nil {
 						log.Fatal(err)
 					}
-					c[i][k]["content"] = string(json)
+					res := string(json)
+					if cached == "true" {
+						cacheTime := fmt.Sprintf("%v", content["cacheTime"])
+						if cacheTime == "" {
+							gache.Set(cacheKey, res)
+						} else {
+							cacheTime, err := strconv.Atoi(cacheTime)
+							if err != nil {
+								gache.Set(cacheKey, res)
+							} else {
+								gache.SetWithExpire(cacheKey, res, time.Second*time.Duration(cacheTime))
+							}
+						}
+					}
+					c[i][k]["content"] = res
 				} else if v["name"] == "Template" {
 					engine := ""
 					tmpl := ""
