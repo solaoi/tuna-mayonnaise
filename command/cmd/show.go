@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
+	"strconv"
 
 	"github.com/fatih/color"
 	"github.com/rodaine/table"
@@ -12,9 +14,9 @@ import (
 )
 
 var (
-	static = true
+	static  = true
 	enabled = true
-	showCmd       = &cobra.Command{
+	showCmd = &cobra.Command{
 		Use:   "show",
 		Short: "Show all endpoints",
 		Long:  ``,
@@ -40,6 +42,8 @@ func show(cmd *cobra.Command, args []string) {
 	tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
 
 	nodes := objmap["nodes"].(map[string]interface{})
+	var keys []string
+	results := map[string][3]string{}
 	for _, v := range nodes {
 		node := v.(map[string]interface{})
 		if node["name"] == "Endpoint" {
@@ -50,8 +54,13 @@ func show(cmd *cobra.Command, args []string) {
 			id := fmt.Sprint(node["id"])
 			setContents(nodes, id, 0, "0", contents, &isDynamic)
 			enabledFlag := data["enabledFlag"].(bool)
-			tbl.AddRow(path, "GET", !isDynamic, enabledFlag)
+			results[path] = [3]string{"GET", strconv.FormatBool(!isDynamic), strconv.FormatBool(enabledFlag)}
+			keys = append(keys, path)
 		}
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		tbl.AddRow(key, results[key][0], results[key][1], results[key][2])
 	}
 	tbl.Print()
 }
