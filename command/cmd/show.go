@@ -38,12 +38,12 @@ func show(cmd *cobra.Command, args []string) {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 	columnFmt := color.New(color.FgYellow).SprintfFunc()
 
-	tbl := table.New("Path", "Method", "Static", "Enabled")
+	tbl := table.New("Path", "Method", "ContentType", "Static", "Enabled")
 	tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
 
 	nodes := objmap["nodes"].(map[string]interface{})
 	var keys []string
-	results := map[string][3]string{}
+	results := map[string][4]string{}
 	for _, v := range nodes {
 		node := v.(map[string]interface{})
 		if node["name"] == "Endpoint" {
@@ -51,16 +51,17 @@ func show(cmd *cobra.Command, args []string) {
 			isDynamic := false
 			data := node["data"].(map[string]interface{})
 			path := data["path"].(string)
+			contentType := data["contentType"].(string)
 			id := fmt.Sprint(node["id"])
 			setContents(nodes, id, 0, "0", contents, &isDynamic)
 			enabledFlag := data["enabledFlag"].(bool)
-			results[path] = [3]string{"GET", strconv.FormatBool(!isDynamic), strconv.FormatBool(enabledFlag)}
+			results[path] = [4]string{"GET", contentType, strconv.FormatBool(!isDynamic), strconv.FormatBool(enabledFlag)}
 			keys = append(keys, path)
 		}
 	}
 	sort.Strings(keys)
 	for _, key := range keys {
-		tbl.AddRow(key, results[key][0], results[key][1], results[key][2])
+		tbl.AddRow(key, results[key][0], results[key][1], results[key][2], results[key][3])
 	}
 	tbl.Print()
 }
