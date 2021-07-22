@@ -18,7 +18,7 @@ var (
 	enabled = true
 	showCmd = &cobra.Command{
 		Use:   "show",
-		Short: "Show all endpoints",
+		Short: "Show all endpoints generated on this tool command",
 		Long:  ``,
 		Run:   show,
 	}

@@ -14,7 +14,7 @@ import (
 
 var selfUpdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update this tool",
+	Short: "Update this TUNA-Mayonnaise's self",
 	Run:   confirmAndSelfUpdate,
 }
 

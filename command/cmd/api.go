@@ -28,10 +28,10 @@ import (
 
 var apiCmd = &cobra.Command{
 	Use:   "api",
-	Short: "Serve TUNA-Mayonnaise APIs",
-	Long: `Serve TUNA-Mayonnaise APIs
+	Short: "Serve APIs generated on this tool command",
+	Long: `Serve APIs generated on this tool command
 
-This command serves endpoints you generated on TUNA-Mayonnaise Tool.
+This command serves endpoints you generated on this tool commnad.
 
 Let's access http://localhost:8080 with your paths :)`,
 	Run: api,

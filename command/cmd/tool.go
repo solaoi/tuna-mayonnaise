@@ -18,8 +18,8 @@ import (
 
 var toolCmd = &cobra.Command{
 	Use:   "tool",
-	Short: "Open TUNA-Mayonnaise Tool",
-	Long: `Open TUNA-Mayonnaise Tool
+	Short: "Open this editor",
+	Long: `Open this editor
 
 This command launch a browser and you get a power to generate JSON/HTML APIs`,
 	Run: tool,

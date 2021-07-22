@@ -15,7 +15,7 @@ var (
 	output     = "json"
 	versionCmd = &cobra.Command{
 		Use:   "version",
-		Short: "Version will output the current build information",
+		Short: "Print this version with the current build information",
 		Long:  ``,
 		Run: func(_ *cobra.Command, _ []string) {
 			resp := goVersion.FuncWithOutput(shortened, version, commit, date, output)
