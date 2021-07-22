@@ -14,25 +14,31 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node
 <details>
 <summary>CLICK</summary>
 
-- [Get Started](#get-started)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Tool Features](#tool-features)
-  - [Template Engine](#template-engine)
-  - [API](#api)
-  - [Database](#database)
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-  - [Options](#options)
-- [UseCases](#usecases)
-  - [1. Serve Static JSON](#1-serve-static-json)
-  - [2. Serve Static HTML](#2-serve-static-html)
-  - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
-  - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Get Started](#get-started)
+    - [Install](#install)
+      - [For MacOS (Homebrew)](#for-macos-homebrew)
+      - [For Others (Binary Releases)](#for-others-binary-releases)
+    - [Usage](#usage)
+      - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
+      - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
+  - [Tool Features](#tool-features)
+    - [Template Engine](#template-engine)
+    - [API](#api)
+    - [Database](#database)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+    - [Options](#options)
+  - [UseCases](#usecases)
+    - [1. Serve Static JSON](#1-serve-static-json)
+    - [2. Serve Static HTML](#2-serve-static-html)
+    - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
+    - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -196,6 +202,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [github.com/christopherhein/go-version](https://github.com/christopherhein/go-version) | Apache License 2.0 |
  | [github.com/common-nighthawk/go-figure](https://github.com/common-nighthawk/go-figure) | MIT License |
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
+ | [github.com/fatih/color](https://github.com/fatih/color) | MIT License |
  | [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) | MPL-2.0 License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
@@ -203,6 +210,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
  | [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) | Apache License 2.0 |
  | [github.com/rhysd/go-github-selfupdate](https://github.com/rhysd/go-github-selfupdate) | MIT License |
+ | [github.com/rodaine/table](https://github.com/rodaine/table) | MIT License |
  | [github.com/spf13/cobra](https://github.com/spf13/cobra) | Apache License 2.0 |
 
 ### FRONTEND Dependencies
