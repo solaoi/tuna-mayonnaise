@@ -197,6 +197,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
  | [github.com/fatih/color](https://github.com/fatih/color) | MIT License |
  | [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) | MPL-2.0 License |
+ | [github.com/kpango/gache](https://github.com/kpango/gache) | MIT License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
  | [github.com/lib/pq](https://github.com/lib/pq) | MIT License |
