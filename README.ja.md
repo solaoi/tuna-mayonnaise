@@ -133,6 +133,13 @@ WEB APIにリクエストし、そのレスポンスを利用できます。
 ]
 ```
 
+#### 接続オプション
+
+##### TLS / SSL
+
+- MySQL: [tls](https://github.com/go-sql-driver/mysql#tls)
+- PostgreSQL: [sslmode](https://pkg.go.dev/github.com/lib/pq#hdr-Connection_String_Parameters)
+
 ## APIの機能
 
 ### 監視

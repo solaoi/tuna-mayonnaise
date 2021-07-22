@@ -139,6 +139,13 @@ You get the response like below.
 ]
 ```
 
+#### Connection Options
+
+##### TLS / SSL
+
+- MySQL: [tls](https://github.com/go-sql-driver/mysql#tls)
+- PostgreSQL: [sslmode](https://pkg.go.dev/github.com/lib/pq#hdr-Connection_String_Parameters)
+
 ## API Features
 
 ### Monitoring

@@ -23,7 +23,7 @@ class PostgreSQLComponent extends Rete.Component {
       .addInput(jsonInput)
       .addControl(new TextControl(this.editor, "sslmode", node, false, "SSLMODE", "disable"))
       .addControl(new TextControl(this.editor, "host", node, false, "HOST", "127.0.0.1"))
-      .addControl(new TextControl(this.editor, "port", node, false, "PORT", "3306"))
+      .addControl(new TextControl(this.editor, "port", node, false, "PORT", "5432"))
       .addControl(new TextControl(this.editor, "user", node, false, "USER", "guest"))
       .addControl(new TextControl(this.editor, "db", node, false, "DB_NAME", "foo"))
       .addControl(
