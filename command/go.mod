@@ -9,6 +9,7 @@ require (
 	github.com/eknkc/pug v0.0.0-20180224090515-607e1323ff9d
 	github.com/fatih/color v1.12.0
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/kpango/gache v1.2.6
 	github.com/labstack/echo-contrib v0.9.0
 	github.com/labstack/echo/v4 v4.1.17
 	github.com/lib/pq v1.10.2

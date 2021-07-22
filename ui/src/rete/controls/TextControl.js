@@ -3,20 +3,32 @@ import Rete from "rete";
 class TextControl extends Rete.Control {
   static component = ({ value, onChange, title, placeHolder }) => (
     <>
-      {title && <label style={{color: 'white', display: 'block', textAlign: 'left'}}>{title}</label>}
+      {title && (
+        <label style={{ color: "white", display: "block", textAlign: "left" }}>
+          {title}
+        </label>
+      )}
       <input
         type="text"
         value={value}
         placeholder={placeHolder}
         ref={(ref) => {
-          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
+          ref &&
+            ref.addEventListener("pointerdown", (e) => e.stopPropagation());
         }}
         onChange={(e) => onChange(String(e.target.value))}
       />
     </>
   );
 
-  constructor(emitter, key, node, readonly = false, title = "", placeHolder = "") {
+  constructor(
+    emitter,
+    key,
+    node,
+    readonly = false,
+    title = "",
+    placeHolder = ""
+  ) {
     super(key);
     this.emitter = emitter;
     this.key = key;

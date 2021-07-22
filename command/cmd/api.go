@@ -17,6 +17,7 @@ import (
 	"github.com/aymerick/raymond"
 	"github.com/eknkc/pug"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kpango/gache"
 	prom "github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -83,9 +84,9 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 	data := node["data"].(map[string]interface{})
 
 	if name == "API" {
-		content = data["url"]
+		content = map[string]interface{}{"url": data["url"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "MySQL" || name == "PostgreSQL" {
-		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"]}
+		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else {
 		content = data["output"]
 	}
@@ -122,15 +123,26 @@ func setContents(nodes map[string]interface{}, id string, depth int, parent stri
 }
 
 func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (content body) {
-	var apiResponses []apiResponse
 	return func() (content body) {
+		var apiResponses []apiResponse
 		c := deepcopy.Copy(contents).(map[int]map[string]map[string]interface{})
 		for i := len(c) - 1; i >= 0; i-- {
 			for k, v := range c[i] {
 				if v["name"] == "API" {
-					url := v["content"].(string)
-
+					content := v["content"].(map[string]interface{})
+					url := fmt.Sprintf("%v", content["url"])
+					cached := fmt.Sprintf("%v", content["cached"])
 					method := "GET"
+
+					if cached == "true" {
+						v, ok := gache.Get(url)
+						if ok {
+							apiResponses = append(apiResponses, apiResponse{method, url, "cached"})
+							c[i][k]["content"] = v
+							continue
+						}
+					}
+
 					req, _ := http.NewRequest(method, url, nil)
 					resp, err := client.Do(req)
 					if err == nil && resp.StatusCode >= 400 {
@@ -152,6 +164,19 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					apiResponses = append(apiResponses, apiResponse{method, url, strconv.Itoa(resp.StatusCode)})
 					byteArray, _ := io.ReadAll(resp.Body)
 					res := string(byteArray)
+					if cached == "true" {
+						cacheTime := fmt.Sprintf("%v", content["cacheTime"])
+						if cacheTime == "" {
+							gache.Set(url, res)
+						} else {
+							cacheTime, err := strconv.Atoi(cacheTime)
+							if err != nil {
+								gache.Set(url, res)
+							} else {
+								gache.SetWithExpire(url, res, time.Second*time.Duration(cacheTime))
+							}
+						}
+					}
 					c[i][k]["content"] = res
 				} else if v["name"] == "MySQL" || v["name"] == "PostgreSQL" {
 					content := v["content"].(map[string]interface{})
@@ -160,6 +185,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					port := fmt.Sprintf("%v", content["port"])
 					dbName := fmt.Sprintf("%v", content["db"])
 					uniqueKey := fmt.Sprintf("%s_%s_%s_%s", user, host, port, dbName)
+					cached := fmt.Sprintf("%v", content["cached"])
 
 					query := ""
 					dummyJson := ""
@@ -174,6 +200,15 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					}
 					if query == "" || dummyJson == "" {
 						log.Fatal("set sql params on tool...")
+					}
+					cacheKey := fmt.Sprintf("%s_%s", uniqueKey, query)
+
+					if cached == "true" {
+						v, ok := gache.Get(cacheKey)
+						if ok {
+							c[i][k]["content"] = v
+							continue
+						}
 					}
 
 					db := dbs[uniqueKey]
@@ -221,7 +256,21 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					if err != nil {
 						log.Fatal(err)
 					}
-					c[i][k]["content"] = string(json)
+					res := string(json)
+					if cached == "true" {
+						cacheTime := fmt.Sprintf("%v", content["cacheTime"])
+						if cacheTime == "" {
+							gache.Set(cacheKey, res)
+						} else {
+							cacheTime, err := strconv.Atoi(cacheTime)
+							if err != nil {
+								gache.Set(cacheKey, res)
+							} else {
+								gache.SetWithExpire(cacheKey, res, time.Second*time.Duration(cacheTime))
+							}
+						}
+					}
+					c[i][k]["content"] = res
 				} else if v["name"] == "Template" {
 					engine := ""
 					tmpl := ""
