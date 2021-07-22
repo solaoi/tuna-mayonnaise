@@ -97,3 +97,52 @@ body {
   color: var(--vip-grey-60);
   letter-spacing: -1px;
 }
+
+/* checkboxのスタイル変更 */
+.switchArea {
+  line-height: 32px;
+  letter-spacing: 0;
+  text-align: center;
+  font-size: 13px;
+  position: relative;
+  margin: auto;
+  width: 122px;
+  background: grey;
+}
+.switchArea input[type="checkbox"] {
+  display: none;
+}
+.switchArea label {
+  display: block;
+  box-sizing: border-box;
+  height: 32px;
+  border: 2px solid #545454;
+  border-radius: 16px;
+}
+.switchArea input[type="checkbox"]:checked + label {
+  border-color: #ffd92c;
+}
+.switchArea label span:after {
+  content: "OFF";
+  padding: 0 0 0 19px;
+  color: #545454;
+}
+.switchArea input[type="checkbox"]:checked + label span:after {
+  content: "ON";
+  padding: 0 19px 0 0;
+  color: #fff;
+}
+.switchArea .swImg {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: #545454;
+  top: 4px;
+  left: 4px;
+  border-radius: 12px;
+  transition: 0.2s;
+}
+.switchArea input[type="checkbox"]:checked ~ .swImg {
+  transform: translateX(90px);
+  background: #ffd92c;
+}

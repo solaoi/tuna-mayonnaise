@@ -1,17 +1,40 @@
 import Rete from "rete";
 
 class BooleanControl extends Rete.Control {
-  static component = ({ checked, onChange, title }) => (
+  static component = ({
+    checked,
+    onChange,
+    title,
+    id = new Date().getTime(),
+  }) => (
     <>
-      {title && <label style={{color: 'white', display: 'block', textAlign: 'left'}}>{title}</label>}
-      <input
-        type="checkbox"
-        checked={checked}
-        ref={(ref) => {
-          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-        }}
-        onChange={(e) => onChange(+e.target.checked)}
-      />
+      {title && (
+        <div
+          style={{
+            color: "white",
+            textAlign: "left",
+            marginBottom: "5px",
+          }}
+        >
+          {title}
+        </div>
+      )}
+      <div class="switchArea">
+        <input
+          type="checkbox"
+          id={id}
+          checked={checked}
+          ref={(ref) => {
+            ref &&
+              ref.addEventListener("pointerdown", (e) => e.stopPropagation());
+          }}
+          onChange={(e) => onChange(+e.target.checked)}
+        />
+        <label for={id}>
+          <span></span>
+        </label>
+        <div class="swImg"></div>
+      </div>
     </>
   );
 
