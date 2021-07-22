@@ -73,6 +73,7 @@ class MySQLComponent extends Rete.Component {
     outputs["user"] = node.data.user;
     outputs["db"] = node.data.db;
     outputs["cached"] = node.data.cached;
+    outputs["cacheTime"] = node.data.cacheTime;
 
     this.editor.nodes
       .find((n) => n.id === node.id)

@@ -1,5 +1,7 @@
 import Rete from "rete";
 import TextControl from "../controls/TextControl";
+import BooleanControl from "../controls/BooleanControl";
+import NumControl from "../controls/NumControl";
 import { DbNode } from "../nodes/DbNode";
 
 class PostgreSQLComponent extends Rete.Component {
@@ -24,6 +26,25 @@ class PostgreSQLComponent extends Rete.Component {
       .addControl(new TextControl(this.editor, "port", node, false, "PORT", "3306"))
       .addControl(new TextControl(this.editor, "user", node, false, "USER", "guest"))
       .addControl(new TextControl(this.editor, "db", node, false, "DB_NAME", "foo"))
+      .addControl(
+        new BooleanControl(
+          this.editor,
+          "cached",
+          node,
+          false,
+          "Cached (In-Memory)"
+        )
+      )
+      .addControl(
+        new NumControl(
+          this.editor,
+          "cacheTime",
+          node,
+          false,
+          "CacheTime (seconds)",
+          30
+        )
+      )
       .addOutput(out);
   }
 
@@ -35,6 +56,13 @@ class PostgreSQLComponent extends Rete.Component {
     outputs["port"] = node.data.port;
     outputs["user"] = node.data.user;
     outputs["db"] = node.data.db;
+    outputs["cached"] = node.data.cached;
+    outputs["cacheTime"] = node.data.cacheTime;
+
+    this.editor.nodes
+      .find((n) => n.id === node.id)
+      .controls.get("cacheTime")
+      .setValue(node.data.cacheTime, !node.data.cached);
   }
 }
 
