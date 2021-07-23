@@ -26,7 +26,6 @@ builds:
       - windows
     goarch:
       - amd64
-      - arm64
   - main: .
     id: compressed
     binary: tuna
@@ -43,9 +42,6 @@ builds:
       - linux
     goarch:
       - amd64
-      - arm64
-    goarm:
-      - 7
     hooks:
       post: upx --lzma '{{ .Path }}'
 
