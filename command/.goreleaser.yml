@@ -26,22 +26,7 @@ builds:
       - windows
     goarch:
       - amd64
-      - 386
-      - arm
       - arm64
-    goarm:
-      - 7
-    ignore:
-      - goos: darwin
-        goarch: 386
-      - goos: windows
-        goarch: arm
-        goarm: 7
-      - goos: windows
-        goarch: 386
-      - goos: netbsd
-        goarch: arm
-        goarm: 7
   - main: .
     id: compressed
     binary: tuna
@@ -58,8 +43,6 @@ builds:
       - linux
     goarch:
       - amd64
-      - 386
-      - arm
       - arm64
     goarm:
       - 7
