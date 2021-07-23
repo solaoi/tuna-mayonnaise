@@ -9,11 +9,17 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 
+	"github.com/common-nighthawk/go-figure"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/spf13/cobra"
-	"github.com/common-nighthawk/go-figure"
+)
+
+var (
+	toolPort   = 3000
+	noOpen = false
 )
 
 var toolCmd = &cobra.Command{
@@ -73,9 +79,10 @@ func jsonExportHandler(c echo.Context) error {
 }
 
 func tool(cmd *cobra.Command, args []string) {
+	toolPort := strconv.Itoa(toolPort)
 	// Show this tool name
 	myFigure := figure.NewFigure("TUNA", "", true)
-  	myFigure.Print()
+	myFigure.Print()
 
 	// Echo instance
 	e := echo.New()
@@ -92,12 +99,16 @@ func tool(cmd *cobra.Command, args []string) {
 	e.POST("/regist", jsonExportHandler)
 
 	// Open browser
-	openbrowser("http://localhost:3000")
+	if !noOpen {
+		openbrowser("http://localhost:" + toolPort)
+	}
 
 	// Start server
-	e.Logger.Fatal(e.Start(":3000"))
+	e.Logger.Fatal(e.Start(":" + toolPort))
 }
 
 func init() {
+	toolCmd.Flags().BoolVarP(&noOpen, "no-open", "x", false, "Do not open the browser window automatically")
+	toolCmd.Flags().IntVarP(&toolPort, "port", "p", 3000, "Port to use")
 	rootCmd.AddCommand(toolCmd)
 }

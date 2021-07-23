@@ -153,24 +153,6 @@ WEB APIにリクエストし、そのレスポンスを利用できます。
 2. TUNA-Mayonnaise（ツナマヨ）は、ヘルスチェックを `/health` で提供します。
 3. TUNA-Mayonnaise（ツナマヨ）は、Labeled Tab-separated Values ( `LTSV` ) フォーマット形式でログ出力します。
 
-### オプション
-
-1. Port   
-デフォルトのPortは、8080です。   
-他のPortを設定したい場合は、下記のように環境変数を渡してください。
-
-```
-PORT=9999 tuna api
-```
-
-2. Prometheus Metrics   
-デフォルトでは有効になっており、メトリクスを `/metrics` から参照できます   
-無効にしたい場合は、下記のように環境変数を渡してください。
-
-```
-PROM=OFF tuna api
-```
-
 ## 活用例
 
 ### 1. 静的なJSONを返すサーバー作成

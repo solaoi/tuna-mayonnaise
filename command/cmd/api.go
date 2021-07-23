@@ -27,14 +27,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	apiPort   = 8080
+	noMetrics = false
+)
+
 var apiCmd = &cobra.Command{
 	Use:   "api",
 	Short: "Serve APIs generated on this tool command",
 	Long: `Serve APIs generated on this tool command
 
-This command serves endpoints you generated on this tool commnad.
-
-Let's access http://localhost:8080 with your paths :)`,
+This command serves endpoints you generated on this tool commnad.`,
 	Run: api,
 }
 
@@ -66,12 +69,11 @@ func endpointHandler(c echo.Context) error {
 
 var dynamicEndpoints map[string]response
 var dynamicEndpointCounter *prometheus.CounterVec
-var isPromEnabled string
 var promRet bool
 
 func dynamicEndpointHandler(c echo.Context) error {
 	body := dynamicEndpoints[c.Path()].ContentBuilder()
-	if isPromEnabled != "OFF" {
+	if !noMetrics {
 		for _, v := range body.APIResponses {
 			dynamicEndpointCounter.WithLabelValues(v.StatusCode, v.Method, v.URL).Inc()
 		}
@@ -420,11 +422,7 @@ func api(cmd *cobra.Command, args []string) {
 	}
 
 	// Prometheus
-	isPromEnabled, promRet = os.LookupEnv("PROM")
-	if promRet == false {
-		isPromEnabled = "ON"
-	}
-	if isPromEnabled != "OFF" {
+	if !noMetrics {
 		reqAPICnt := &prom.Metric{
 			ID:          "reqAPICnt",
 			Name:        "requests_api_total",
@@ -459,11 +457,8 @@ func api(cmd *cobra.Command, args []string) {
 	}
 
 	// Start server
-	port, ret := os.LookupEnv("PORT")
-	if ret == false {
-		port = "8080"
-	}
-	e.Logger.Fatal(e.Start(":" + port))
+	apiPort := strconv.Itoa(apiPort)
+	e.Logger.Fatal(e.Start(":" + apiPort))
 
 	for _, db := range dbs {
 		defer db.Close()
@@ -495,5 +490,7 @@ func logFormat() string {
 }
 
 func init() {
+	apiCmd.Flags().BoolVarP(&noMetrics, "no-metrics", "x", false, "Do not collect the prometheus metrics on /metrics")
+	apiCmd.Flags().IntVarP(&apiPort, "port", "p", 8080, "Port to use")
 	rootCmd.AddCommand(apiCmd)
 }
