@@ -1,5 +1,6 @@
 import Rete from "rete";
 import TextControl from "../controls/TextControl";
+import SelectControl from "../controls/SelectControl";
 import BooleanControl from "../controls/BooleanControl";
 import NumControl from "../controls/NumControl";
 import { DbNode } from "../nodes/DbNode";
@@ -26,7 +27,12 @@ class MySQLComponent extends Rete.Component {
       .addInput(sqlInput)
       .addInput(jsonInput)
       .addControl(
-        new TextControl(this.editor, "tls", node, false, "TLS", "false")
+        new SelectControl(this.editor, "tls", node, false, "TLS", [
+          "false",
+          "true",
+          "skip-verify",
+          "preferred",
+        ])
       )
       .addControl(
         new TextControl(this.editor, "host", node, false, "HOST", "127.0.0.1")
