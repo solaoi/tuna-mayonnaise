@@ -14,25 +14,33 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node
 <details>
 <summary>CLICK</summary>
 
-- [Get Started](#get-started)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Tool Features](#tool-features)
-  - [Template Engine](#template-engine)
-  - [API](#api)
-  - [Database](#database)
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-  - [Options](#options)
-- [UseCases](#usecases)
-  - [1. Serve Static JSON](#1-serve-static-json)
-  - [2. Serve Static HTML](#2-serve-static-html)
-  - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
-  - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Get Started](#get-started)
+    - [Install](#install)
+      - [For MacOS (Homebrew)](#for-macos-homebrew)
+      - [For Others (Binary Releases)](#for-others-binary-releases)
+    - [Usage](#usage)
+      - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
+      - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
+  - [Tool Features](#tool-features)
+    - [Template Engine](#template-engine)
+    - [API](#api)
+    - [Database](#database)
+      - [Connection Options](#connection-options)
+        - [TLS / SSL](#tls--ssl)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+    - [Options](#options)
+  - [UseCases](#usecases)
+    - [1. Serve Static JSON](#1-serve-static-json)
+    - [2. Serve Static HTML](#2-serve-static-html)
+    - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
+    - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -40,6 +48,8 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node
 ## Get Started
 
 ### Install
+
+TUNA-Mayonnaise only supports amd64.
 
 #### For MacOS (Homebrew)
 
@@ -59,11 +69,11 @@ you can download a binary release [here](https://github.com/solaoi/tuna-mayonnai
 ## set the latest version on releases.
 VERSION=v0.0.3
 ## set the OS you use.
-OS=linux_amd64
+OS=linux
 ## case you use wget
-wget https://github.com/solaoi/tuna-mayonnaise/releases/download/$VERSION/tuna_${OS}.tar.gz
+wget https://github.com/solaoi/tuna-mayonnaise/releases/download/$VERSION/tuna_${OS}_amd64.tar.gz
 ## case you use curl
-curl -LO  https://github.com/solaoi/tuna-mayonnaise/releases/download/$VERSION/tuna_${OS}.tar.gz
+curl -LO  https://github.com/solaoi/tuna-mayonnaise/releases/download/$VERSION/tuna_${OS}_amd64.tar.gz
 ## extract
 tar xvf ./tuna_${OS}.tar.gz
 ## move it to a location in your $PATH, such as /usr/local/bin.
