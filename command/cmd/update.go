@@ -15,6 +15,9 @@ import (
 var selfUpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update this TUNA-Mayonnaise's self",
+	Long: `Update this TUNA-Mayonnaise's self
+
+If you installed this via Homebrew, you should not use this update command`,
 	Run:   confirmAndSelfUpdate,
 }
 
