@@ -37,6 +37,8 @@ builds:
       - goos: windows
         goarch: arm
         goarm: 7
+      - goos: windows
+        goarch: 386
       - goos: netbsd
         goarch: arm
         goarm: 7
