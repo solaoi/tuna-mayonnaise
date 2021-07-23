@@ -34,6 +34,9 @@ builds:
     ignore:
       - goos: darwin
         goarch: 386
+      - goos: windows
+        goarch: arm
+        goarm: 7
   - main: .
     id: compressed
     binary: tuna
