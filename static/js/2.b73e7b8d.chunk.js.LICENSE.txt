@@ -31,8 +31,8 @@ object-assign
  */
 
 /*!
-* rete v1.4.5-rc.1 
-* (c) 2020 Vitaliy Stoliarov 
+* rete v1.4.5 
+* (c) 2021 Vitaliy Stoliarov 
 * Released under the MIT license.
 */
 
