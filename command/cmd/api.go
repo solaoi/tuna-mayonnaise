@@ -96,8 +96,10 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 	for _, v := range inputs {
 		input := v.(map[string]interface{})
 		connections := input["connections"].([]interface{})
-		connection := connections[0].(map[string]interface{})
-		nexts = append(nexts, fmt.Sprint(connection["node"]))
+		for _, v2 := range connections {
+			connection := v2.(map[string]interface{})
+			nexts = append(nexts, fmt.Sprint(connection["node"]))
+		}
 	}
 
 	return
@@ -285,7 +287,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						} else if v2["parent"] == k && v2["name"] == "Pug" {
 							engine = "Pug"
 							tmpl = v2["content"].(string)
-						} else if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "MySQL" || v2["name"] == "PostgreSQL") {
+						} else if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "MySQL" || v2["name"] == "PostgreSQL" || v2["name"] == "JSONManager") {
 							if strings.HasPrefix(v2["content"].(string), "[") {
 								json.Unmarshal([]byte(v2["content"].(string)), &ctxs)
 							} else {
@@ -320,9 +322,33 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 							c[i][k]["content"] = tpl.String()
 						}
 					}
+				} else if v["name"] == "JSONManager" {
+					content := v["content"].(string)
+					var obj []map[string]interface{}
+					newObj := map[string]interface{}{}
+					if err := json.Unmarshal([]byte(content), &obj); err != nil {
+						log.Fatal(err)
+					}
+
+					ctx := map[string]interface{}{}
+					for _, v2 := range c[i+1] {
+						if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "MySQL" || v2["name"] == "PostgreSQL" || v2["name"] == "JSONManager") {
+							json.Unmarshal([]byte(v2["content"].(string)), &ctx)
+						}
+					}
+					for _, v2 := range obj {
+						key := v2["key"].(string)
+						newObj[key] = ctx[key]
+					}
+
+					json, err := json.Marshal(newObj)
+					if err != nil {
+						log.Fatal(err)
+					}
+					c[i][k]["content"] = string(json)
 				} else if v["name"] == "Endpoint" {
 					for _, v3 := range c[i+1] {
-						if v3["parent"] == k && (v3["name"] == "JSON" || v3["name"] == "API" || v3["name"] == "MySQL" || v3["name"] == "PostgreSQL" || v3["name"] == "Template") {
+						if v3["parent"] == k && (v3["name"] == "JSON" || v3["name"] == "API" || v3["name"] == "MySQL" || v3["name"] == "PostgreSQL" || v3["name"] == "Template" || v3["name"] == "JSONManager") {
 							content := v3["content"].(string)
 							return body{http.StatusOK, content, apiResponses}
 						}
