@@ -203,3 +203,94 @@ input[type="number"]:disabled {
 textarea {
   width: 100%;
 }
+.jsonManagerInput .socket:before {
+  content: "N";
+  color: #fff;
+  margin-left: 4.5px;
+}
+.jsonManagerInput .socket:hover:before {
+  display: none;
+}
+.jsonManagerCtrl {
+  display: flex;
+}
+.jsonManagerCtrlCategory {
+  background: #545454;
+  margin: 0;
+  color: #fff
+}
+.jsonManagerCtrlInputs {
+  width: 200px;
+}
+.jsonManagerCtrlInput {
+  background: #fff;
+  min-height: 100px;
+}
+.jsonManagerCtrlInputTitle {
+  background: #96b38a;
+  color: #fff;
+  margin: 0;
+}
+.jsonManagerCtrlInputKey {
+  margin: 2px 5px;
+  display: inline-block;
+  background: #6e88ff;
+  color: #fff;
+  border-radius: 5px;
+  padding: 0 5px;
+}
+.jsonManagerCtrlInputKeyHover:hover {
+  cursor: grab;
+}
+.jsonManagerCtrlOutputKey {
+  margin: 2px 5px;
+  display: inline-flex;
+  align-items: center;
+  background: #6e88ff;
+  color: #fff;
+  border-radius: 5px;
+  padding: 0 5px;
+}
+.jsonManagerCtrlFunctions{
+  background: #fff;
+  min-height: 100px;
+}
+.jsonManagerCtrlHint{
+  color: #fff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  margin: 0 5px;
+}
+.jsonManagerCtrlOutput{
+  background: #fff;
+  width: 200px;
+}
+.closeBtn {
+  display: inline-block;
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(255, 0, 80, 0.7);
+  margin-left: 5px;
+}
+.closeBtn:hover {
+  background: rgba(255, 0, 80);
+}
+.closeBtn:before, .closeBtn:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.1rem;
+  height: 0.8rem;
+  background: #fff;
+}
+.closeBtn:before {
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+.closeBtn:after {
+  transform: translate(-50%,-50%) rotate(-45deg);
+}

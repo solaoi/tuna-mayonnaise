@@ -18,6 +18,7 @@ import TemplateComponent from "./rete/components/template/TemplateComponent";
 import HandlebarsComponent from "./rete/components/template/HandlebarsComponent";
 import PugComponent from "./rete/components/template/PugComponent";
 import EndpointComponent from "./rete/components/EndpointComponent";
+import JsonManagerComponent from "./rete/components/JsonManagerComponent";
 import ApiComponent from "./rete/components/ApiComponent";
 import MySQLComponent from "./rete/components/MySQLComponent";
 import PostgreSQLComponent from "./rete/components/PostgreSQLComponent";
@@ -48,6 +49,7 @@ export async function createEditor(container) {
   // 利用可能なコンポーネント一覧
   const components = [
     new EndpointComponent(stringSocket),
+    new JsonManagerComponent(jsonSocket),
     new JsonComponent(jsonSocket),
     new TemplateComponent(jsonSocket, templateSocket, htmlSocket),
     new HandlebarsComponent(handlebarsSocket),
@@ -129,7 +131,7 @@ export async function createEditor(container) {
       // Spaceキーでメニュー表示
       case "Space":
         const rect = editor.view.container.getBoundingClientRect();
-        const event = new MouseEvent("contextmenu", {
+        const event = new PointerEvent("contextmenu", {
           clientX: rect.left + rect.width / 2,
           clientY: rect.top + rect.height / 2,
         });

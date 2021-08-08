@@ -1,7 +1,7 @@
 import Rete from "rete";
 import BooleanControl from "../../controls/BooleanControl";
 
-class SqlComponent extends Rete.Component {
+class BooleanComponent extends Rete.Component {
   constructor(socket) {
     super("Boolean");
     this.socket = socket;
