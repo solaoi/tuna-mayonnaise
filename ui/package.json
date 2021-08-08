@@ -23,7 +23,7 @@
     "react-simple-code-editor": "0.11.0",
     "react-toastify": "^7.0.4",
     "react-use": "17.2.4",
-    "rete": "1.4.5-rc.1",
+    "rete": "1.4.5",
     "rete-area-plugin": "0.2.1",
     "rete-auto-arrange-plugin": "^0.4.0",
     "rete-connection-path-plugin": "^0.3.1",
