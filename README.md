@@ -82,7 +82,7 @@ tuna update
 
 this tool generate a configuration( `tuna-mayonnaise.json` ) with `Save` menu.
 
-![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
+![tuna-demo](https://user-images.githubusercontent.com/46414076/128729100-5f37d74d-3df8-4f4b-acac-81334b52dd3d.gif)
 
 [Tool Sample](https://solaoi.github.io/tuna-mayonnaise)
 
