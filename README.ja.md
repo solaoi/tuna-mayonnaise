@@ -36,6 +36,17 @@ TUNA-Mayonnaise（ツナマヨ）は、ノードベースエディタ上でJSON�
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## これなに
+
+世の中には多くのWEBフレームワークがあり、貴方はそのどれか一つ、またはいくつかを使ってWEB開発をしているはずです。   
+そのいずれのフレームワークであっても、貴方は多くの記述パターンを発見し、同じ処理を書くことに飽き飽きしていることでしょう。
+
+そこで、パターンは全て設定ファイルに書いてしまいたい！と思った貴方は、極めて優秀なエンジニアです。   
+ただYAMLにせよJSONにせよ、昨今のWEB開発の記述パターンを表現するには少し力不足です。   
+
+であれば、ビジュアルプログラミングのUI上で、各設定を線と線で結び表現してはどうでしょうか。
+そんな試みから生まれたのが、このおにぎりの具として最も有名なTUNA-Mayonnaise（ツナマヨ）です。
+
 ## 始め方
 
 ### インストール方法
@@ -208,6 +219,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [pug](https://www.npmjs.com/package/pug) | MIT License |
  | [react](https://www.npmjs.com/package/react) | MIT License |
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
+ | [react-modal](https://www.npmjs.com/package/react-modal) | MIT License |
  | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
  | [react-use](https://www.npmjs.com/package/react-use) | Unlicense License |

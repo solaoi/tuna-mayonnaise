@@ -147,6 +147,7 @@ body {
   background: #ffd92c;
 }
 select {
+  cursor: pointer;
   background-color: white;
   border-radius: 4px;
   display: inline-block;
@@ -200,6 +201,9 @@ input[type="number"]:focus {
 input[type="number"]:disabled {
   border-color: revert;
 }
+input::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
 textarea {
   width: 100%;
 }
@@ -217,9 +221,16 @@ textarea {
 .jsonManagerCtrlCategory {
   background: #545454;
   margin: 0;
-  color: #fff
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 .jsonManagerCtrlInputs {
+  width: 200px;
+}
+.jsonManagerCtrlOutputs {
   width: 200px;
 }
 .jsonManagerCtrlInput {
@@ -251,22 +262,35 @@ textarea {
   border-radius: 5px;
   padding: 0 5px;
 }
-.jsonManagerCtrlFunctions{
+.jsonManagerCtrlFunctions {
   background: #fff;
   min-height: 100px;
 }
-.jsonManagerCtrlHint{
+.jsonManagerCtrlHint {
   color: #fff;
   font-weight: 800;
   display: flex;
   align-items: center;
   margin: 0 5px;
 }
-.jsonManagerCtrlOutput{
+.jsonManagerCtrlOutput {
   background: #fff;
-  width: 200px;
+  min-height: 100px;
 }
-.closeBtn {
+.jsonManagerCtrlPreview {
+  display: flex;
+  flex-direction: column;
+  min-height: 100px;
+}
+.jsonManagerCtrlPreviewArea {
+  flex-grow: 1;
+  display: block;
+  width: stretch;
+  width: -webkit-fill-available;
+  width: -moz-available;
+}
+.removeBtn {
+  cursor: pointer;
   display: inline-block;
   position: relative;
   width: 1rem;
@@ -276,8 +300,34 @@ textarea {
   background: rgba(255, 0, 80, 0.7);
   margin-left: 5px;
 }
-.closeBtn:hover {
-  background: rgba(255, 0, 80);
+.removeBtn:hover {
+  background: rgba(255, 0, 80, 1);
+}
+.removeBtn:before, .removeBtn:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.1rem;
+  height: 0.8rem;
+  background: #fff;
+}
+.removeBtn:before {
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+.removeBtn:after {
+  transform: translate(-50%,-50%) rotate(-45deg);
+}
+.closeBtn {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #545454;
+  margin-left: 5px;
 }
 .closeBtn:before, .closeBtn:after {
   content: "";
@@ -293,4 +343,126 @@ textarea {
 }
 .closeBtn:after {
   transform: translate(-50%,-50%) rotate(-45deg);
+}
+.addBtn {
+  display: inline-block;
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(255, 217, 44, 0.7);
+  margin-left: 5px;
+}
+.addBtn:hover {
+  background: rgba(255, 217, 44, 1);
+}
+.addBtn:before, .addBtn:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.1rem;
+  height: 0.8rem;
+  background: #fff;
+}
+.addBtn:before {
+  transform: translate(-50%,-50%);
+}
+.addBtn:after {
+  transform: translate(-50%,-50%) rotate(90deg);
+}
+.modalAddBtn {
+  color: #767676;
+  background-color: white;
+  border: 1px solid #767676;
+  border-radius: 4px;
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5em;
+  padding: 0.1em 1em 0.1em 1em;
+  margin-left: 5px;
+}
+.modalAddBtn:hover {
+  border: 1px solid #ffd92c;
+  cursor: pointer;
+}
+.jsonManagerModalTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #545454;
+  color: #fff;
+  padding: 0 15px;
+}
+.jsonManagerModalContent {
+  padding: 20px;
+}
+.modalFunction {
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 4px;
+  margin: 10px 0; 
+}
+.modalFunctionTitle {
+  background: #545454;
+  color: #fff;
+  padding: 5px 15px;
+  margin: 0;
+  font-weight: 600;
+  display: inline-flex;
+  width: stretch;
+  width: -webkit-fill-available;
+  width: -moz-available;
+  justify-content: space-between;
+  align-items: center;
+}
+.modalFunctionKey {
+  margin: 10px 0;
+}
+.modalFunctionKeyTitle {
+  display: inline-block;
+  margin: 0 5px 0 10px;
+}
+.modalFunctionContent {
+  display: inline-flex;
+  align-items: center;
+}
+.modalFunctionContentInput {
+  border: 1px solid #545454;
+  width: 300px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 4px;
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5em;
+  padding: 0.1em 3.5em 0.1em 1em;
+  margin: 5px 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%),
+    linear-gradient(135deg, gray 50%, transparent 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position: calc(100% - 20px) calc(0.7em + 2px),
+    calc(100% - 15px) calc(0.7em + 2px), calc(100% - 2.5em) 0.1em;
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+}
+.modalFunctionContentInput:focus {
+  background-image: linear-gradient(45deg, #ffd92c 50%, transparent 50%),
+    linear-gradient(135deg, transparent 50%, #ffd92c 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position: calc(100% - 15px) 0.7em, calc(100% - 20px) 0.7em,
+    calc(100% - 2.5em) 0.1em;
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+  border-color: #ffd92c;
+  outline: 0;
+}
+.modalFunctionContentSymbol {
+  margin: 0 10px;
+  font-weight: 600;
 }

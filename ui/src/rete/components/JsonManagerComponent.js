@@ -34,9 +34,11 @@ class JsonManagerComponent extends Rete.Component {
     if(node.data.output === "[]"){
       outputs["json"] = "";
     } else if(node.data.output !== ""){
-      const previewParam = JSON.parse(node.data.output).map(v => [v.key, v.value]);
+      const previewParam = JSON.parse(node.data.output).map(v => [v.key, JSON.parse(v.value)]);
       outputs["json"] = JSON.stringify(Object.fromEntries(previewParam));
     }
+
+    outputs["outputFunctions"] = node.data.outputFunctions;
   }
 }
 

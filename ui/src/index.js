@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Modal from "react-modal";
 import { createEditor } from "./rete";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +21,7 @@ function App() {
           position: "absolute",
           top: "25%",
           left: "25%",
+          pointerEvents: "none",
         }}
       ></img>
       <div
@@ -30,5 +32,6 @@ function App() {
   );
 }
 
+Modal.setAppElement("#root");
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);

@@ -1,11 +1,83 @@
 import Rete from "rete";
+import React from "react";
+import Modal from "react-modal";
 
 class JsonManagerControl extends Rete.Control {
-  static component = ({ inputs, outputs, onPointerDown, onPointerOver, onPointerOut, onClickCloseBtn }) => (
+  static component = ({ inputs, outputs, onPointerDown, onPointerOver, onPointerOut, onClickCloseBtn, isModalOpen, setModalOpen, functions, onClickAddBtn, onChangeModalFunc, outputFunctions, onClickRemoveBtn, onChangeModalFuncParams, textAreaRef, previewRef }) => (
     <div className="jsonManagerCtrl" >
+      <Modal isOpen={isModalOpen} style={{content: {padding: "0px"}}}>
+        <div className="jsonManagerModalTitle">
+          <p style={{display: "inline-block", fontWeight: "600", fontSize: "18px"}}>Functions</p>
+          <span className="closeBtn" onClick={() => setModalOpen(false)} />
+        </div>
+        <div className="jsonManagerModalContent">
+          <select
+            style={{color: "#767676"}}
+            ref={(ref) => {
+              ref &&
+                ref.addEventListener("pointerdown", (e) => e.stopPropagation());
+            }}
+          >
+          <option value="" style={{display: "none"}}>Select your function</option>
+          {functions.map((v) => (
+            <option value={v.name}>{v.name}</option>
+          ))}
+          </select>
+          <div className="modalAddBtn" onClick={onClickAddBtn}>Add</div>
+            {outputFunctions.map((v, idx) => (
+              <div className="modalFunction">
+                <p className="modalFunctionTitle">{v.func}<span className="removeBtn" onClick={onClickRemoveBtn} data-idx={idx} /></p>
+                <div className="modalFunctionKey">
+                  <p className="modalFunctionKeyTitle">name:</p>
+                  <input
+                    type="text"
+                    value={v.name}
+                    placeholder="name to use output"
+                    ref={(ref) => {
+                      ref &&
+                        ref.addEventListener("pointerdown", (e) => e.stopPropagation());
+                    }}
+                    onChange={onChangeModalFunc}
+                    data-idx={idx}
+                    style={{
+                      background: v.warn ? "rgba(255, 0, 80, 0.7)" : "#FFF"
+                    }}
+                  />
+                </div>
+                <div className="modalFunctionKey">
+                  <p className="modalFunctionKeyTitle">params: </p>
+                  <div className="modalFunctionContent">
+                  {(()=>{
+                    const func = functions.filter(f => f.name === v.func)[0];
+                    if(func.paramCount === 1){
+                      return <input className="modalFunctionContentInput" list="inputs-datalist" name={"func-" + idx + "_0"} placeholder="Input or Select your param" onChange={onChangeModalFuncParams} data-idx={idx} data-params-idx={0} value={v.params[0] ? v.params[0]: null} />
+                    } else {
+                      return <>
+                        <input className="modalFunctionContentInput" list="inputs-datalist" name={"func-" + idx + "_0"} placeholder="Input or Select your param" onChange={onChangeModalFuncParams} data-idx={idx} data-params-idx={0} value={v.params[0] ? v.params[0]: null}/>
+                        <span className="modalFunctionContentSymbol" >{func.symbol}</span>
+                        <input className="modalFunctionContentInput" list="inputs-datalist" name={"func-" + idx + "_1"} placeholder="Input or Select your param" onChange={onChangeModalFuncParams} data-idx={idx} data-params-idx={1} value={v.params[1] ? v.params[1]: null}/>
+                      </>
+                    }
+                    })()}
+                  </div>
+                </div>
+              </div>
+            ))}
+          <datalist id="inputs-datalist" >
+            {inputs.map((input, i) => {
+              try {
+                const parsed = JSON.parse(input);
+                return Object.keys(parsed).map((key) => (<option value={"inputs[" + i + "]." + key}>{"inputs[" + i + "]." + key}</option>))
+              } catch {
+                return '';
+              }
+            })}
+          </datalist>
+        </div>
+      </Modal>
       <div className="jsonManagerCtrlInputs">
         <div className="jsonManagerCtrlInput">
-          <p className="jsonManagerCtrlCategory">Input</p>
+          <p className="jsonManagerCtrlCategory">Inputs</p>
           {inputs.map((v, i)=>{
             try {
               const parsed = JSON.parse(v);
@@ -16,7 +88,7 @@ class JsonManagerControl extends Rete.Control {
                   </div>;
               }
               return <div className="jsonManagerCtrlInputGroup">
-                  <p className="jsonManagerCtrlInputTitle">input_{i}</p>
+                  <p className="jsonManagerCtrlInputTitle">inputs[{i}]</p>
                   {Object.keys(parsed)
                     .map(v => <p className="jsonManagerCtrlInputKey jsonManagerCtrlInputKeyHover" onPointerDown={onPointerDown} data-idx={i}>{v}</p>)}
                 </div>;
@@ -26,14 +98,25 @@ class JsonManagerControl extends Rete.Control {
           })}
         </div>
         <div className="jsonManagerCtrlFunctions">
-          <p className="jsonManagerCtrlCategory">Functions</p>
+          <p className="jsonManagerCtrlCategory">Functions<span className="addBtn" onClick={()=>setModalOpen(true)}></span></p>
+          <div className="jsonManagerCtrlInputGroup">
+            {outputFunctions.map((v, i)=> (v.name !== "" && <p className="jsonManagerCtrlInputKey jsonManagerCtrlInputKeyHover" onPointerDown={onPointerDown} data-idx={i} data-type="func" >{v.name}</p>))}
+          </div>
         </div>
       </div>
       <div className="jsonManagerCtrlHint">&gt;&gt;&gt;</div>
-      <div className="jsonManagerCtrlOutput" onPointerOver={onPointerOver} onPointerOut={onPointerOut} >
-        <p className="jsonManagerCtrlCategory">Output</p>
-        <div className="jsonManagerCtrlOutputArea">
-          {outputs.map((v) => <p className="jsonManagerCtrlOutputKey">{v.key}<span className="closeBtn" onClick={onClickCloseBtn} data-key={v.key}></span></p>)}
+      <div className="jsonManagerCtrlOutputs">
+        <div className="jsonManagerCtrlPreview" style={{
+            height: (textAreaRef && previewRef && textAreaRef.current && previewRef.current) ? (textAreaRef.current.scrollHeight + previewRef.current.scrollHeight) + "px" : "initial"
+          }}>
+          <p className="jsonManagerCtrlCategory" ref={previewRef}>Preview</p>
+          <textarea disabled ref={textAreaRef} className="jsonManagerCtrlPreviewArea" value={outputs.length !== 0 ? JSON.stringify(Object.fromEntries(outputs.map(v => [v.key, JSON.parse(v.value)])), null, 2): ""}></textarea>
+        </div>
+        <div className="jsonManagerCtrlOutput" onPointerOver={onPointerOver} onPointerOut={onPointerOut} >
+          <p className="jsonManagerCtrlCategory">Outputs</p>
+          <div className="jsonManagerCtrlOutputArea">
+            {outputs.map((v) => <p className="jsonManagerCtrlOutputKey">{v.key}<span className="removeBtn" onClick={onClickCloseBtn} data-key={v.key}></span></p>)}
+          </div>
         </div>
       </div>
     </div>
@@ -113,18 +196,59 @@ class JsonManagerControl extends Rete.Control {
         if (this.props.isDroppable) {
           const id = parseInt(selectedElement.dataset.idx);
           const key = selectedElement.innerText;
-          // すでに同じキーが登録済みなら上書き
-          if(this.props.outputs.filter(v => v.key === key).length === 1){
-            this.props.outputs = this.props.outputs
-            .map(v => {
-              if(v.key === key) {
-                return {src: id, key: v.key, value: JSON.parse(this.props.inputs[id])[v.key]};
-              } else {
-                return v;
-              }
-            });
+          if(selectedElement.dataset.type !== "func") {
+            // すでに同じキーが登録済みなら上書き
+            if(this.props.outputs.filter(v => v.key === key).length === 1){
+              this.props.outputs = this.props.outputs
+              .map(v => {
+                if(v.key === key) {
+                  return {src: id, key: v.key, value: JSON.stringify(JSON.parse(this.props.inputs[id])[v.key])};
+                } else {
+                  return v;
+                }
+              });
+            } else {
+              this.props.outputs.push({src: id, key, value: JSON.stringify(JSON.parse(this.props.inputs[id])[key])});
+            }
           } else {
-            this.props.outputs.push({src: id, key, value: JSON.parse(this.props.inputs[id])[key]});
+            // function execute
+            const params = this.props.outputFunctions[id].params;
+            const func = this.props.functions.filter(v=> v.name === this.props.outputFunctions[id].func)[0];
+            const {paramCount, logic} = func;
+            const p0 = (() => {
+              if(params[0].startsWith("inputs[")){
+                const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                const result = pattern.exec(params[0]);
+                const id = result[1];
+                const key = result[2];
+                return  JSON.parse(this.props.inputs[id])[key];
+              } else {
+                return params[0];
+              }})();
+              const p1 = (() => {
+                if(paramCount === 2 && params[1].startsWith("inputs[")){
+                  const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                  const result = pattern.exec(params[1]);
+                  const id = result[1];
+                  const key = result[2];
+                  return  JSON.parse(this.props.inputs[id])[key];
+                } else {
+                  return params[1];
+                }})();
+            const value = paramCount === 1 ? logic(p0): logic(p0, p1);
+
+            if(this.props.outputs.filter(v => v.key === key).length === 1){
+              this.props.outputs = this.props.outputs
+              .map(v => {
+                if(v.key === key) {
+                  return {src: (id + 1) * -1, key: v.key, value: JSON.stringify(value)};
+                } else {
+                  return v;
+                }
+              });
+            } else {
+              this.props.outputs.push({src: (id + 1) * -1, key, value: JSON.stringify(value)});
+            }
           }
           this.putData("output", JSON.stringify(this.props.outputs));
           this.update();
@@ -132,7 +256,7 @@ class JsonManagerControl extends Rete.Control {
         }
         drag.dragElement.remove();
       },
-      onClickCloseBtn: (e)=>{
+      onClickCloseBtn: (e) => {
         const el = e.currentTarget;
         this.props.outputs = this.props.outputs.reduce((a,c) => {
           if(c.key === el.dataset.key) return a;
@@ -141,14 +265,134 @@ class JsonManagerControl extends Rete.Control {
         this.putData("output", JSON.stringify(this.props.outputs));
         this.update();
         this.emitter.trigger("process");
-      }
+      },
+      isModalOpen: false,
+      setModalOpen: (b) => {
+        this.props.isModalOpen = b;
+        this.update();
+        this.emitter.trigger("process");
+      },
+      outputFunctions: node.data.outputFunctions ? JSON.parse(node.data.outputFunctions): [], // [{func: "Wrap", name: "hoge", params: ["value1", "value2"]}]
+      functions: [
+                  {name: "Wrap", paramCount: 1, symbol: null, logic: (param)=>param},
+                  {name: "1000 Separate", paramCount: 1, symbol: null, logic: (param) => {
+                    const s = String(param).split('.');
+                    let ret = String(s[0]).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                    if (s.length > 1) {
+                        ret += '.' + s[1];
+                    }
+                    return ret;
+                  }},
+                  {name: "Equal", paramCount: 2, symbol: "=", logic: (param1, param2) => (param1 === param2)},
+                  {name: "NotEquals", paramCount: 2, symbol: "!=", logic: (param1, param2) => (param1 !== param2)},
+                  {name: "GreaterThan", paramCount: 2, symbol: ">", logic: (param1, param2) => (parseFloat(param1) > parseFloat(param2))},
+                  {name: "GreaterEqual", paramCount: 2, symbol: ">=", logic: (param1, param2) => (parseFloat(param1) >= parseFloat(param2))},
+                  {name: "LessThan", paramCount: 2, symbol: "<", logic: (param1, param2) => (parseFloat(param1) < parseFloat(param2))},
+                  {name: "LessEqual", paramCount: 2, symbol: "<=", logic: (param1, param2) => (parseFloat(param1) <= parseFloat(param2))},
+                  {name: "And", paramCount: 2, symbol: "&&", logic: (param1, param2) => ((param1 === "true") && (param2 === "true"))},
+                  {name: "Or", paramCount: 2, symbol: "||", logic: (param1, param2) => ((param1 === "true") || (param2 === "true"))},
+                  // {name: "Map", paramCount: 1, symbol: null},
+                  {name: "IndexOrKey", paramCount: 2, symbol: "has the item", logic: (param1, param2) => {
+                    try {
+                      const arr = JSON.parse(param1);
+                      return arr[param2] ? arr[param2] : "undefined";
+                    } catch(e) {
+                      return "no item..."
+                    }
+                  }},
+                  {name: "Split", paramCount: 2, symbol: "is split by the separator", logic: (param1, param2) => (param1.split(param2))}
+                ],
+      onClickAddBtn: (e) => {
+        const val = e.currentTarget.previousElementSibling.value;
+        if(val === "") return;
+        this.props.outputFunctions.push({func: val, name: "", params: [], warn: false});
+        this.putData("outputFunctions", JSON.stringify(this.props.outputFunctions));
+        this.update();
+        this.emitter.trigger("process");
+      },
+      onClickRemoveBtn: (e) => {
+        const id = parseInt(e.currentTarget.dataset.idx);
+        const name = this.props.outputFunctions[id].name;
+        this.props.outputs = this.props.outputs.filter(v=>v.key !== name);
+        this.props.outputFunctions = this.props.outputFunctions.filter((_,i) => i !== id);
+        this.putData("outputFunctions", JSON.stringify(this.props.outputFunctions));
+        this.update();
+        this.emitter.trigger("process");
+      },
+      onChangeModalFunc: (e) => {
+        const id = parseInt(e.currentTarget.dataset.idx);
+        if(this.props.outputFunctions.filter(v=>v.name === e.target.value).length === 1){
+          this.props.outputFunctions[id].warn = true;
+        }else{
+          this.props.outputFunctions[id].warn = false;
+        }
+        this.props.outputFunctions[id].name = e.target.value;
+        this.putData("outputFunctions", JSON.stringify(this.props.outputFunctions));
+        this.update();
+        this.emitter.trigger("process");
+      },
+      onChangeModalFuncParams: (e) => {
+        const id = parseInt(e.currentTarget.dataset.idx);
+        const paramsId = parseInt(e.currentTarget.dataset.paramsIdx);
+        if(paramsId === 2 && this.props.outputFunctions[id].params.length < 2){
+          this.props.outputFunctions[id].params[0] = null;
+        }
+        this.props.outputFunctions[id].params[paramsId] = e.target.value;
+        this.putData("outputFunctions", JSON.stringify(this.props.outputFunctions));
+
+        if(this.props.outputFunctions[id].name){
+          const paramName = this.props.outputFunctions[id].name;
+          const params = this.props.outputFunctions[id].params;
+          const func = this.props.functions.filter(v=> v.name === this.props.outputFunctions[id].func)[0];
+          const {paramCount, logic} = func;
+          if(paramCount === 1 || params[0]) {
+            const p0 = (() => {
+              if(params[0].startsWith("inputs[")){
+                const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                const result = pattern.exec(params[0]);
+                const id = result[1];
+                const key = result[2];
+                return  JSON.parse(this.props.inputs[id])[key];
+              } else {
+                return params[0];
+              }})();
+              const p1 = (() => {
+                if(paramCount === 2 && params[1].startsWith("inputs[")){
+                  const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                  const result = pattern.exec(params[1]);
+                  const id = result[1];
+                  const key = result[2];
+                  return  JSON.parse(this.props.inputs[id])[key];
+                } else {
+                  return params[1];
+                }})();
+            const value = paramCount === 1 ? logic(p0): logic(p0, p1);
+            if(this.props.outputs.filter(v => v.key === paramName).length === 1){
+              this.props.outputs = this.props.outputs
+              .map(v => {
+                if(v.key === paramName) {
+                  return {src: (id + 1) * -1, key: v.key, value: JSON.stringify(value)};
+                } else {
+                  return v;
+                }
+              });
+            }
+          }
+        }
+
+        this.update();
+        this.emitter.trigger("process");
+      },
+      textAreaRef: React.createRef(),
+      previewRef: React.createRef(),
     };
   }
 
   setValue(inputs) {
     const content = inputs["content"];
+    this.props.inputs = content;
     const elems = this.props.outputs.reduce((a,c)=>{
-      if(a.includes(c.src)) return a;
+      if(a.includes(c.src) || c.src < 0) return a;
       return [...a, c.src];
     },[]);
     if(elems.length > content.length) {
@@ -160,14 +404,61 @@ class JsonManagerControl extends Rete.Control {
           if (c.src === i){
             const parsed = JSON.parse(v);
             if(!Object.keys(parsed).includes(c.key)) return a; // キー名自体に変更があった場合はOutputから削除
-            return [...a, {src: c.src, key: c.key, value: parsed[c.key]}];
+            return [...a, {src: c.src, key: c.key, value: JSON.stringify(parsed[c.key])}];
           } else {
             return [...a, c];
           }
         }, [])
       );
+      // inputsを参照するfunctionがある場合
+      const hasReferenceFromFuncs = this.props.outputFunctions.filter(v => v.name && v.params.reduce((a,c) => {
+        if(a) return a;
+        return c.startsWith("inputs[");
+      },false));
+      if(hasReferenceFromFuncs){
+        this.props.outputFunctions.forEach(
+          f => {
+            const paramName = f.name;
+            const params = f.params;
+            const func = this.props.functions.filter(v=> v.name === f.func)[0];
+            const {paramCount, logic} = func;
+            if(paramCount === 1 || params[0]) {
+              const p0 = (() => {
+                if(params[0].startsWith("inputs[")){
+                  const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                  const result = pattern.exec(params[0]);
+                  const id = result[1];
+                  const key = result[2];
+                  return  JSON.parse(this.props.inputs[id])[key];
+                } else {
+                  return params[0];
+                }})();
+                const p1 = (() => {
+                  if(paramCount === 2 && params[1].startsWith("inputs[")){
+                    const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                    const result = pattern.exec(params[1]);
+                    const id = result[1];
+                    const key = result[2];
+                    return  JSON.parse(this.props.inputs[id])[key];
+                  } else {
+                    return params[1];
+                  }})();
+              const value = paramCount === 1 ? logic(p0): logic(p0, p1);
+              if(this.props.outputs.filter(v => v.key === paramName).length === 1){
+                this.props.outputs = this.props.outputs
+                .map(v => {
+                  if(v.key === paramName) {
+                    return {src: v.src, key: v.key, value: JSON.stringify(value)};
+                  } else {
+                    return v;
+                  }
+                });
+              }
+            }
+          }
+        )
+      }
     }
-    this.props.inputs = content;
 
     this.putData("output", JSON.stringify(this.props.outputs));
     this.update();
