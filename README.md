@@ -250,5 +250,13 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | Dependency  | License |
  | :------------- | :------------- |
  | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
+ | [husky](https://www.npmjs.com/package/husky) | MIT License |
+ | [lint-staged](https://www.npmjs.com/package/lint-staged) | MIT License |
+ | [prettier](https://www.npmjs.com/package/prettier) | MIT License |
  | [react-app-rewired](https://www.npmjs.com/package/react-app-rewired) | MIT License |
  | [react-scripts](https://www.npmjs.com/package/react-scripts) | MIT License |
+ | [stylelint](https://www.npmjs.com/package/stylelint) | MIT License |
+ | [stylelint-config-prettier](https://www.npmjs.com/package/stylelint-config-prettier) | MIT License |
+ | [stylelint-config-recommended](https://www.npmjs.com/package/stylelint-config-recommended) | MIT License |
+ | [stylelint-order](https://www.npmjs.com/package/stylelint-order) | MIT License |
+ | [stylelint-prettier](https://www.npmjs.com/package/stylelint-prettier) | MIT License |
