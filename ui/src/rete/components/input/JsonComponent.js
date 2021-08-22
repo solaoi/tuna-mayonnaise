@@ -1,8 +1,9 @@
 import Rete from "rete";
-import JsonControl from "../../controls/JsonControl";
+import { JsonControl } from "../../controls/JsonControl";
 
-class JsonComponent extends Rete.Component {
+export class JsonComponent extends Rete.Component {
   path = ["New"];
+
   constructor(socket) {
     super("JSON");
     this.socket = socket;
@@ -17,8 +18,6 @@ class JsonComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    outputs["json"] = node.data.json;
+    outputs.json = node.data.json;
   }
 }
-
-export default JsonComponent;

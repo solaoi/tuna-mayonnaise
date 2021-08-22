@@ -1,9 +1,10 @@
 import Rete from "rete";
 import { JsonManagerNode } from "../nodes/JsonManagerNode";
-import JsonManagerControl from "../controls/JsonManagerControl";
+import { JsonManagerControl } from "../controls/JsonManagerControl";
 
-class JsonManagerComponent extends Rete.Component {
+export class JsonManagerComponent extends Rete.Component {
   path = ["New"];
+
   constructor(jsonSocket) {
     super("JSONManager");
     this.data.component = JsonManagerNode; // optional
@@ -21,7 +22,9 @@ class JsonManagerComponent extends Rete.Component {
 
     return node
       .addInput(contentInput)
-      .addControl(new JsonManagerControl(this.editor, "jsonManager", node, true))
+      .addControl(
+        new JsonManagerControl(this.editor, "jsonManager", node, true)
+      )
       .addOutput(out);
   }
 
@@ -31,15 +34,16 @@ class JsonManagerComponent extends Rete.Component {
       .controls.get("jsonManager")
       .setValue(inputs);
 
-    if(node.data.output === "[]"){
-      outputs["json"] = "";
-    } else if(node.data.output !== ""){
-      const previewParam = JSON.parse(node.data.output).map(v => [v.key, JSON.parse(v.value)]);
-      outputs["json"] = JSON.stringify(Object.fromEntries(previewParam));
+    if (node.data.output === "[]") {
+      outputs.json = "";
+    } else if (node.data.output !== "") {
+      const previewParam = JSON.parse(node.data.output).map((v) => [
+        v.key,
+        JSON.parse(v.value),
+      ]);
+      outputs.json = JSON.stringify(Object.fromEntries(previewParam));
     }
 
-    outputs["outputFunctions"] = node.data.outputFunctions;
+    outputs.outputFunctions = node.data.outputFunctions;
   }
 }
-
-export default JsonManagerComponent;

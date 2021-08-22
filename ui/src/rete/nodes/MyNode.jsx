@@ -12,7 +12,7 @@ export class MyNode extends Node {
           {"<<"} {node.name} {">>"}
         </div>
         {/* Outputs */}
-        {outputs.map(output => (
+        {outputs.map((output) => (
           <div className="output" key={output.key}>
             <div className="output-title">{output.name}</div>
             <Socket
@@ -24,7 +24,7 @@ export class MyNode extends Node {
           </div>
         ))}
         {/* Controls */}
-        {controls.map(control => (
+        {controls.map((control) => (
           <Control
             className="control"
             key={control.key}
@@ -33,7 +33,7 @@ export class MyNode extends Node {
           />
         ))}
         {/* Inputs */}
-        {inputs.map(input => (
+        {inputs.map((input) => (
           <div className="input" key={input.key}>
             <Socket
               type="input"

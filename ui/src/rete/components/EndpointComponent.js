@@ -1,12 +1,13 @@
 import Rete from "rete";
 import { EndpointNode } from "../nodes/EndpointNode";
-import EndpointControl from "../controls/EndpointControl";
-import BooleanControl from "../controls/BooleanControl";
-import TextControl from "../controls/TextControl";
-import PathControl from "../controls/PathControl";
+import { EndpointControl } from "../controls/EndpointControl";
+import { BooleanControl } from "../controls/BooleanControl";
+import { TextControl } from "../controls/TextControl";
+import { PathControl } from "../controls/PathControl";
 
-class EndpointComponent extends Rete.Component {
+export class EndpointComponent extends Rete.Component {
   path = ["New"];
+
   constructor(stringSocket) {
     super("Endpoint");
     this.data.component = EndpointNode; // optional
@@ -25,25 +26,29 @@ class EndpointComponent extends Rete.Component {
     return node
       .addInput(contentInput)
       .addControl(new EndpointControl(this.editor, "endpoint", node, true))
-      .addControl(new BooleanControl(this.editor, "enabledFlag", node, false, "Enabled"))
-      .addControl(new PathControl(this.editor, "path", node, false, "Path", "/foo"));
+      .addControl(
+        new BooleanControl(this.editor, "enabledFlag", node, false, "Enabled")
+      )
+      .addControl(
+        new PathControl(this.editor, "path", node, false, "Path", "/foo")
+      );
   }
 
-  worker(node, inputs, outputs) {
-    const content = inputs["content"].length ? inputs["content"][0] : "Rendering...";
-    const contentType = ((connection)=>{
-      if(connection){
-        if (connection.output === "html"){
+  worker(node, inputs) {
+    const content = inputs.content.length ? inputs.content[0] : "Rendering...";
+    const contentType = ((connection) => {
+      if (connection) {
+        if (connection.output === "html") {
           return "text/html; charset=utf-8";
-        } else if(connection.output === "json"){
+        }
+        if (connection.output === "json") {
           return "application/json; charset=utf-8";
-        } else {
-          return "text/plain; charset=utf-8"
         }
       }
+      return "text/plain; charset=utf-8";
     })(node.inputs.content.connections[0]);
-    const enabledFlag = node.data.enabledFlag;
-    const path = node.data.path;
+    const { enabledFlag } = node.data;
+    const { path } = node.data;
 
     this.editor.nodes
       .find((n) => n.id === node.id)
@@ -51,5 +56,3 @@ class EndpointComponent extends Rete.Component {
       .setValue(inputs, content, contentType, enabledFlag, path);
   }
 }
-
-export default EndpointComponent;

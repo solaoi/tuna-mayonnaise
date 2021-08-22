@@ -42,7 +42,7 @@ export class DbNode extends Node {
               innerRef={bindControl}
             />
             {control.key === "db" && (
-              <div class="control" title="pass">
+              <div className="control" title="pass">
                 <label
                   style={{
                     color: "white",

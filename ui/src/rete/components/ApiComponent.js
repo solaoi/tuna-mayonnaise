@@ -1,11 +1,12 @@
 import Rete from "rete";
-import TextControl from "../controls/TextControl";
-import BooleanControl from "../controls/BooleanControl";
-import NumControl from "../controls/NumControl";
+import { TextControl } from "../controls/TextControl";
+import { BooleanControl } from "../controls/BooleanControl";
+import { NumControl } from "../controls/NumControl";
 import { ApiNode } from "../nodes/ApiNode";
 
-class ApiComponent extends Rete.Component {
+export class ApiComponent extends Rete.Component {
   path = ["New"];
+
   constructor(jsonSocket) {
     super("API");
     this.data.component = ApiNode; // optional
@@ -55,11 +56,9 @@ class ApiComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    outputs["json"] = inputs["json"].length
-      ? inputs["json"][0]
-      : node.data.json;
-    outputs["url"] = node.data.url;
-    outputs["cached"] = node.data.cached;
+    outputs.json = inputs.json.length ? inputs.json[0] : node.data.json;
+    outputs.url = node.data.url;
+    outputs.cached = node.data.cached;
 
     this.editor.nodes
       .find((n) => n.id === node.id)
@@ -67,5 +66,3 @@ class ApiComponent extends Rete.Component {
       .setValue(node.data.cacheTime, !node.data.cached);
   }
 }
-
-export default ApiComponent;

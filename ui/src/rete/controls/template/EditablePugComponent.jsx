@@ -9,7 +9,7 @@ import * as pug from "pug";
 import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 
-const EditablePugComponent = ({ value, onChange }) => {
+export const EditablePugComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);
   const [warn, setWarn] = useState(false);
   const [stack, setStack] = useState(null);
@@ -29,20 +29,20 @@ const EditablePugComponent = ({ value, onChange }) => {
         textareaClassName="editorTextarea"
         preClassName="line-numbers"
         value={code}
-        onValueChange={(code) => {
+        onValueChange={(c) => {
           try {
-            pug.compile(code);
+            pug.compile(c);
             setWarn(false);
             setStack(null);
           } catch (e) {
             setStack(e.message);
             setWarn(true);
           }
-          setCode(code);
-          onChange(code);
+          setCode(c);
+          onChange(c);
         }}
-        highlight={(code) =>
-          highlight(code, languages.pug)
+        highlight={(c) =>
+          highlight(c, languages.pug)
             .split("\n")
             .map(
               (line) =>
@@ -61,5 +61,3 @@ const EditablePugComponent = ({ value, onChange }) => {
     </div>
   );
 };
-
-export default EditablePugComponent;

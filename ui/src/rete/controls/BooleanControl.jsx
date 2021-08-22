@@ -1,6 +1,6 @@
 import Rete from "rete";
 
-class BooleanControl extends Rete.Control {
+export class BooleanControl extends Rete.Control {
   static component = ({
     checked,
     onChange,
@@ -19,21 +19,21 @@ class BooleanControl extends Rete.Control {
           {title}
         </div>
       )}
-      <div class="switchArea">
+      <div className="switchArea">
         <input
           type="checkbox"
           id={id}
           checked={checked}
-          ref={(ref) => {
+          ref={(ref) =>
             ref &&
-              ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-          }}
+            ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+          }
           onChange={(e) => onChange(+e.target.checked)}
         />
-        <label for={id}>
-          <span></span>
+        <label htmlFor={id}>
+          <span />
         </label>
-        <div class="swImg"></div>
+        <div className="swImg" />
       </div>
     </>
   );
@@ -47,7 +47,7 @@ class BooleanControl extends Rete.Control {
     const initial = node.data[key] || false;
 
     node.data[key] = initial;
-    node.data["output"] = initial;
+    node.data.output = initial;
     this.props = {
       readonly,
       checked: initial,
@@ -66,5 +66,3 @@ class BooleanControl extends Rete.Control {
     this.update();
   }
 }
-
-export default BooleanControl;

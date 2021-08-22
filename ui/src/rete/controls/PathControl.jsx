@@ -1,7 +1,7 @@
 import Rete from "rete";
 import { toast } from "react-toastify";
 
-class PathControl extends Rete.Control {
+export class PathControl extends Rete.Control {
   static component = ({ value, onChange, title, placeHolder, warn }) => (
     <>
       {title && (
@@ -13,10 +13,9 @@ class PathControl extends Rete.Control {
         type="text"
         value={value}
         placeholder={placeHolder}
-        ref={(ref) => {
-          ref &&
-            ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-        }}
+        ref={(ref) =>
+          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+        }
         onChange={(e) => onChange(String(e.target.value))}
         style={{ background: warn ? "rgba(255, 0, 80, 0.7)" : "#FFF" }}
       />
@@ -40,7 +39,7 @@ class PathControl extends Rete.Control {
     const initial = node.data[key] || "/foo";
 
     node.data[key] = initial;
-    node.data["output"] = initial;
+    node.data.output = initial;
     this.props = {
       readonly,
       value: initial,
@@ -69,5 +68,3 @@ class PathControl extends Rete.Control {
     this.update();
   }
 }
-
-export default PathControl;

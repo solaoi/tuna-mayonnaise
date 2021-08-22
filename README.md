@@ -249,7 +249,16 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
 
  | Dependency  | License |
  | :------------- | :------------- |
+ | [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser) | MIT License |
  | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
+ | [customize-cra-eslint](https://www.npmjs.com/package/customize-cra-eslint) | MIT License |
+ | [eslint](https://www.npmjs.com/package/eslint) | MIT License |
+ | [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) | MIT License |
+ | [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier) | MIT License |
+ | [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) | MIT License |
+ | [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y) | MIT License |
+ | [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react) | MIT License |
+ | [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks) | MIT License |
  | [husky](https://www.npmjs.com/package/husky) | MIT License |
  | [lint-staged](https://www.npmjs.com/package/lint-staged) | MIT License |
  | [prettier](https://www.npmjs.com/package/prettier) | MIT License |

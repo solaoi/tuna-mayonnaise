@@ -7,7 +7,7 @@ import * as parser from "js-sql-parser";
 import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 
-const EditableSqlComponent = ({ value, onChange }) => {
+export const EditableSqlComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);
   const [warn, setWarn] = useState(false);
   const [stack, setStack] = useState(null);
@@ -21,19 +21,19 @@ const EditableSqlComponent = ({ value, onChange }) => {
   return (
     <Editor
       value={code}
-      onValueChange={(code) => {
+      onValueChange={(c) => {
         try {
-          parser.parse(code);
+          parser.parse(c);
           setWarn(false);
           setStack(null);
         } catch (e) {
           setStack(e.message);
           setWarn(true);
         }
-        setCode(code);
-        onChange(code);
+        setCode(c);
+        onChange(c);
       }}
-      highlight={(code) => highlight(code, languages.sql)}
+      highlight={(c) => highlight(c, languages.sql)}
       padding={10}
       style={{
         fontFamily: '"Fira code", "Fira Mono", monospace',
@@ -44,5 +44,3 @@ const EditableSqlComponent = ({ value, onChange }) => {
     />
   );
 };
-
-export default EditableSqlComponent;

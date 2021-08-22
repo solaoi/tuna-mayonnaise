@@ -1,6 +1,6 @@
 import Rete from "rete";
 
-class TextControl extends Rete.Control {
+export class TextControl extends Rete.Control {
   static component = ({ value, onChange, title, placeHolder }) => (
     <>
       {title && (
@@ -12,10 +12,9 @@ class TextControl extends Rete.Control {
         type="text"
         value={value}
         placeholder={placeHolder}
-        ref={(ref) => {
-          ref &&
-            ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-        }}
+        ref={(ref) =>
+          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+        }
         onChange={(e) => onChange(String(e.target.value))}
       />
     </>
@@ -37,7 +36,7 @@ class TextControl extends Rete.Control {
     const initial = node.data[key] || "";
 
     node.data[key] = initial;
-    node.data["output"] = initial;
+    node.data.output = initial;
     this.props = {
       readonly,
       value: initial,
@@ -57,5 +56,3 @@ class TextControl extends Rete.Control {
     this.update();
   }
 }
-
-export default TextControl;
