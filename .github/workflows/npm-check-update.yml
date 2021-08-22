@@ -1,0 +1,39 @@
+name: Update Node.js Dependencies
+
+on:
+  schedule:
+    - cron: '0 3 * * 3' # 毎週水曜日の正午に実行 ( 12+JST = 3+UTC )
+  workflow_dispatch:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: ./ui
+
+jobs:
+  update-deps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: Update dependencies
+        id: vars
+        run: |
+          npm install -g npm-check-updates
+          ncu -u
+          npm install
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: update dependencies
+          title: Automated Dependency Updates
+          body: This is an auto-generated PR with dependency updates.
+          labels: dependencies
+          reviewers: solaoi
+          branch: dependencies
+          branch-suffix: timestamp
