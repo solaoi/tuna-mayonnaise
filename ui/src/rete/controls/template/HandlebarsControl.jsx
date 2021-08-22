@@ -1,12 +1,12 @@
 import Rete from "rete";
-import EditableHandlebarsComponent from "./EditableHandlebarsComponent";
+import { EditableHandlebarsComponent } from "./EditableHandlebarsComponent";
 
-class HandlebarsControl extends Rete.Control {
+export class HandlebarsControl extends Rete.Control {
   static component = ({ value, onChange }) => (
     <div
-      ref={(ref) => {
-        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-      }}
+      ref={(ref) =>
+        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+      }
     >
       <EditableHandlebarsComponent
         value={value}
@@ -24,7 +24,7 @@ class HandlebarsControl extends Rete.Control {
     const initial = node.data[key] || "<div>{{name}}</div>";
 
     node.data[key] = initial;
-    node.data["output"] = initial;
+    node.data.output = initial;
     this.props = {
       readonly,
       value: initial,
@@ -42,5 +42,3 @@ class HandlebarsControl extends Rete.Control {
     this.update();
   }
 }
-
-export default HandlebarsControl;

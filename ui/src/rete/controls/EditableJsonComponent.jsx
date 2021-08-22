@@ -7,7 +7,7 @@ import * as jsonlint from "jsonlint-mod";
 import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 
-const EditableJsonComponent = ({ value, onChange }) => {
+export const EditableJsonComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);
   const [warn, setWarn] = useState(false);
   const [stack, setStack] = useState(null);
@@ -21,19 +21,19 @@ const EditableJsonComponent = ({ value, onChange }) => {
   return (
     <Editor
       value={code}
-      onValueChange={(code) => {
+      onValueChange={(c) => {
         try {
-          jsonlint.parse(code);
+          jsonlint.parse(c);
           setWarn(false);
           setStack(null);
         } catch (e) {
           setStack(e.message);
           setWarn(true);
         }
-        setCode(code);
-        onChange(code);
+        setCode(c);
+        onChange(c);
       }}
-      highlight={(code) => highlight(code, languages.json)}
+      highlight={(c) => highlight(c, languages.json)}
       padding={10}
       style={{
         fontFamily: '"Fira code", "Fira Mono", monospace',
@@ -44,5 +44,3 @@ const EditableJsonComponent = ({ value, onChange }) => {
     />
   );
 };
-
-export default EditableJsonComponent;

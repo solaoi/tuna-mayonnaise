@@ -1,6 +1,6 @@
 import Rete from "rete";
 
-class SelectControl extends Rete.Control {
+export class SelectControl extends Rete.Control {
   static component = ({ title, value, values, onChange }) => (
     <>
       {title && (
@@ -11,10 +11,9 @@ class SelectControl extends Rete.Control {
       <select
         style={{ width: "100%" }}
         value={value}
-        ref={(ref) => {
-          ref &&
-            ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-        }}
+        ref={(ref) =>
+          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+        }
         onChange={(e) => onChange(String(e.target.value))}
       >
         {values.map((v) => (
@@ -33,7 +32,7 @@ class SelectControl extends Rete.Control {
     const initial = node.data[key] || values[0];
 
     node.data[key] = initial;
-    node.data["output"] = initial;
+    node.data.output = initial;
     this.props = {
       readonly,
       value: initial,
@@ -53,5 +52,3 @@ class SelectControl extends Rete.Control {
     this.update();
   }
 }
-
-export default SelectControl;

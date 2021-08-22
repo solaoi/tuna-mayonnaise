@@ -9,7 +9,7 @@ import Handlebars from "handlebars";
 import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 
-const EditableHandlebarsComponent = ({ value, onChange }) => {
+export const EditableHandlebarsComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);
   const [warn, setWarn] = useState(false);
   const [stack, setStack] = useState(null);
@@ -29,20 +29,20 @@ const EditableHandlebarsComponent = ({ value, onChange }) => {
         textareaClassName="editorTextarea"
         preClassName="line-numbers"
         value={code}
-        onValueChange={(code) => {
+        onValueChange={(c) => {
           try {
-            Handlebars.precompile(code);
+            Handlebars.precompile(c);
             setWarn(false);
             setStack(null);
           } catch (e) {
             setStack(e.message);
             setWarn(true);
           }
-          setCode(code);
-          onChange(code);
+          setCode(c);
+          onChange(c);
         }}
-        highlight={(code) =>
-          highlight(code, languages.handlebars)
+        highlight={(c) =>
+          highlight(c, languages.handlebars)
             .split("\n")
             .map(
               (line) =>
@@ -61,5 +61,3 @@ const EditableHandlebarsComponent = ({ value, onChange }) => {
     </div>
   );
 };
-
-export default EditableHandlebarsComponent;

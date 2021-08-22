@@ -1,14 +1,14 @@
 import Rete from "rete";
-import EditableJsonComponent from "./EditableJsonComponent";
+import { EditableSqlComponent } from "./EditableSqlComponent";
 
-class JsonControl extends Rete.Control {
+export class SqlControl extends Rete.Control {
   static component = ({ value, onChange }) => (
     <div
-      ref={(ref) => {
-        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-      }}
+      ref={(ref) =>
+        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+      }
     >
-      <EditableJsonComponent value={value} onChange={(v) => onChange(v)} />
+      <EditableSqlComponent value={value} onChange={(v) => onChange(v)} />
     </div>
   );
 
@@ -16,12 +16,12 @@ class JsonControl extends Rete.Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = JsonControl.component;
+    this.component = SqlControl.component;
 
-    const initial = node.data[key] || `{"name": "value"}`;
+    const initial = node.data[key] || `SELECT * FROM users`;
 
     node.data[key] = initial;
-    node.data["output"] = initial;
+    node.data.output = initial;
     this.props = {
       readonly,
       value: initial,
@@ -39,5 +39,3 @@ class JsonControl extends Rete.Control {
     this.update();
   }
 }
-
-export default JsonControl;

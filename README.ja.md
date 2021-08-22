@@ -36,6 +36,17 @@ TUNA-Mayonnaise（ツナマヨ）は、ノードベースエディタ上でJSON�
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## これなに
+
+世の中には多くのWEBフレームワークがあり、貴方はそのどれか一つ、またはいくつかを使ってWEB開発をしているはずです。   
+そのいずれのフレームワークであっても、貴方は多くの記述パターンを発見し、同じ処理を書くことに飽き飽きしていることでしょう。
+
+そこで、パターンは全て設定ファイルに書いてしまいたい！と思った貴方は、極めて優秀なエンジニアです。   
+ただYAMLにせよJSONにせよ、昨今のWEB開発の記述パターンを表現するには少し力不足です。   
+
+であれば、ビジュアルプログラミングのUI上で、各設定を線と線で結び表現してはどうでしょうか。
+そんな試みから生まれたのが、このおにぎりの具として最も有名なTUNA-Mayonnaise（ツナマヨ）です。
+
 ## 始め方
 
 ### インストール方法
@@ -208,6 +219,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [pug](https://www.npmjs.com/package/pug) | MIT License |
  | [react](https://www.npmjs.com/package/react) | MIT License |
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
+ | [react-modal](https://www.npmjs.com/package/react-modal) | MIT License |
  | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
  | [react-use](https://www.npmjs.com/package/react-use) | Unlicense License |
@@ -226,6 +238,23 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
 
  | ライブラリ  | ライセンス |
  | :------------- | :------------- |
+ | [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser) | MIT License |
  | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
+ | [customize-cra-eslint](https://www.npmjs.com/package/customize-cra-eslint) | MIT License |
+ | [eslint](https://www.npmjs.com/package/eslint) | MIT License |
+ | [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) | MIT License |
+ | [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier) | MIT License |
+ | [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) | MIT License |
+ | [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y) | MIT License |
+ | [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react) | MIT License |
+ | [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks) | MIT License |
+ | [husky](https://www.npmjs.com/package/husky) | MIT License |
+ | [lint-staged](https://www.npmjs.com/package/lint-staged) | MIT License |
+ | [prettier](https://www.npmjs.com/package/prettier) | MIT License |
  | [react-app-rewired](https://www.npmjs.com/package/react-app-rewired) | MIT License |
  | [react-scripts](https://www.npmjs.com/package/react-scripts) | MIT License |
+ | [stylelint](https://www.npmjs.com/package/stylelint) | MIT License |
+ | [stylelint-config-prettier](https://www.npmjs.com/package/stylelint-config-prettier) | MIT License |
+ | [stylelint-config-recommended](https://www.npmjs.com/package/stylelint-config-recommended) | MIT License |
+ | [stylelint-order](https://www.npmjs.com/package/stylelint-order) | MIT License |
+ | [stylelint-prettier](https://www.npmjs.com/package/stylelint-prettier) | MIT License |

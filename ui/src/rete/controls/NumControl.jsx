@@ -1,6 +1,6 @@
 import Rete from "rete";
 
-class NumControl extends Rete.Control {
+export class NumControl extends Rete.Control {
   static component = ({ value, onChange, title, disabled }) => (
     <>
       {title && (
@@ -11,10 +11,9 @@ class NumControl extends Rete.Control {
       <input
         type="number"
         value={value}
-        ref={(ref) => {
-          ref &&
-            ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-        }}
+        ref={(ref) =>
+          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+        }
         onChange={(e) => onChange(+e.target.value)}
         disabled={disabled}
       />
@@ -38,7 +37,7 @@ class NumControl extends Rete.Control {
     const initial = node.data[key] || defalut;
 
     node.data[key] = initial;
-    node.data["output"] = initial;
+    node.data.output = initial;
     this.props = {
       readonly,
       value: initial,
@@ -59,5 +58,3 @@ class NumControl extends Rete.Control {
     this.update();
   }
 }
-
-export default NumControl;

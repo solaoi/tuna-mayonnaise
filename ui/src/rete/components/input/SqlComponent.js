@@ -1,8 +1,9 @@
 import Rete from "rete";
-import SqlControl from "../../controls/SqlControl";
+import { SqlControl } from "../../controls/SqlControl";
 
-class SqlComponent extends Rete.Component {
+export class SqlComponent extends Rete.Component {
   path = ["New"];
+
   constructor(socket) {
     super("SQL");
     this.socket = socket;
@@ -17,8 +18,6 @@ class SqlComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    outputs["sql"] = node.data.sql;
+    outputs.sql = node.data.sql;
   }
 }
-
-export default SqlComponent;

@@ -1,8 +1,9 @@
 import Rete from "rete";
-import PugControl from "../../controls/template/PugControl";
+import { PugControl } from "../../controls/template/PugControl";
 
-class PugComponent extends Rete.Component {
+export class PugComponent extends Rete.Component {
   path = ["New"];
+
   constructor(socket) {
     super("Pug");
     this.socket = socket;
@@ -17,8 +18,6 @@ class PugComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    outputs["pug"] = node.data.pug;
+    outputs.pug = node.data.pug;
   }
 }
-
-export default PugComponent;

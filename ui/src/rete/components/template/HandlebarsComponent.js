@@ -1,8 +1,9 @@
 import Rete from "rete";
-import HandlebarsControl from "../../controls/template/HandlebarsControl";
+import { HandlebarsControl } from "../../controls/template/HandlebarsControl";
 
-class HandlebarsComponent extends Rete.Component {
+export class HandlebarsComponent extends Rete.Component {
   path = ["New"];
+
   constructor(socket) {
     super("Handlebars");
     this.socket = socket;
@@ -17,8 +18,6 @@ class HandlebarsComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    outputs["hbs"] = node.data.hbs;
+    outputs.hbs = node.data.hbs;
   }
 }
-
-export default HandlebarsComponent;

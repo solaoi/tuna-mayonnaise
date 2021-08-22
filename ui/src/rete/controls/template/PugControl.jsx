@@ -1,14 +1,14 @@
 import Rete from "rete";
-import EditableSqlComponent from "./EditableSqlComponent";
+import { EditablePugComponent } from "./EditablePugComponent";
 
-class SqlControl extends Rete.Control {
+export class PugControl extends Rete.Control {
   static component = ({ value, onChange }) => (
     <div
-      ref={(ref) => {
-        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-      }}
+      ref={(ref) =>
+        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+      }
     >
-      <EditableSqlComponent value={value} onChange={(v) => onChange(v)} />
+      <EditablePugComponent value={value} onChange={(v) => onChange(v)} />
     </div>
   );
 
@@ -16,12 +16,12 @@ class SqlControl extends Rete.Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = SqlControl.component;
+    this.component = PugControl.component;
 
-    const initial = node.data[key] || `SELECT * FROM users`;
+    const initial = node.data[key] || "div #{name}";
 
     node.data[key] = initial;
-    node.data["output"] = initial;
+    node.data.output = initial;
     this.props = {
       readonly,
       value: initial,
@@ -39,5 +39,3 @@ class SqlControl extends Rete.Control {
     this.update();
   }
 }
-
-export default SqlControl;

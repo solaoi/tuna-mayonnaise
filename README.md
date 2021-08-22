@@ -14,27 +14,46 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node
 <details>
 <summary>CLICK</summary>
 
-- [Get Started](#get-started)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Tool Features](#tool-features)
-  - [Template Engine](#template-engine)
-  - [API](#api)
-  - [Database](#database)
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-- [UseCases](#usecases)
-  - [1. Serve Static JSON](#1-serve-static-json)
-  - [2. Serve Static HTML](#2-serve-static-html)
-  - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
-  - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Get Started](#get-started)
+    - [Install](#install)
+      - [For MacOS (Homebrew)](#for-macos-homebrew)
+      - [For Others (Binary Releases)](#for-others-binary-releases)
+    - [Usage](#usage)
+      - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
+      - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
+  - [Tool Features](#tool-features)
+    - [Template Engine](#template-engine)
+    - [API](#api)
+    - [Database](#database)
+      - [Connection Options](#connection-options)
+        - [TLS / SSL](#tls--ssl)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+  - [UseCases](#usecases)
+    - [1. Serve Static JSON](#1-serve-static-json)
+    - [2. Serve Static HTML](#2-serve-static-html)
+    - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
+    - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Why
+
+There are many web frameworks in the world, and you must be using one or several of them for your web development.   
+In any of these frameworks, you may have found many patterns and are getting tired of writing the same process.
+
+If you are a very good engineer, you want to write all the patterns in one configuration file.   
+However, both YAML and JSON are a bit inadequate to express the patterns of today's web development.   
+
+So, why don't we use a visual programming UI to express each pattern by connecting settings with lines?
+The result of such an attempt is TUNA-Mayonnaise, the most famous ingredient in rice balls.
 
 ## Get Started
 
@@ -211,6 +230,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [pug](https://www.npmjs.com/package/pug) | MIT License |
  | [react](https://www.npmjs.com/package/react) | MIT License |
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
+ | [react-modal](https://www.npmjs.com/package/react-modal) | MIT License |
  | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
  | [react-use](https://www.npmjs.com/package/react-use) | Unlicense License |
@@ -229,6 +249,23 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
 
  | Dependency  | License |
  | :------------- | :------------- |
+ | [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser) | MIT License |
  | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
+ | [customize-cra-eslint](https://www.npmjs.com/package/customize-cra-eslint) | MIT License |
+ | [eslint](https://www.npmjs.com/package/eslint) | MIT License |
+ | [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) | MIT License |
+ | [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier) | MIT License |
+ | [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) | MIT License |
+ | [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y) | MIT License |
+ | [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react) | MIT License |
+ | [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks) | MIT License |
+ | [husky](https://www.npmjs.com/package/husky) | MIT License |
+ | [lint-staged](https://www.npmjs.com/package/lint-staged) | MIT License |
+ | [prettier](https://www.npmjs.com/package/prettier) | MIT License |
  | [react-app-rewired](https://www.npmjs.com/package/react-app-rewired) | MIT License |
  | [react-scripts](https://www.npmjs.com/package/react-scripts) | MIT License |
+ | [stylelint](https://www.npmjs.com/package/stylelint) | MIT License |
+ | [stylelint-config-prettier](https://www.npmjs.com/package/stylelint-config-prettier) | MIT License |
+ | [stylelint-config-recommended](https://www.npmjs.com/package/stylelint-config-recommended) | MIT License |
+ | [stylelint-order](https://www.npmjs.com/package/stylelint-order) | MIT License |
+ | [stylelint-prettier](https://www.npmjs.com/package/stylelint-prettier) | MIT License |

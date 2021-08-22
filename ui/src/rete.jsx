@@ -12,18 +12,18 @@ import AutoArrangePlugin from "rete-auto-arrange-plugin";
 import HistoryPlugin from "rete-history-plugin";
 import { toast } from "react-toastify";
 
-import JsonComponent from "./rete/components/input/JsonComponent";
-import SqlComponent from "./rete/components/input/SqlComponent";
-import TemplateComponent from "./rete/components/template/TemplateComponent";
-import HandlebarsComponent from "./rete/components/template/HandlebarsComponent";
-import PugComponent from "./rete/components/template/PugComponent";
-import EndpointComponent from "./rete/components/EndpointComponent";
-import JsonManagerComponent from "./rete/components/JsonManagerComponent";
-import ApiComponent from "./rete/components/ApiComponent";
-import MySQLComponent from "./rete/components/MySQLComponent";
-import PostgreSQLComponent from "./rete/components/PostgreSQLComponent";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import { JsonComponent } from "./rete/components/input/JsonComponent";
+import { SqlComponent } from "./rete/components/input/SqlComponent";
+import { TemplateComponent } from "./rete/components/template/TemplateComponent";
+import { HandlebarsComponent } from "./rete/components/template/HandlebarsComponent";
+import { PugComponent } from "./rete/components/template/PugComponent";
+import { EndpointComponent } from "./rete/components/EndpointComponent";
+import { JsonManagerComponent } from "./rete/components/JsonManagerComponent";
+import { ApiComponent } from "./rete/components/ApiComponent";
+import { MySQLComponent } from "./rete/components/MySQLComponent";
+import { PostgreSQLComponent } from "./rete/components/PostgreSQLComponent";
 
 export async function createEditor(container) {
   // 各種Socket定義
@@ -63,7 +63,7 @@ export async function createEditor(container) {
   const ua = window.navigator.userAgent.toLowerCase();
   const isMacOS = ua.indexOf("mac os x") !== -1;
   const isInputFocused = () => {
-    const nodeName = document.activeElement.nodeName;
+    const { nodeName } = document.activeElement;
     return nodeName === "TEXTAREA" || nodeName === "INPUT";
   };
   const editor = new Rete.NodeEditor("tuna-mayonnaise@0.0.1", container);
@@ -105,14 +105,17 @@ export async function createEditor(container) {
         saveAs(blob, "tuna-mayonnaise.json");
       },
       Debug() {
+        // eslint-disable-next-line no-console
         console.log(JSON.stringify(editor.toJSON()));
       },
     },
   });
   // ダブルクリックおよび入力エリアでのズームを無効化
-  editor.on("zoom", ({ source }) => {
-    return source !== "dblclick" && source === "wheel" && !isInputFocused();
-  });
+  editor.on(
+    "zoom",
+    ({ source }) =>
+      source !== "dblclick" && source === "wheel" && !isInputFocused()
+  );
   // 履歴機能を追加
   editor.use(HistoryPlugin, { keyboard: false });
   // ショートカットキー設定
@@ -129,7 +132,7 @@ export async function createEditor(container) {
         editor.selected.clear();
         return;
       // Spaceキーでメニュー表示
-      case "Space":
+      case "Space": {
         const rect = editor.view.container.getBoundingClientRect();
         const event = new PointerEvent("contextmenu", {
           clientX: rect.left + rect.width / 2,
@@ -137,6 +140,7 @@ export async function createEditor(container) {
         });
         editor.trigger("contextmenu", { e: event, view: editor.view });
         return;
+      }
       default:
         break;
     }
@@ -153,7 +157,7 @@ export async function createEditor(container) {
           } else {
             editor.trigger("undo");
           }
-          return;
+          break;
         default:
           break;
       }
@@ -203,7 +207,7 @@ export async function createEditor(container) {
     editor.addNode(endpoint);
   }
 
-  editor.on("showcontextmenu", ({ e, node }) => {
+  editor.on("showcontextmenu", () => {
     document.getElementsByClassName("rightClick")[0].style.display = "none";
     return true;
   });

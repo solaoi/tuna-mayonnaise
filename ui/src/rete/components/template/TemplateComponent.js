@@ -1,12 +1,13 @@
 import Rete from "rete";
-import { TemplateNode } from "../../nodes/TemplateNode";
-import JsonControl from "../../controls/JsonControl";
-import HTMLControl from "../../controls/HTMLControl";
 import * as pug from "pug";
 import Handlebars from "handlebars";
+import { TemplateNode } from "../../nodes/TemplateNode";
+import { JsonControl } from "../../controls/JsonControl";
+import { HTMLControl } from "../../controls/HTMLControl";
 
-class TemplateComponent extends Rete.Component {
+export class TemplateComponent extends Rete.Component {
   path = ["New"];
+
   constructor(dataSocket, templateSocket, htmlSocket) {
     super("Template");
     this.data.component = TemplateNode; // optional
@@ -34,19 +35,17 @@ class TemplateComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    const json = inputs["json"].length ? inputs["json"][0] : node.data.json;
+    const json = inputs.json.length ? inputs.json[0] : node.data.json;
     const connections = node.inputs.template.connections.filter(
-      (conn) =>
-        conn?.output === "hbs" ||
-        conn?.output === "pug"
+      (conn) => conn?.output === "hbs" || conn?.output === "pug"
     );
     const html = (() => {
       if (connections.length === 0) {
         return "No TemplateEngine detected...";
       }
       const templateEngine = connections[0].output;
-      const template = inputs["template"]?.length
-        ? inputs["template"][0]
+      const template = inputs.template?.length
+        ? inputs.template[0]
         : node.data.json;
       if (templateEngine === "pug") {
         return pug.render(template, JSON.parse(json));
@@ -55,14 +54,13 @@ class TemplateComponent extends Rete.Component {
         const hbsTemplate = Handlebars.compile(template);
         return hbsTemplate(JSON.parse(json));
       }
+      return "Unknown TemplateEngine detected...";
     })();
 
     this.editor.nodes
       .find((n) => n.id === node.id)
       .controls.get("template")
       .setValue(inputs, html, "text/html; charset=utf-8");
-    outputs["html"] = html;
+    outputs.html = html;
   }
 }
-
-export default TemplateComponent;

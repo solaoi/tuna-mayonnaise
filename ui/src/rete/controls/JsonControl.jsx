@@ -1,14 +1,14 @@
 import Rete from "rete";
-import EditablePugComponent from "./EditablePugComponent";
+import { EditableJsonComponent } from "./EditableJsonComponent";
 
-class PugControl extends Rete.Control {
+export class JsonControl extends Rete.Control {
   static component = ({ value, onChange }) => (
     <div
-      ref={(ref) => {
-        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation());
-      }}
+      ref={(ref) =>
+        ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+      }
     >
-      <EditablePugComponent value={value} onChange={(v) => onChange(v)} />
+      <EditableJsonComponent value={value} onChange={(v) => onChange(v)} />
     </div>
   );
 
@@ -16,12 +16,12 @@ class PugControl extends Rete.Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = PugControl.component;
+    this.component = JsonControl.component;
 
-    const initial = node.data[key] || "div #{name}";
+    const initial = node.data[key] || `{"name": "value"}`;
 
     node.data[key] = initial;
-    node.data["output"] = initial;
+    node.data.output = initial;
     this.props = {
       readonly,
       value: initial,
@@ -39,5 +39,3 @@ class PugControl extends Rete.Control {
     this.update();
   }
 }
-
-export default PugControl;
