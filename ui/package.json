@@ -11,7 +11,7 @@
   },
   "main": "src/index.jsx",
   "dependencies": {
-    "axios": "^0.21.3",
+    "axios": "^0.21.4",
     "file-saver": "^2.0.5",
     "handlebars": "^4.7.7",
     "js-sql-parser": "1.4.1",
