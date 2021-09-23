@@ -16,7 +16,7 @@
     "handlebars": "^4.7.7",
     "js-sql-parser": "1.4.1",
     "jsonlint-mod": "1.7.6",
-    "prismjs": "1.24.1",
+    "prismjs": "1.25.0",
     "pug": "^3.0.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
