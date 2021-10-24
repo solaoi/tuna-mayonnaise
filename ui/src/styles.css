@@ -71,7 +71,7 @@ body {
 /* スクロールバーを表示 */
 .hasScrollbar::-webkit-scrollbar {
   -webkit-appearance: none;
-  width: 7px;
+  width: 12px;
 }
 .hasScrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.5);
@@ -243,10 +243,11 @@ textarea {
   margin: 0;
 }
 .jsonManagerCtrlInputKey {
+  align-items: center;
   background: #6e88ff;
   border-radius: 5px;
   color: #fff;
-  display: inline-block;
+  display: inline-flex;
   margin: 2px 5px;
   padding: 0 5px;
 }

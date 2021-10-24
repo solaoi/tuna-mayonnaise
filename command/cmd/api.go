@@ -9,6 +9,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"reflect"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -60,6 +62,8 @@ type response struct {
 	ContentBuilder func() body
 }
 
+var re *regexp.Regexp
+var reIsNum *regexp.Regexp
 var endpoints map[string]map[string]string
 var dbs map[string]*sql.DB
 
@@ -89,6 +93,8 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 		content = map[string]interface{}{"url": data["url"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "MySQL" || name == "PostgreSQL" {
 		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
+	} else if name == "JSONManager" {
+		content = map[string]interface{}{"content": data["output"], "functions": data["outputFunctions"]}
 	} else {
 		content = data["output"]
 	}
@@ -323,7 +329,12 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						}
 					}
 				} else if v["name"] == "JSONManager" {
-					content := v["content"].(string)
+					temp := v["content"].(map[string]interface{})
+					content := fmt.Sprintf("%v", temp["content"])
+					functions := fmt.Sprintf("%v", temp["functions"])
+					// log.Println(content)
+					// log.Println(functions)
+
 					var obj []map[string]interface{}
 					newObj := map[string]interface{}{}
 					if err := json.Unmarshal([]byte(content), &obj); err != nil {
@@ -331,14 +342,108 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					}
 
 					ctx := map[string]interface{}{}
+					ctxs := []map[string]interface{}{}
+					ctxsSimple := []string{}
 					for _, v2 := range c[i+1] {
 						if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "MySQL" || v2["name"] == "PostgreSQL" || v2["name"] == "JSONManager") {
-							json.Unmarshal([]byte(v2["content"].(string)), &ctx)
+							if strings.HasPrefix(v2["content"].(string), "[") {
+								if strings.Contains(v2["content"].(string), "{") && strings.Contains(v2["content"].(string), "}") {
+									json.Unmarshal([]byte(v2["content"].(string)), &ctxs)
+								} else {
+									json.Unmarshal([]byte(v2["content"].(string)), &ctxsSimple)
+								}
+							} else {
+								json.Unmarshal([]byte(v2["content"].(string)), &ctx)
+							}
 						}
 					}
 					for _, v2 := range obj {
 						key := v2["key"].(string)
-						newObj[key] = ctx[key]
+						if ctx[key] == nil {
+							var funcJson []map[string]interface{}
+							if err := json.Unmarshal([]byte(functions), &funcJson); err != nil {
+								log.Fatal(err)
+							}
+							for _, v4 := range funcJson {
+								funcName := v4["name"].(string)
+								if funcName == key {
+									funcType := v4["func"].(string)
+									funcParams := v4["params"].([]interface{})
+									if funcType == "Rename" {
+										param1 := funcParams[0].(string)
+										if strings.HasPrefix(param1, "inputs[") {
+											reg := re.Copy()
+											tempKey := reg.FindStringSubmatch(param1)[4]
+											if len(ctxs) == 0 && len(ctxsSimple) == 0 {
+												newObj[key] = ctx[tempKey]
+											} else {
+												if reIsNum.MatchString(tempKey) {
+													index, err := strconv.Atoi(tempKey)
+													if err != nil {
+														log.Fatal(err)
+													} else {
+														if len(ctxsSimple) == 0 {
+															newObj[key] = ctxs[index]
+														} else {
+															newObj[key] = ctxsSimple[index]
+														}
+													}
+												} else {
+													if tempKey != "" {
+														newObj[key] = ctx[tempKey]
+													} else {
+														if len(ctxsSimple) == 0 {
+															newObj[key] = ctxs
+														} else {
+															newObj[key] = ctxsSimple
+														}
+													}
+												}
+											}
+										} else {
+											newObj[key] = param1
+										}
+										// functionの一覧を書いていく
+									} else if funcType == "1000 Separate" {
+										param1 := funcParams[0].(string)
+										var unSeparated string
+										if strings.HasPrefix(param1, "inputs[") {
+											reg := re.Copy()
+											tempKey := reg.FindStringSubmatch(param1)[4]
+											// tempKeyが空ケースを記載する
+											if reflect.TypeOf(ctx[tempKey]).Kind() == reflect.String {
+												unSeparated = ctx[tempKey].(string)
+											} else {
+												unSeparated = strconv.FormatFloat(ctx[tempKey].(float64), 'f', -1, 64)
+											}
+										} else {
+											unSeparated = param1
+										}
+										arrSeparatedByDot := strings.Split(unSeparated, ".")
+										arr := strings.Split(arrSeparatedByDot[0], "")
+										cnt := len(arr) - 1
+										res := ""
+										i2 := 0
+										for i := cnt; i >= 0; i-- {
+											if i2 > 2 && i2%3 == 0 {
+												res = fmt.Sprintf(",%s", res)
+											}
+											res = fmt.Sprintf("%s%s", arr[i], res)
+											i2++
+										}
+										if len(arrSeparatedByDot) == 2 {
+											newObj[key] = res + arrSeparatedByDot[1]
+										} else {
+											newObj[key] = res
+										}
+									} else if funcType != "Rename" && funcType != "1000 Separate" {
+										newObj[key] = nil
+									}
+								}
+							}
+						} else {
+							newObj[key] = ctx[key]
+						}
 					}
 
 					json, err := json.Marshal(newObj)
@@ -369,6 +474,8 @@ func urlSkipper(c echo.Context) bool {
 }
 
 func api(cmd *cobra.Command, args []string) {
+	re = regexp.MustCompile("^inputs\\[(\\d+)\\](([^.]?)|\\.(.*))$")
+	reIsNum = regexp.MustCompile("^\\d+$")
 	endpoints = map[string]map[string]string{}
 	dbs = map[string]*sql.DB{}
 	dynamicEndpoints = map[string]response{}

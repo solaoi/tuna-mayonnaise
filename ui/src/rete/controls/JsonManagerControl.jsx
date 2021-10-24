@@ -149,11 +149,20 @@ export class JsonManagerControl extends Rete.Control {
             {inputs.map((input, i) => {
               try {
                 const parsed = JSON.parse(input);
-                return Object.keys(parsed).map((key) => (
-                  <option value={`inputs[${i}].${key}`}>
-                    {`inputs[${i}].${key}`}
-                  </option>
-                ));
+
+                return (() => {
+                  const inputArray = Array.isArray(parsed)
+                    ? [<option value={`inputs[${i}]`}>{`inputs[${i}]`}</option>]
+                    : [];
+                  return [
+                    ...inputArray,
+                    ...Object.keys(parsed).map((key) => (
+                      <option value={`inputs[${i}].${key}`}>
+                        {`inputs[${i}].${key}`}
+                      </option>
+                    )),
+                  ];
+                })();
               } catch {
                 return "";
               }
@@ -215,6 +224,13 @@ export class JsonManagerControl extends Rete.Control {
                     data-type="func"
                   >
                     {v.name}
+                    <span
+                      role="button"
+                      tabIndex="0"
+                      className="removeBtn"
+                      onClick={onClickRemoveBtn}
+                      data-idx={i}
+                    />
                   </p>
                 )
             )}
@@ -395,21 +411,25 @@ export class JsonManagerControl extends Rete.Control {
             const { paramCount, logic } = func;
             const p0 = (() => {
               if (params[0].startsWith("inputs[")) {
-                const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
                 const result = pattern.exec(params[0]);
                 const p0Id = result[1];
-                const p0Key = result[2];
-                return JSON.parse(this.props.inputs[p0Id])[p0Key];
+                const p0Key = result[4];
+                return p0Key
+                  ? JSON.parse(this.props.inputs[p0Id])[p0Key]
+                  : JSON.parse(this.props.inputs[p0Id]);
               }
               return params[0];
             })();
             const p1 = (() => {
               if (paramCount === 2 && params[1].startsWith("inputs[")) {
-                const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
                 const result = pattern.exec(params[1]);
                 const p1Id = result[1];
-                const p1Key = result[2];
-                return JSON.parse(this.props.inputs[p1Id])[p1Key];
+                const p1Key = result[4];
+                return p1Key
+                  ? JSON.parse(this.props.inputs[p1Id])[p1Key]
+                  : JSON.parse(this.props.inputs[p1Id]);
               }
               return params[1];
             })();
@@ -456,92 +476,101 @@ export class JsonManagerControl extends Rete.Control {
         this.update();
         this.emitter.trigger("process");
       },
-      outputFunctions: node.data.outputFunctions
-        ? JSON.parse(node.data.outputFunctions)
-        : [], // [{func: "Wrap", name: "hoge", params: ["value1", "value2"]}]
+      outputFunctions:
+        !(
+          Array.isArray(node.data.outputFunctions) &&
+          node.data.outputFunctions.length === 0
+        ) && node.data.outputFunctions
+          ? JSON.parse(node.data.outputFunctions)
+          : [], // [{func: "Rename", name: "hoge", params: ["inputs[0].hoge", "value2"]}]
       functions: [
-        { name: "Wrap", paramCount: 1, symbol: null, logic: (param) => param },
         {
-          name: "1000 Separate",
+          name: "Rename",
           paramCount: 1,
           symbol: null,
-          logic: (param) => {
-            const s = String(param).split(".");
-            let ret = String(s[0]).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-            if (s.length > 1) {
-              ret += `.${s[1]}`;
-            }
-            return ret;
-          },
+          logic: (param) => param,
         },
-        {
-          name: "Equal",
-          paramCount: 2,
-          symbol: "=",
-          logic: (param1, param2) => param1 === param2,
-        },
-        {
-          name: "NotEquals",
-          paramCount: 2,
-          symbol: "!=",
-          logic: (param1, param2) => param1 !== param2,
-        },
-        {
-          name: "GreaterThan",
-          paramCount: 2,
-          symbol: ">",
-          logic: (param1, param2) => parseFloat(param1) > parseFloat(param2),
-        },
-        {
-          name: "GreaterEqual",
-          paramCount: 2,
-          symbol: ">=",
-          logic: (param1, param2) => parseFloat(param1) >= parseFloat(param2),
-        },
-        {
-          name: "LessThan",
-          paramCount: 2,
-          symbol: "<",
-          logic: (param1, param2) => parseFloat(param1) < parseFloat(param2),
-        },
-        {
-          name: "LessEqual",
-          paramCount: 2,
-          symbol: "<=",
-          logic: (param1, param2) => parseFloat(param1) <= parseFloat(param2),
-        },
-        {
-          name: "And",
-          paramCount: 2,
-          symbol: "&&",
-          logic: (param1, param2) => param1 === "true" && param2 === "true",
-        },
-        {
-          name: "Or",
-          paramCount: 2,
-          symbol: "||",
-          logic: (param1, param2) => param1 === "true" || param2 === "true",
-        },
-        // {name: "Map", paramCount: 1, symbol: null},
-        {
-          name: "IndexOrKey",
-          paramCount: 2,
-          symbol: "has the item",
-          logic: (param1, param2) => {
-            try {
-              const arr = JSON.parse(param1);
-              return arr[param2] ? arr[param2] : "undefined";
-            } catch (e) {
-              return "no item...";
-            }
-          },
-        },
-        {
-          name: "Split",
-          paramCount: 2,
-          symbol: "is split by the separator",
-          logic: (param1, param2) => param1.split(param2),
-        },
+        // {
+        //   name: "1000 Separate",
+        //   paramCount: 1,
+        //   symbol: null,
+        //   logic: (param) => {
+        //     const s = String(param).split(".");
+        //     let ret = String(s[0]).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+        //     if (s.length > 1) {
+        //       ret += `.${s[1]}`;
+        //     }
+        //     return ret;
+        //   },
+        // },
+        // {
+        //   name: "Equal",
+        //   paramCount: 2,
+        //   symbol: "=",
+        //   logic: (param1, param2) => param1 === param2,
+        // },
+        // {
+        //   name: "NotEquals",
+        //   paramCount: 2,
+        //   symbol: "!=",
+        //   logic: (param1, param2) => param1 !== param2,
+        // },
+        // {
+        //   name: "GreaterThan",
+        //   paramCount: 2,
+        //   symbol: ">",
+        //   logic: (param1, param2) => parseFloat(param1) > parseFloat(param2),
+        // },
+        // {
+        //   name: "GreaterEqual",
+        //   paramCount: 2,
+        //   symbol: ">=",
+        //   logic: (param1, param2) => parseFloat(param1) >= parseFloat(param2),
+        // },
+        // {
+        //   name: "LessThan",
+        //   paramCount: 2,
+        //   symbol: "<",
+        //   logic: (param1, param2) => parseFloat(param1) < parseFloat(param2),
+        // },
+        // {
+        //   name: "LessEqual",
+        //   paramCount: 2,
+        //   symbol: "<=",
+        //   logic: (param1, param2) => parseFloat(param1) <= parseFloat(param2),
+        // },
+        // {
+        //   name: "And",
+        //   paramCount: 2,
+        //   symbol: "&&",
+        //   logic: (param1, param2) => param1 === "true" && param2 === "true",
+        // },
+        // {
+        //   name: "Or",
+        //   paramCount: 2,
+        //   symbol: "||",
+        //   logic: (param1, param2) => param1 === "true" || param2 === "true",
+        // },
+        // // {name: "Map", paramCount: 1, symbol: null},
+        // {
+        //   name: "IndexOrKey",
+        //   paramCount: 2,
+        //   symbol: "has the item",
+        //   logic: (param1, param2) => {
+        //     try {
+        //       const arr = JSON.parse(param1);
+        //       return arr[param2] ? arr[param2] : "undefined";
+        //     } catch (e) {
+        //       return "no item...";
+        //     }
+        //   },
+        // },
+        // {
+        //   name: "Split",
+        //   paramCount: 2,
+        //   symbol: "is split by the separator",
+        //   logic: (param1, param2) => param1.split(param2),
+        // },
       ],
       onClickAddBtn: (e) => {
         const val = e.currentTarget.previousElementSibling.value;
@@ -616,21 +645,25 @@ export class JsonManagerControl extends Rete.Control {
           if (paramCount === 1 || params[0]) {
             const p0 = (() => {
               if (params[0].startsWith("inputs[")) {
-                const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
                 const result = pattern.exec(params[0]);
                 const p0Id = result[1];
-                const p0Key = result[2];
-                return JSON.parse(this.props.inputs[p0Id])[p0Key];
+                const p0Key = result[4];
+                return p0Key
+                  ? JSON.parse(this.props.inputs[p0Id])[p0Key]
+                  : JSON.parse(this.props.inputs[p0Id]);
               }
               return params[0];
             })();
             const p1 = (() => {
               if (paramCount === 2 && params[1].startsWith("inputs[")) {
-                const pattern = /^inputs\[(\d+)\]\.(.*)$/;
+                const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
                 const result = pattern.exec(params[1]);
                 const p1Id = result[1];
-                const p1Key = result[2];
-                return JSON.parse(this.props.inputs[p1Id])[p1Key];
+                const p1Key = result[4];
+                return p1Key
+                  ? JSON.parse(this.props.inputs[p1Id])[p1Key]
+                  : JSON.parse(this.props.inputs[p1Id]);
               }
               return params[1];
             })();
@@ -663,12 +696,17 @@ export class JsonManagerControl extends Rete.Control {
   setValue(inputs) {
     const { content } = inputs;
     this.props.inputs = content;
+    if (content.length === 0) {
+      this.props.outputs = [];
+      this.props.outputFunctions = [];
+    }
     const elems = this.props.outputs.reduce((a, c) => {
       if (a.includes(c.src) || c.src < 0) return a;
       return [...a, c.src];
     }, []);
     if (elems.length > content.length) {
       this.props.outputs = [];
+      this.props.outputFunctions = [];
     } else {
       // inputsの変更をoutputsに反映
       content.forEach(
@@ -697,51 +735,81 @@ export class JsonManagerControl extends Rete.Control {
             if (a) return a;
             return c.startsWith("inputs[");
           }, false)
-      );
+      ).length;
       if (hasReferenceFromFuncs) {
-        this.props.outputFunctions.forEach((f) => {
-          const paramName = f.name;
-          const { params } = f;
-          const func = this.props.functions.filter((v) => v.name === f.func)[0];
-          const { paramCount, logic } = func;
-          if (paramCount === 1 || params[0]) {
-            const p0 = (() => {
-              if (params[0].startsWith("inputs[")) {
-                const pattern = /^inputs\[(\d+)\]\.(.*)$/;
-                const result = pattern.exec(params[0]);
-                const id = result[1];
-                const key = result[2];
-                return JSON.parse(this.props.inputs[id])[key];
-              }
-              return params[0];
-            })();
-            const p1 = (() => {
-              if (paramCount === 2 && params[1].startsWith("inputs[")) {
-                const pattern = /^inputs\[(\d+)\]\.(.*)$/;
-                const result = pattern.exec(params[1]);
-                const id = result[1];
-                const key = result[2];
-                return JSON.parse(this.props.inputs[id])[key];
-              }
-              return params[1];
-            })();
-            const value = paramCount === 1 ? logic(p0) : logic(p0, p1);
-            if (
-              this.props.outputs.filter((v) => v.key === paramName).length === 1
-            ) {
-              this.props.outputs = this.props.outputs.map((v) => {
-                if (v.key === paramName) {
-                  return {
-                    src: v.src,
-                    key: v.key,
-                    value: JSON.stringify(value),
-                  };
+        this.props.outputFunctions.forEach((f, i) => {
+          try {
+            const paramName = f.name;
+            const { params } = f;
+            const func = this.props.functions.filter(
+              (v) => v.name === f.func
+            )[0];
+            const { paramCount, logic } = func;
+            if (paramCount === 1 || params[0]) {
+              const p0 = (() => {
+                if (
+                  params[0] !== undefined &&
+                  params[0].startsWith("inputs[")
+                ) {
+                  const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
+                  const result = pattern.exec(params[0]);
+                  const id = result[1];
+                  const key = result[4];
+                  const p = key
+                    ? JSON.parse(this.props.inputs[id])[key]
+                    : JSON.parse(this.props.inputs[id]);
+                  if (p === undefined) throw Error;
+                  return p;
                 }
-                return v;
-              });
+                return params[0];
+              })();
+              const p1 = (() => {
+                if (
+                  paramCount === 2 &&
+                  params[1] !== undefined &&
+                  params[1].startsWith("inputs[")
+                ) {
+                  const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
+                  const result = pattern.exec(params[1]);
+                  const id = result[1];
+                  const key = result[4];
+                  const p = key
+                    ? JSON.parse(this.props.inputs[id])[key]
+                    : JSON.parse(this.props.inputs[id]);
+                  if (p === undefined) throw Error;
+                  return p;
+                }
+                return params[1];
+              })();
+              const value = paramCount === 1 ? logic(p0) : logic(p0, p1);
+              if (
+                this.props.outputs.filter((v) => v.key === paramName).length ===
+                1
+              ) {
+                this.props.outputs = this.props.outputs.map((v) => {
+                  if (v.key === paramName) {
+                    return {
+                      src: v.src,
+                      key: v.key,
+                      value: JSON.stringify(value),
+                    };
+                  }
+                  return v;
+                });
+              }
             }
+            // JSON.parseでエラーが既に存在しないinputを参照するとき発生するので
+          } catch (e) {
+            // outputからの削除処理、該当のfunctionを削除する
+            this.props.outputs = this.props.outputs.filter(
+              (v) => v.key !== this.props.outputFunctions[i].name
+            );
+            delete this.props.outputFunctions[i];
           }
         });
+        this.props.outputFunctions = this.props.outputFunctions.filter(
+          (v) => v !== undefined
+        );
       }
     }
 

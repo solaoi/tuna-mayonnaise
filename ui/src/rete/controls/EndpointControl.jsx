@@ -1,20 +1,36 @@
 import Rete from "rete";
 
 export class EndpointControl extends Rete.Control {
-  static component = ({ value, onChange }) => (
+  static component = ({ value, contentType, onChange }) => (
     <>
       <label style={{ color: "white", display: "block", textAlign: "left" }}>
         Preview
       </label>
-      <textarea
-        value={value}
-        rows={10}
-        ref={(ref) =>
-          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
-        }
-        onChange={(e) => onChange(String(e.target.value))}
-        disabled
-      />
+      {contentType === "text/html; charset=utf-8" ? (
+        <div
+          className="hasScrollbar"
+          style={{
+            backgroundColor: "white",
+            overflowY: "auto",
+            maxHeight: "500px",
+          }}
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: value,
+          }}
+        />
+      ) : (
+        <textarea
+          value={value}
+          rows={10}
+          ref={(ref) =>
+            ref &&
+            ref.addEventListener("pointerdown", (e) => e.stopPropagation())
+          }
+          onChange={(e) => onChange(String(e.target.value))}
+          disabled
+        />
+      )}
     </>
   );
 
@@ -26,6 +42,7 @@ export class EndpointControl extends Rete.Control {
     this.props = {
       readonly,
       value: "",
+      contentType: "",
       onChange: () => {},
     };
     node.data.output = "";
@@ -33,6 +50,7 @@ export class EndpointControl extends Rete.Control {
 
   setValue(inputs, outputValue, contentType, enabledFlag, path) {
     this.props.value = outputValue;
+    this.props.contentType = contentType;
     this.putData("enabledFlag", enabledFlag);
     this.putData("output", outputValue);
     this.putData("contentType", contentType);
