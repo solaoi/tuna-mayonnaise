@@ -100,7 +100,7 @@ export async function createEditor(container) {
       },
       Download() {
         const blob = new Blob([JSON.stringify(editor.toJSON())], {
-          type: "application/json;charset=utf-8",
+          type: "application/json; charset=utf-8",
         });
         saveAs(blob, "tuna-mayonnaise.json");
       },
