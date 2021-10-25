@@ -369,7 +369,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 								if funcName == key {
 									funcType := v4["func"].(string)
 									funcParams := v4["params"].([]interface{})
-									if funcType == "Rename" {
+									if funcType == "Naming" {
 										param1 := funcParams[0].(string)
 										if strings.HasPrefix(param1, "inputs[") {
 											reg := re.Copy()
@@ -436,7 +436,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 										} else {
 											newObj[key] = res
 										}
-									} else if funcType != "Rename" && funcType != "1000 Separate" {
+									} else if funcType != "Naming" && funcType != "1000 Separate" {
 										newObj[key] = nil
 									}
 								}
