@@ -265,7 +265,10 @@ export class JsonManagerControl extends Rete.Control {
               outputs.length !== 0
                 ? JSON.stringify(
                     Object.fromEntries(
-                      outputs.map((v) => [v.key, JSON.parse(v.value)])
+                      outputs.map((v) => [
+                        v.key,
+                        v.value ? JSON.parse(v.value) : "",
+                      ])
                     ),
                     null,
                     2
@@ -482,10 +485,10 @@ export class JsonManagerControl extends Rete.Control {
           node.data.outputFunctions.length === 0
         ) && node.data.outputFunctions
           ? JSON.parse(node.data.outputFunctions)
-          : [], // [{func: "Rename", name: "hoge", params: ["inputs[0].hoge", "value2"]}]
+          : [], // [{func: "Naming", name: "hoge", params: ["inputs[0].hoge", "value2"]}]
       functions: [
         {
-          name: "Rename",
+          name: "Naming",
           paramCount: 1,
           symbol: null,
           logic: (param) => param,
@@ -634,7 +637,6 @@ export class JsonManagerControl extends Rete.Control {
           "outputFunctions",
           JSON.stringify(this.props.outputFunctions)
         );
-
         if (this.props.outputFunctions[id].name) {
           const paramName = this.props.outputFunctions[id].name;
           const { params } = this.props.outputFunctions[id];
