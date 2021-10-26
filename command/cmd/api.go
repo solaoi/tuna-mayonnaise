@@ -332,34 +332,45 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					temp := v["content"].(map[string]interface{})
 					content := fmt.Sprintf("%v", temp["content"])
 					functions := fmt.Sprintf("%v", temp["functions"])
-					// log.Println(content)
-					// log.Println(functions)
-
 					var obj []map[string]interface{}
 					newObj := map[string]interface{}{}
 					if err := json.Unmarshal([]byte(content), &obj); err != nil {
 						log.Fatal(err)
 					}
 
-					ctx := map[string]interface{}{}
-					ctxs := []map[string]interface{}{}
-					ctxsSimple := []string{}
-					for _, v2 := range c[i+1] {
-						if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "MySQL" || v2["name"] == "PostgreSQL" || v2["name"] == "JSONManager") {
-							if strings.HasPrefix(v2["content"].(string), "[") {
-								if strings.Contains(v2["content"].(string), "{") && strings.Contains(v2["content"].(string), "}") {
-									json.Unmarshal([]byte(v2["content"].(string)), &ctxs)
+					ctxArray := map[int]map[string]interface{}{}
+					ctxsArray := map[int][]map[string]interface{}{}
+					ctxsSimpleArray := map[int][]string{}
+					loopCount := 0
+					var v2Keys []string
+					for key := range c[i+1]{
+						v2Keys = append(v2Keys, key)
+					}
+					sort.Strings(v2Keys)
+					for _, v2Key := range v2Keys {
+						if c[i+1][v2Key]["parent"] == k && (c[i+1][v2Key]["name"] == "JSON" || c[i+1][v2Key]["name"] == "API" || c[i+1][v2Key]["name"] == "MySQL" || c[i+1][v2Key]["name"] == "PostgreSQL" || c[i+1][v2Key]["name"] == "JSONManager") {
+							ctx := map[string]interface{}{}
+							ctxs := []map[string]interface{}{}
+							ctxsSimple := []string{}
+							if strings.HasPrefix(c[i+1][v2Key]["content"].(string), "[") {
+								if strings.Contains(c[i+1][v2Key]["content"].(string), "{") && strings.Contains(c[i+1][v2Key]["content"].(string), "}") {
+									json.Unmarshal([]byte(c[i+1][v2Key]["content"].(string)), &ctxs)
+									ctxsArray[loopCount] = ctxs
 								} else {
-									json.Unmarshal([]byte(v2["content"].(string)), &ctxsSimple)
+									json.Unmarshal([]byte(c[i+1][v2Key]["content"].(string)), &ctxsSimple)
+									ctxsSimpleArray[loopCount] = ctxsSimple
 								}
 							} else {
-								json.Unmarshal([]byte(v2["content"].(string)), &ctx)
+								json.Unmarshal([]byte(c[i+1][v2Key]["content"].(string)), &ctx)
+								ctxArray[loopCount] = ctx
 							}
+							loopCount++
 						}
 					}
+					loopCount2 := 0
 					for _, v2 := range obj {
 						key := v2["key"].(string)
-						if ctx[key] == nil {
+						if ctxArray[loopCount2][key] == nil {
 							var funcJson []map[string]interface{}
 							if err := json.Unmarshal([]byte(functions), &funcJson); err != nil {
 								log.Fatal(err)
@@ -374,28 +385,28 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 										if strings.HasPrefix(param1, "inputs[") {
 											reg := re.Copy()
 											tempKey := reg.FindStringSubmatch(param1)[4]
-											if len(ctxs) == 0 && len(ctxsSimple) == 0 {
-												newObj[key] = ctx[tempKey]
+											if len(ctxsArray[loopCount2]) == 0 && len(ctxsSimpleArray[loopCount2]) == 0 {
+												newObj[key] = ctxArray[loopCount2][tempKey]
 											} else {
 												if reIsNum.MatchString(tempKey) {
 													index, err := strconv.Atoi(tempKey)
 													if err != nil {
 														log.Fatal(err)
 													} else {
-														if len(ctxsSimple) == 0 {
-															newObj[key] = ctxs[index]
+														if len(ctxsSimpleArray[loopCount2]) == 0 {
+															newObj[key] = ctxsArray[loopCount2][index]
 														} else {
-															newObj[key] = ctxsSimple[index]
+															newObj[key] = ctxsSimpleArray[loopCount2][index]
 														}
 													}
 												} else {
 													if tempKey != "" {
-														newObj[key] = ctx[tempKey]
+														newObj[key] = ctxArray[loopCount2][tempKey]
 													} else {
-														if len(ctxsSimple) == 0 {
-															newObj[key] = ctxs
+														if len(ctxsSimpleArray[loopCount2]) == 0 {
+															newObj[key] = ctxsArray[loopCount2]
 														} else {
-															newObj[key] = ctxsSimple
+															newObj[key] = ctxsSimpleArray[loopCount2]
 														}
 													}
 												}
@@ -411,10 +422,10 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 											reg := re.Copy()
 											tempKey := reg.FindStringSubmatch(param1)[4]
 											// tempKeyが空ケースを記載する
-											if reflect.TypeOf(ctx[tempKey]).Kind() == reflect.String {
-												unSeparated = ctx[tempKey].(string)
+											if reflect.TypeOf(ctxArray[loopCount2][tempKey]).Kind() == reflect.String {
+												unSeparated = ctxArray[loopCount2][tempKey].(string)
 											} else {
-												unSeparated = strconv.FormatFloat(ctx[tempKey].(float64), 'f', -1, 64)
+												unSeparated = strconv.FormatFloat(ctxArray[loopCount2][tempKey].(float64), 'f', -1, 64)
 											}
 										} else {
 											unSeparated = param1
@@ -442,8 +453,9 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 								}
 							}
 						} else {
-							newObj[key] = ctx[key]
+							newObj[key] = ctxArray[loopCount2][key]
 						}
+						loopCount2++
 					}
 
 					json, err := json.Marshal(newObj)

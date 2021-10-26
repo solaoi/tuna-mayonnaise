@@ -252,6 +252,7 @@ export class JsonManagerControl extends Rete.Control {
                     previewRef.current.scrollHeight
                   }px`
                 : "initial",
+            maxHeight: "200px",
           }}
         >
           <p className="jsonManagerCtrlCategory" ref={previewRef}>
@@ -260,7 +261,7 @@ export class JsonManagerControl extends Rete.Control {
           <textarea
             disabled
             ref={textAreaRef}
-            className="jsonManagerCtrlPreviewArea"
+            className="jsonManagerCtrlPreviewArea hasScrollbar"
             value={
               outputs.length !== 0
                 ? JSON.stringify(
@@ -338,9 +339,15 @@ export class JsonManagerControl extends Rete.Control {
         dragStyle.display = "none"; // 複製時は非表示
         dragStyle.position = "absolute"; // 複製時の位置を対象と同一に
         const keyMargin = 10;
+        const pattern = /^.*scale\((.*)\)$/;
+        const style =
+          document.getElementsByClassName("minimap")[0].previousElementSibling
+            .style.transform;
+        const scale = style.match(pattern)[1];
         const offset =
-          el.getBoundingClientRect().left -
-          el.closest(".jsonManagerCtrl").getBoundingClientRect().left +
+          (el.getBoundingClientRect().left -
+            el.closest(".jsonManagerCtrl").getBoundingClientRect().left) /
+            scale +
           keyMargin;
         dragStyle.left = `${offset}px`;
         el.after(dragElement);
@@ -358,11 +365,16 @@ export class JsonManagerControl extends Rete.Control {
       },
       onPointerMove: (e) => {
         e.stopPropagation();
+        const pattern = /^.*scale\((.*)\)$/;
+        const style =
+          document.getElementsByClassName("minimap")[0].previousElementSibling
+            .style.transform;
+        const scale = style.match(pattern)[1];
         const { clientX, clientY } = e;
         const { drag, pointerPos } = this.props.state;
         // マウスポインターの移動量を計算
-        const x = clientX - pointerPos.x;
-        const y = clientY - pointerPos.y;
+        const x = (clientX - pointerPos.x) / scale;
+        const y = (clientY - pointerPos.y) / scale;
         const dragStyle = drag.dragElement.style;
         // ドラッグ時に可視化
         dragStyle.display = "inline-block";
