@@ -68,7 +68,7 @@ brew upgrade tuna
 ```sh
 # wget または curl でインストール
 ## releasesタブの最新のバージョンを指定してください。
-VERSION=v0.0.3
+VERSION=v0.0.4
 ## 利用OSを指定してください。
 OS=linux_amd64
 ## wget経由の場合
@@ -92,7 +92,7 @@ tuna update
 
 このUI上で、 `Save` メニューから設定ファイル（ `tuna-mayonnaise.json` ）を作成できます。
 
-![tuna-demo](https://user-images.githubusercontent.com/46414076/107113423-30f0a500-68a2-11eb-879e-a3a2c375f5c9.gif)
+![tuna-demo](https://user-images.githubusercontent.com/46414076/128729100-5f37d74d-3df8-4f4b-acac-81334b52dd3d.gif)
 
 [UI サンプル](https://solaoi.github.io/tuna-mayonnaise)
 
