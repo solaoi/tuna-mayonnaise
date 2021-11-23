@@ -341,36 +341,37 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					ctxArray := map[int]map[string]interface{}{}
 					ctxsArray := map[int][]map[string]interface{}{}
 					ctxsSimpleArray := map[int][]string{}
-					loopCount := 0
-					var v2Keys []string
-					for key := range c[i+1]{
-						v2Keys = append(v2Keys, key)
-					}
-					sort.Strings(v2Keys)
-					for _, v2Key := range v2Keys {
-						if c[i+1][v2Key]["parent"] == k && (c[i+1][v2Key]["name"] == "JSON" || c[i+1][v2Key]["name"] == "API" || c[i+1][v2Key]["name"] == "MySQL" || c[i+1][v2Key]["name"] == "PostgreSQL" || c[i+1][v2Key]["name"] == "JSONManager") {
+					for k2, v2 := range c[i+1] {
+						if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "MySQL" || v2["name"] == "PostgreSQL" || v2["name"] == "JSONManager") {
 							ctx := map[string]interface{}{}
 							ctxs := []map[string]interface{}{}
 							ctxsSimple := []string{}
-							if strings.HasPrefix(c[i+1][v2Key]["content"].(string), "[") {
-								if strings.Contains(c[i+1][v2Key]["content"].(string), "{") && strings.Contains(c[i+1][v2Key]["content"].(string), "}") {
-									json.Unmarshal([]byte(c[i+1][v2Key]["content"].(string)), &ctxs)
-									ctxsArray[loopCount] = ctxs
+							id, _ := strconv.Atoi(k2)
+							if strings.HasPrefix(v2["content"].(string), "[") {
+								if strings.Contains(v2["content"].(string), "{") && strings.Contains(v2["content"].(string), "}") {
+									json.Unmarshal([]byte(v2["content"].(string)), &ctxs)
+									ctxsArray[id] = ctxs
 								} else {
-									json.Unmarshal([]byte(c[i+1][v2Key]["content"].(string)), &ctxsSimple)
-									ctxsSimpleArray[loopCount] = ctxsSimple
+									json.Unmarshal([]byte(v2["content"].(string)), &ctxsSimple)
+									ctxsSimpleArray[id] = ctxsSimple
 								}
 							} else {
-								json.Unmarshal([]byte(c[i+1][v2Key]["content"].(string)), &ctx)
-								ctxArray[loopCount] = ctx
+								json.Unmarshal([]byte(v2["content"].(string)), &ctx)
+								ctxArray[id] = ctx
 							}
-							loopCount++
 						}
 					}
-					loopCount2 := 0
+					srcMap := map[int]int{}
+					for _, v2 := range obj {
+						id := int(v2["src"].(float64))
+						if id > 0 {
+							srcMap[id] = int(v2["srcId"].(float64))
+						}
+					}
 					for _, v2 := range obj {
 						key := v2["key"].(string)
-						if ctxArray[loopCount2][key] == nil {
+						id := int(v2["srcId"].(float64))
+						if id == -1 {
 							var funcJson []map[string]interface{}
 							if err := json.Unmarshal([]byte(functions), &funcJson); err != nil {
 								log.Fatal(err)
@@ -384,29 +385,32 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 										param1 := funcParams[0].(string)
 										if strings.HasPrefix(param1, "inputs[") {
 											reg := re.Copy()
-											tempKey := reg.FindStringSubmatch(param1)[4]
-											if len(ctxsArray[loopCount2]) == 0 && len(ctxsSimpleArray[loopCount2]) == 0 {
-												newObj[key] = ctxArray[loopCount2][tempKey]
+											matched := reg.FindStringSubmatch(param1)
+											tempKey := matched[4]
+											inputIndex, _ := strconv.Atoi(matched[1])
+											nodeId := srcMap[inputIndex]
+											if len(ctxsArray[nodeId]) == 0 && len(ctxsSimpleArray[nodeId]) == 0 {
+												newObj[key] = ctxArray[nodeId][tempKey]
 											} else {
 												if reIsNum.MatchString(tempKey) {
 													index, err := strconv.Atoi(tempKey)
 													if err != nil {
 														log.Fatal(err)
 													} else {
-														if len(ctxsSimpleArray[loopCount2]) == 0 {
-															newObj[key] = ctxsArray[loopCount2][index]
+														if len(ctxsSimpleArray[nodeId]) == 0 {
+															newObj[key] = ctxsArray[nodeId][index]
 														} else {
-															newObj[key] = ctxsSimpleArray[loopCount2][index]
+															newObj[key] = ctxsSimpleArray[nodeId][index]
 														}
 													}
 												} else {
 													if tempKey != "" {
-														newObj[key] = ctxArray[loopCount2][tempKey]
+														newObj[key] = ctxArray[nodeId][tempKey]
 													} else {
-														if len(ctxsSimpleArray[loopCount2]) == 0 {
-															newObj[key] = ctxsArray[loopCount2]
+														if len(ctxsSimpleArray[nodeId]) == 0 {
+															newObj[key] = ctxsArray[nodeId]
 														} else {
-															newObj[key] = ctxsSimpleArray[loopCount2]
+															newObj[key] = ctxsSimpleArray[nodeId]
 														}
 													}
 												}
@@ -414,18 +418,21 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 										} else {
 											newObj[key] = param1
 										}
-										// functionの一覧を書いていく
 									} else if funcType == "1000 Separate" {
+										// ctxsArray, ctxsSimpleArrayのケースを記載する
 										param1 := funcParams[0].(string)
 										var unSeparated string
 										if strings.HasPrefix(param1, "inputs[") {
 											reg := re.Copy()
-											tempKey := reg.FindStringSubmatch(param1)[4]
+											matched := reg.FindStringSubmatch(param1)
+											tempKey := matched[4]
+											inputIndex, _ := strconv.Atoi(matched[1])
+											nodeId := srcMap[inputIndex]
 											// tempKeyが空ケースを記載する
-											if reflect.TypeOf(ctxArray[loopCount2][tempKey]).Kind() == reflect.String {
-												unSeparated = ctxArray[loopCount2][tempKey].(string)
+											if reflect.TypeOf(ctxArray[nodeId][tempKey]).Kind() == reflect.String {
+												unSeparated = ctxArray[nodeId][tempKey].(string)
 											} else {
-												unSeparated = strconv.FormatFloat(ctxArray[loopCount2][tempKey].(float64), 'f', -1, 64)
+												unSeparated = strconv.FormatFloat(ctxArray[nodeId][tempKey].(float64), 'f', -1, 64)
 											}
 										} else {
 											unSeparated = param1
@@ -453,9 +460,8 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 								}
 							}
 						} else {
-							newObj[key] = ctxArray[loopCount2][key]
+							newObj[key] = ctxArray[id][key]
 						}
-						loopCount2++
 					}
 
 					json, err := json.Marshal(newObj)
