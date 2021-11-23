@@ -32,7 +32,7 @@ export class JsonManagerComponent extends Rete.Component {
     this.editor.nodes
       .find((n) => n.id === node.id)
       .controls.get("jsonManager")
-      .setValue(inputs);
+      .setValue(node, inputs);
 
     if (node.data.output === "[]") {
       outputs.json = "";

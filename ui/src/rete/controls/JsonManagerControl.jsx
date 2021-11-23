@@ -5,6 +5,7 @@ import Modal from "react-modal";
 export class JsonManagerControl extends Rete.Control {
   static component = ({
     inputs,
+    inputIds,
     outputs,
     onPointerDown,
     onPointerOver,
@@ -179,8 +180,13 @@ export class JsonManagerControl extends Rete.Control {
               if (Array.isArray(parsed)) {
                 return (
                   <div className="jsonManagerCtrlInputGroup">
-                    <p className="jsonManagerCtrlInputTitle">input_{i}</p>
-                    <p className="jsonManagerCtrlInputKey">Array</p>
+                    <p className="jsonManagerCtrlInputTitle">inputs[{i}]</p>
+                    <p
+                      className="jsonManagerCtrlInputKey"
+                      data-nodeid={inputIds[i]}
+                    >
+                      Array
+                    </p>
                   </div>
                 );
               }
@@ -192,6 +198,7 @@ export class JsonManagerControl extends Rete.Control {
                       className="jsonManagerCtrlInputKey jsonManagerCtrlInputKeyHover"
                       onPointerDown={onPointerDown}
                       data-idx={i}
+                      data-nodeid={inputIds[i]}
                     >
                       {k}
                     </p>
@@ -311,6 +318,7 @@ export class JsonManagerControl extends Rete.Control {
     this.props = {
       readonly,
       inputs: [],
+      inputIds: [],
       outputs: node.data.output ? JSON.parse(node.data.output) : [], // e.g. [{src: 0, key: "key", value: "value"}]
       state: {
         pointerPos: { x: 0, y: 0 },
@@ -394,6 +402,7 @@ export class JsonManagerControl extends Rete.Control {
         // ドロップエリア内であれば、Outputに格納
         if (this.props.isDroppable) {
           const id = parseInt(selectedElement.dataset.idx, 10);
+          const nodeId = parseInt(selectedElement.dataset.nodeid, 10);
           const key = selectedElement.innerText;
           if (selectedElement.dataset.type !== "func") {
             // すでに同じキーが登録済みなら上書き
@@ -401,6 +410,7 @@ export class JsonManagerControl extends Rete.Control {
               this.props.outputs = this.props.outputs.map((v) => {
                 if (v.key === key) {
                   return {
+                    srcId: nodeId,
                     src: id,
                     key: v.key,
                     value: JSON.stringify(
@@ -412,6 +422,7 @@ export class JsonManagerControl extends Rete.Control {
               });
             } else {
               this.props.outputs.push({
+                srcId: nodeId,
                 src: id,
                 key,
                 value: JSON.stringify(JSON.parse(this.props.inputs[id])[key]),
@@ -454,6 +465,7 @@ export class JsonManagerControl extends Rete.Control {
               this.props.outputs = this.props.outputs.map((v) => {
                 if (v.key === key) {
                   return {
+                    srcId: -1,
                     src: (id + 1) * -1,
                     key: v.key,
                     value: JSON.stringify(value),
@@ -463,6 +475,7 @@ export class JsonManagerControl extends Rete.Control {
               });
             } else {
               this.props.outputs.push({
+                srcId: -1,
                 src: (id + 1) * -1,
                 key,
                 value: JSON.stringify(value),
@@ -688,6 +701,7 @@ export class JsonManagerControl extends Rete.Control {
               this.props.outputs = this.props.outputs.map((v) => {
                 if (v.key === paramName) {
                   return {
+                    srcId: -1,
                     src: (id + 1) * -1,
                     key: v.key,
                     value: JSON.stringify(value),
@@ -707,18 +721,17 @@ export class JsonManagerControl extends Rete.Control {
     };
   }
 
-  setValue(inputs) {
+  setValue(node, inputs) {
+    const inputIds = node.inputs.content.connections.map((c) => c.node);
     const { content } = inputs;
+
     this.props.inputs = content;
+    this.props.inputIds = inputIds;
     if (content.length === 0) {
       this.props.outputs = [];
       this.props.outputFunctions = [];
     }
-    const elems = this.props.outputs.reduce((a, c) => {
-      if (a.includes(c.src) || c.src < 0) return a;
-      return [...a, c.src];
-    }, []);
-    if (elems.length > content.length) {
+    if (inputIds.length > content.length) {
       this.props.outputs = [];
       this.props.outputFunctions = [];
     } else {
@@ -732,6 +745,7 @@ export class JsonManagerControl extends Rete.Control {
               return [
                 ...a,
                 {
+                  srcId: c.srcId,
                   src: c.src,
                   key: c.key,
                   value: JSON.stringify(parsed[c.key]),
@@ -803,6 +817,7 @@ export class JsonManagerControl extends Rete.Control {
                 this.props.outputs = this.props.outputs.map((v) => {
                   if (v.key === paramName) {
                     return {
+                      srcId: v.srcId,
                       src: v.src,
                       key: v.key,
                       value: JSON.stringify(value),
