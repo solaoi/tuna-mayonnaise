@@ -411,6 +411,7 @@ export class JsonManagerControl extends Rete.Control {
                 if (v.key === key) {
                   return {
                     srcId: nodeId,
+                    srcIds: "",
                     src: id,
                     key: v.key,
                     value: JSON.stringify(
@@ -423,6 +424,7 @@ export class JsonManagerControl extends Rete.Control {
             } else {
               this.props.outputs.push({
                 srcId: nodeId,
+                srcIds: "",
                 src: id,
                 key,
                 value: JSON.stringify(JSON.parse(this.props.inputs[id])[key]),
@@ -435,37 +437,70 @@ export class JsonManagerControl extends Rete.Control {
               (v) => v.name === this.props.outputFunctions[id].func
             )[0];
             const { paramCount, logic } = func;
-            const p0 = (() => {
+            const { p0, p0Id } = (() => {
               if (params[0].startsWith("inputs[")) {
                 const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
                 const result = pattern.exec(params[0]);
-                const p0Id = result[1];
+                const p0ID = result[1];
                 const p0Key = result[4];
                 return p0Key
-                  ? JSON.parse(this.props.inputs[p0Id])[p0Key]
-                  : JSON.parse(this.props.inputs[p0Id]);
+                  ? {
+                      p0: JSON.parse(this.props.inputs[p0ID])[p0Key],
+                      p0Id: p0ID,
+                    }
+                  : { p0: JSON.parse(this.props.inputs[p0ID]), p0Id: p0ID };
               }
-              return params[0];
+              return { p0: params[0], p0Id: null };
             })();
-            const p1 = (() => {
+            const { p1, p1Id } = (() => {
               if (paramCount === 2 && params[1].startsWith("inputs[")) {
                 const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
                 const result = pattern.exec(params[1]);
-                const p1Id = result[1];
+                const p1ID = result[1];
                 const p1Key = result[4];
                 return p1Key
-                  ? JSON.parse(this.props.inputs[p1Id])[p1Key]
-                  : JSON.parse(this.props.inputs[p1Id]);
+                  ? {
+                      p1: JSON.parse(this.props.inputs[p1ID])[p1Key],
+                      p1Id: p1ID,
+                    }
+                  : { p1: JSON.parse(this.props.inputs[p1ID]), p1Id: p1ID };
               }
-              return params[1];
+              return { p1: params[1], p1Id: null };
             })();
             const value = paramCount === 1 ? logic(p0) : logic(p0, p1);
+            const srcIds = (() => {
+              if (paramCount === 1) {
+                return p0Id !== null
+                  ? `${p0Id}:${parseInt(
+                      document.querySelectorAll(
+                        `.jsonManagerCtrlInputKey[data-idx='${p0Id}']`
+                      )[0].dataset.nodeid,
+                      10
+                    )}`
+                  : "";
+              }
+              if (p0Id == null && p1Id == null) return "";
+              if (p0Id == null)
+                return `${p1Id}:${parseInt(
+                  document.querySelectorAll(
+                    `.jsonManagerCtrlInputKey[data-idx='${p1Id}']`
+                  )[0].dataset.nodeid,
+                  10
+                )}`;
+              return `${p0Id}:${parseInt(
+                document.querySelectorAll(
+                  `.jsonManagerCtrlInputKey[data-idx='${p0Id}']`
+                )[0].dataset.nodeid,
+                10
+              )}`;
+            })();
 
             if (this.props.outputs.filter((v) => v.key === key).length === 1) {
               this.props.outputs = this.props.outputs.map((v) => {
                 if (v.key === key) {
                   return {
                     srcId: -1,
+                    srcIds,
                     src: (id + 1) * -1,
                     key: v.key,
                     value: JSON.stringify(value),
@@ -476,6 +511,7 @@ export class JsonManagerControl extends Rete.Control {
             } else {
               this.props.outputs.push({
                 srcId: -1,
+                srcIds,
                 src: (id + 1) * -1,
                 key,
                 value: JSON.stringify(value),
@@ -670,31 +706,64 @@ export class JsonManagerControl extends Rete.Control {
           )[0];
           const { paramCount, logic } = func;
           if (paramCount === 1 || params[0]) {
-            const p0 = (() => {
+            const { p0, p0Id } = (() => {
               if (params[0].startsWith("inputs[")) {
                 const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
                 const result = pattern.exec(params[0]);
-                const p0Id = result[1];
+                const p0ID = result[1];
                 const p0Key = result[4];
                 return p0Key
-                  ? JSON.parse(this.props.inputs[p0Id])[p0Key]
-                  : JSON.parse(this.props.inputs[p0Id]);
+                  ? {
+                      p0: JSON.parse(this.props.inputs[p0ID])[p0Key],
+                      p0Id: p0ID,
+                    }
+                  : { p0: JSON.parse(this.props.inputs[p0ID]), p0Id: p0ID };
               }
-              return params[0];
+              return { p0: params[0], p0Id: null };
             })();
-            const p1 = (() => {
+            const { p1, p1Id } = (() => {
               if (paramCount === 2 && params[1].startsWith("inputs[")) {
                 const pattern = /^inputs\[(\d+)\](([^.]?)|\.(.*))$/;
                 const result = pattern.exec(params[1]);
-                const p1Id = result[1];
+                const p1ID = result[1];
                 const p1Key = result[4];
                 return p1Key
-                  ? JSON.parse(this.props.inputs[p1Id])[p1Key]
-                  : JSON.parse(this.props.inputs[p1Id]);
+                  ? {
+                      p1: JSON.parse(this.props.inputs[p1ID])[p1Key],
+                      p1Id: p1ID,
+                    }
+                  : { p1: JSON.parse(this.props.inputs[p1ID]), p1Id: p1ID };
               }
-              return params[1];
+              return { p1: params[1], p1Id: null };
             })();
+
             const value = paramCount === 1 ? logic(p0) : logic(p0, p1);
+            const srcIds = (() => {
+              if (paramCount === 1) {
+                return p0Id !== null
+                  ? `${p0Id}:${parseInt(
+                      document.querySelectorAll(
+                        `.jsonManagerCtrlInputKey[data-idx='${p0Id}']`
+                      )[0].dataset.nodeid,
+                      10
+                    )}`
+                  : "";
+              }
+              if (p0Id == null && p1Id == null) return "";
+              if (p0Id == null)
+                return `${p1Id}:${parseInt(
+                  document.querySelectorAll(
+                    `.jsonManagerCtrlInputKey[data-idx='${p1Id}']`
+                  )[0].dataset.nodeid,
+                  10
+                )}`;
+              return `${p0Id}:${parseInt(
+                document.querySelectorAll(
+                  `.jsonManagerCtrlInputKey[data-idx='${p0Id}']`
+                )[0].dataset.nodeid,
+                10
+              )}`;
+            })();
             if (
               this.props.outputs.filter((v) => v.key === paramName).length === 1
             ) {
@@ -702,6 +771,7 @@ export class JsonManagerControl extends Rete.Control {
                 if (v.key === paramName) {
                   return {
                     srcId: -1,
+                    srcIds,
                     src: (id + 1) * -1,
                     key: v.key,
                     value: JSON.stringify(value),
@@ -746,6 +816,7 @@ export class JsonManagerControl extends Rete.Control {
                 ...a,
                 {
                   srcId: c.srcId,
+                  srcIds: c.srcIds,
                   src: c.src,
                   key: c.key,
                   value: JSON.stringify(parsed[c.key]),
@@ -818,6 +889,7 @@ export class JsonManagerControl extends Rete.Control {
                   if (v.key === paramName) {
                     return {
                       srcId: v.srcId,
+                      srcIds: v.srcIds,
                       src: v.src,
                       key: v.key,
                       value: JSON.stringify(value),
