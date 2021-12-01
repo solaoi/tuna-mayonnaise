@@ -366,6 +366,17 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						id := int(v2["src"].(float64))
 						if id > 0 {
 							srcMap[id] = int(v2["srcId"].(float64))
+						} else {
+							srcIds := v2["srcIds"].(string)
+							if srcIds != "" {
+								arr := strings.Split(srcIds, ",")
+								for _, keyValue := range arr {
+									arr2 := strings.Split(keyValue, ":")
+									key, _ := strconv.Atoi(arr2[0])
+									val, _ := strconv.Atoi(arr2[1])
+									srcMap[key] = val
+								}
+							}
 						}
 					}
 					for _, v2 := range obj {
