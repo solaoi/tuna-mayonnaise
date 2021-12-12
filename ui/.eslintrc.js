@@ -13,10 +13,10 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react"],
-  ignorePatterns: ["config-overrides.js"],
   rules: {
     "import/prefer-default-export": "off",
     "import/no-default-export": "error",
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "react/react-in-jsx-scope": "off",
     "no-param-reassign": "off",
     "react/prop-types": "off",
@@ -29,5 +29,11 @@ module.exports = {
     ],
     "no-return-assign": "off",
     "class-methods-use-this": ["error", { exceptMethods: ["worker"] }],
+    "react/function-component-definition": [
+      2,
+      {
+        namedComponents: "arrow-function",
+      },
+    ],
   },
 };
