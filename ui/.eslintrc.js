@@ -1,5 +1,7 @@
+process.env.BABEL_ENV = process.env.BABEL_ENV || "development";
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
 module.exports = {
-  parser: "babel-eslint",
+  parser: "@babel/eslint-parser",
   env: {
     browser: true,
     es2021: true,
@@ -13,10 +15,10 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react"],
-  ignorePatterns: ["config-overrides.js"],
   rules: {
     "import/prefer-default-export": "off",
     "import/no-default-export": "error",
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "react/react-in-jsx-scope": "off",
     "no-param-reassign": "off",
     "react/prop-types": "off",
@@ -29,5 +31,12 @@ module.exports = {
     ],
     "no-return-assign": "off",
     "class-methods-use-this": ["error", { exceptMethods: ["worker"] }],
+    "react/function-component-definition": [
+      2,
+      {
+        namedComponents: "arrow-function",
+      },
+    ],
+    "react/no-array-index-key": "off",
   },
 };
