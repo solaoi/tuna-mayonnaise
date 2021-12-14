@@ -68,7 +68,7 @@ brew upgrade tuna
 ```sh
 # wget または curl でインストール
 ## releasesタブの最新のバージョンを指定してください。
-VERSION=v0.0.4
+VERSION=v0.0.7
 ## 利用OSを指定してください。
 OS=linux_amd64
 ## wget経由の場合
