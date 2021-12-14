@@ -53,7 +53,9 @@ export class JsonManagerControl extends Rete.Control {
               Select your function
             </option>
             {functions.map((v) => (
-              <option value={v.name}>{v.name}</option>
+              <option key={v.name} value={v.name}>
+                {v.name}
+              </option>
             ))}
           </select>
           <div
@@ -65,7 +67,7 @@ export class JsonManagerControl extends Rete.Control {
             Add
           </div>
           {outputFunctions.map((v, idx) => (
-            <div className="modalFunction">
+            <div key={`modalFunction_${idx}`} className="modalFunction">
               <p className="modalFunctionTitle">
                 {v.func}
                 <span
@@ -110,7 +112,7 @@ export class JsonManagerControl extends Rete.Control {
                           onChange={onChangeModalFuncParams}
                           data-idx={idx}
                           data-params-idx={0}
-                          value={v.params[0] ? v.params[0] : null}
+                          value={v.params[0] ? v.params[0] : ""}
                         />
                       );
                     }
@@ -153,12 +155,20 @@ export class JsonManagerControl extends Rete.Control {
 
                 return (() => {
                   const inputArray = Array.isArray(parsed)
-                    ? [<option value={`inputs[${i}]`}>{`inputs[${i}]`}</option>]
+                    ? [
+                        <option
+                          key={`inputs[${i}]`}
+                          value={`inputs[${i}]`}
+                        >{`inputs[${i}]`}</option>,
+                      ]
                     : [];
                   return [
                     ...inputArray,
                     ...Object.keys(parsed).map((key) => (
-                      <option value={`inputs[${i}].${key}`}>
+                      <option
+                        key={`inputs[${i}].${key}`}
+                        value={`inputs[${i}].${key}`}
+                      >
                         {`inputs[${i}].${key}`}
                       </option>
                     )),
@@ -179,7 +189,10 @@ export class JsonManagerControl extends Rete.Control {
               const parsed = JSON.parse(v);
               if (Array.isArray(parsed)) {
                 return (
-                  <div className="jsonManagerCtrlInputGroup">
+                  <div
+                    key={`jsonManagerCtrlInputGroup_${i}`}
+                    className="jsonManagerCtrlInputGroup"
+                  >
                     <p className="jsonManagerCtrlInputTitle">inputs[{i}]</p>
                     <p
                       className="jsonManagerCtrlInputKey"
@@ -191,10 +204,14 @@ export class JsonManagerControl extends Rete.Control {
                 );
               }
               return (
-                <div className="jsonManagerCtrlInputGroup">
+                <div
+                  key={`jsonManagerCtrlInputGroup_${i}`}
+                  className="jsonManagerCtrlInputGroup"
+                >
                   <p className="jsonManagerCtrlInputTitle">inputs[{i}]</p>
-                  {Object.keys(parsed).map((k) => (
+                  {Object.keys(parsed).map((k, idx) => (
                     <p
+                      key={`jsonManagerCtrlInputKey_${idx}`}
                       className="jsonManagerCtrlInputKey jsonManagerCtrlInputKeyHover"
                       onPointerDown={onPointerDown}
                       data-idx={i}
@@ -225,6 +242,7 @@ export class JsonManagerControl extends Rete.Control {
               (v, i) =>
                 v.name !== "" && (
                   <p
+                    key={`jsonManagerCtrlInputKey_${i}_func`}
                     className="jsonManagerCtrlInputKey jsonManagerCtrlInputKeyHover"
                     onPointerDown={onPointerDown}
                     data-idx={i}
@@ -292,8 +310,11 @@ export class JsonManagerControl extends Rete.Control {
         >
           <p className="jsonManagerCtrlCategory">Outputs</p>
           <div className="jsonManagerCtrlOutputArea">
-            {outputs.map((v) => (
-              <p className="jsonManagerCtrlOutputKey">
+            {outputs.map((v, i) => (
+              <p
+                key={`jsonManagerCtrlOutputKey_${i}`}
+                className="jsonManagerCtrlOutputKey"
+              >
                 {v.key}
                 <span
                   role="button"

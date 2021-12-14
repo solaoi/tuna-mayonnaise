@@ -1,5 +1,7 @@
+process.env.BABEL_ENV = process.env.BABEL_ENV || "development";
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
 module.exports = {
-  parser: "babel-eslint",
+  parser: "@babel/eslint-parser",
   env: {
     browser: true,
     es2021: true,
@@ -35,5 +37,6 @@ module.exports = {
         namedComponents: "arrow-function",
       },
     ],
+    "react/no-array-index-key": "off",
   },
 };
