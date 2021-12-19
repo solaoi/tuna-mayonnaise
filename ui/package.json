@@ -6,7 +6,7 @@
   "keywords": [],
   "license": "MIT",
   "engines": {
-    "node": "14",
+    "node": "16",
     "npm": "8"
   },
   "main": "src/index.jsx",
