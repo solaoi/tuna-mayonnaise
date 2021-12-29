@@ -24,4 +24,5 @@ jobs:
         run: |
           npm install -g npm
           npm install -g auditjs
+          npm ci
           auditjs ossi
