@@ -3,6 +3,7 @@
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
 ![CodeQL](https://github.com/solaoi/tuna-mayonnaise/workflows/CodeQL/badge.svg)
 [![go deps scan](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml/badge.svg)](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml)
+[![nodejs deps scan](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/nodejs-deps-scan.yml/badge.svg)](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/nodejs-deps-scan.yml)
 
 *他の言語で読む：[English](README.md)、[日本語](README.ja.md)*
 
@@ -69,7 +70,7 @@ brew upgrade tuna
 ```sh
 # wget または curl でインストール
 ## releasesタブの最新のバージョンを指定してください。
-VERSION=v0.0.7
+VERSION=v0.0.8
 ## 利用OSを指定してください。
 OS=linux_amd64
 ## wget経由の場合
