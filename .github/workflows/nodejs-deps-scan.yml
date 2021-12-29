@@ -1,0 +1,27 @@
+name: nodejs deps scan
+
+on:
+  schedule:
+    - cron: "0 3 * * *" # 毎日の正午に実行 ( 12+JST = 3+UTC )
+  workflow_dispatch:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: ./ui
+
+jobs:
+  update-deps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+      - name: Scan dependencies
+        run: |
+          npm install -g npm
+          npm install -g auditjs
+          auditjs ossi
