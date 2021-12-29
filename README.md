@@ -2,6 +2,7 @@
 
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
 ![CodeQL](https://github.com/solaoi/tuna-mayonnaise/workflows/CodeQL/badge.svg)
+[![go deps scan](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml/badge.svg)](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml)
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 
