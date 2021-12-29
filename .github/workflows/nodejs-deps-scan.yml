@@ -12,7 +12,7 @@ defaults:
     working-directory: ./ui
 
 jobs:
-  update-deps:
+  scan-deps:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

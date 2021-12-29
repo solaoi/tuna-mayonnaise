@@ -12,7 +12,7 @@ defaults:
     working-directory: ./command
 
 jobs:
-  build:
+  scan-deps:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
