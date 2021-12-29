@@ -2,6 +2,7 @@
 
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
 ![CodeQL](https://github.com/solaoi/tuna-mayonnaise/workflows/CodeQL/badge.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9fe6fc4098164d938804cf1e011c6b3a)](https://app.codacy.com/gh/solaoi/tuna-mayonnaise?utm_source=github.com&utm_medium=referral&utm_content=solaoi/tuna-mayonnaise&utm_campaign=Badge_Grade_Settings)
 [![go deps scan](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml/badge.svg)](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml)
 [![nodejs deps scan](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/nodejs-deps-scan.yml/badge.svg)](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/nodejs-deps-scan.yml)
 
