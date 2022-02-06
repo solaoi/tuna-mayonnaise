@@ -128,7 +128,7 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 	data := node["data"].(map[string]interface{})
 
 	if name == "API" {
-		content = map[string]interface{}{"url": data["url"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
+		content = map[string]interface{}{"method": data["method"], "url": data["url"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "MySQL" || name == "PostgreSQL" {
 		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "JSONManager" {
@@ -180,7 +180,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					content := v["content"].(map[string]interface{})
 					url := fmt.Sprintf("%v", content["url"])
 					cached := fmt.Sprintf("%v", content["cached"])
-					method := "GET"
+					method := fmt.Sprintf("%v", content["method"])
 
 					if cached == "true" {
 						v, ok := gache.Get(url)
