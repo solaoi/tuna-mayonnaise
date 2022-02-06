@@ -3,6 +3,7 @@ import { TextControl } from "../controls/TextControl";
 import { BooleanControl } from "../controls/BooleanControl";
 import { NumControl } from "../controls/NumControl";
 import { ApiNode } from "../nodes/ApiNode";
+import { SelectControl } from "../controls/SelectControl";
 
 export class ApiComponent extends Rete.Component {
   path = ["New"];
@@ -23,6 +24,16 @@ export class ApiComponent extends Rete.Component {
 
     return node
       .addInput(jsonInput)
+      .addControl(
+        new SelectControl(this.editor, "method", node, false, "Method", [
+          "GET",
+          "POST",
+          "PUT",
+          "PATCH",
+          "DELETE",
+          "OPTIONS",
+        ])
+      )
       .addControl(
         new TextControl(
           this.editor,

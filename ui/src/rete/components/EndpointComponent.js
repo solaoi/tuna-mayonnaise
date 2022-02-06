@@ -32,6 +32,16 @@ export class EndpointComponent extends Rete.Component {
         new BooleanControl(this.editor, "enabledFlag", node, false, "Enabled")
       )
       .addControl(
+        new SelectControl(this.editor, "method", node, false, "Method", [
+          "GET",
+          "POST",
+          "PUT",
+          "PATCH",
+          "DELETE",
+          "OPTIONS",
+        ])
+      )
+      .addControl(
         new PathControl(this.editor, "path", node, false, "Path", "/foo")
       )
       .addControl(
