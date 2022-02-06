@@ -7,8 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var cfgFile string
-
 var rootCmd = &cobra.Command{
 	Use:   "tuna",
 	Short: "TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node-based editor",

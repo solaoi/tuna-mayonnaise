@@ -20,7 +20,6 @@ var (
 		Run: func(_ *cobra.Command, _ []string) {
 			resp := goVersion.FuncWithOutput(shortened, version, commit, date, output)
 			fmt.Print(resp)
-			return
 		},
 	}
 )

@@ -31,7 +31,7 @@ const dotenvFiles = [
 dotenvFiles.forEach((dotenvFile) => {
   if (fs.existsSync(dotenvFile)) {
     // eslint-disable-next-line global-require
-    require("dotenv-expand")(
+    require("dotenv-expand").expand(
       // eslint-disable-next-line global-require
       require("dotenv").config({
         path: dotenvFile,

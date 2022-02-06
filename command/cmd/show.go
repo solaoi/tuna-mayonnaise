@@ -14,8 +14,6 @@ import (
 )
 
 var (
-	static  = true
-	enabled = true
 	showCmd = &cobra.Command{
 		Use:   "show",
 		Short: "Show all endpoints generated on this tool command",
@@ -25,7 +23,6 @@ var (
 )
 
 func show(cmd *cobra.Command, args []string) {
-	endpoints = map[string]map[string]string{}
 	bytes, err := os.ReadFile("tuna-mayonnaise.json")
 	if err != nil {
 		log.Fatal(err)

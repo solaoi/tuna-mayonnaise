@@ -19,6 +19,7 @@ require (
 	github.com/rodaine/table v1.0.1
 	github.com/spf13/cobra v1.2.1
 	go.hein.dev/go-version v0.1.0
+	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324
 )
 
 require (
@@ -50,7 +51,6 @@ require (
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20211213223007-03aa0b5f6827 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
