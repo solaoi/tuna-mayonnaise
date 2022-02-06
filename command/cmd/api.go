@@ -79,11 +79,13 @@ type ratelimitConfig struct {
 }
 
 type staticEndpointContent struct {
+	method string
 	staticResponse
 	ratelimitConfig
 }
 
 type dynamicEndpointContent struct {
+	method string
 	dynamicResponse
 	ratelimitConfig
 }
@@ -553,6 +555,7 @@ func api(cmd *cobra.Command, args []string) {
 			var contents = map[int]map[string]map[string]interface{}{}
 			isDynamic := false
 			data := node["data"].(map[string]interface{})
+			method := data["method"].(string)
 			path := data["path"].(string)
 			contentType := data["contentType"].(string)
 			// ratelimit config
@@ -569,15 +572,15 @@ func api(cmd *cobra.Command, args []string) {
 				if !isDynamic {
 					content := data["content"].(string)
 					if ratelimitEnableFlag {
-						staticEndpoints[path] = staticEndpointContent{staticResponse{contentType, content}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
+						staticEndpoints[path] = staticEndpointContent{method, staticResponse{contentType, content}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
 					} else {
-						staticEndpoints[path] = staticEndpointContent{staticResponse{contentType, content}, ratelimitConfig{false, "any", 0, 0, 0}}
+						staticEndpoints[path] = staticEndpointContent{method, staticResponse{contentType, content}, ratelimitConfig{false, "any", 0, 0, 0}}
 					}
 				} else {
 					if ratelimitEnableFlag {
-						dynamicEndpoints[path] = dynamicEndpointContent{dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
+						dynamicEndpoints[path] = dynamicEndpointContent{method, dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
 					} else {
-						dynamicEndpoints[path] = dynamicEndpointContent{dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{false, "any", 0, 0, 0}}
+						dynamicEndpoints[path] = dynamicEndpointContent{method, dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{false, "any", 0, 0, 0}}
 					}
 				}
 			}
@@ -664,25 +667,27 @@ func api(cmd *cobra.Command, args []string) {
 	})
 
 	for path, endpointContent := range staticEndpoints {
+		method := endpointContent.method
 		if endpointContent.ratelimitConfig.enable {
 			unit := endpointContent.ratelimitConfig.unit
 			limit := endpointContent.ratelimitConfig.limit
 			burst := endpointContent.ratelimitConfig.burst
 			expireSecond := endpointContent.ratelimitConfig.expireSecond
-			e.GET(path, endpointHandler, middleware.RateLimiterWithConfig(config.GetRateLimiterConfig(unit, limit, burst, expireSecond)))
+			e.Match([]string{method}, path, endpointHandler, middleware.RateLimiterWithConfig(config.GetRateLimiterConfig(unit, limit, burst, expireSecond)))
 		} else {
-			e.GET(path, endpointHandler)
+			e.Match([]string{method}, path, endpointHandler)
 		}
 	}
 	for path, endpointContent := range dynamicEndpoints {
+		method := endpointContent.method
 		if endpointContent.ratelimitConfig.enable {
 			unit := endpointContent.ratelimitConfig.unit
 			limit := endpointContent.ratelimitConfig.limit
 			burst := endpointContent.ratelimitConfig.burst
 			expireSecond := endpointContent.ratelimitConfig.expireSecond
-			e.GET(path, dynamicEndpointHandler, middleware.RateLimiterWithConfig(config.GetRateLimiterConfig(unit, limit, burst, expireSecond)))
+			e.Match([]string{method}, path, dynamicEndpointHandler, middleware.RateLimiterWithConfig(config.GetRateLimiterConfig(unit, limit, burst, expireSecond)))
 		} else {
-			e.GET(path, dynamicEndpointHandler)
+			e.Match([]string{method}, path, dynamicEndpointHandler)
 		}
 	}
 
