@@ -9,6 +9,7 @@ import (
 	"golang.org/x/time/rate"
 )
 
+// GetRateLimiterConfig is Echo Ratelimit Middleware Configuration.
 func GetRateLimiterConfig(unit string, limit float64, burst float64, expireSecond float64) middleware.RateLimiterConfig {
 
 	return middleware.RateLimiterConfig{

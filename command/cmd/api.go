@@ -18,11 +18,13 @@ import (
 
 	"github.com/aymerick/raymond"
 	"github.com/eknkc/pug"
+	// valid usage.
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/kpango/gache"
 	prom "github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	// valid usage.
 	_ "github.com/lib/pq"
 	"github.com/mohae/deepcopy"
 	"github.com/prometheus/client_golang/prometheus"
@@ -232,17 +234,17 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					cached := fmt.Sprintf("%v", content["cached"])
 
 					query := ""
-					dummyJson := ""
+					dummyJSON := ""
 					for _, v1 := range c[i+1] {
 						if v1["parent"] == k {
 							if v1["name"] == "SQL" {
 								query = v1["content"].(string)
 							} else if v1["name"] == "JSON" {
-								dummyJson = v1["content"].(string)
+								dummyJSON = v1["content"].(string)
 							}
 						}
 					}
-					if query == "" || dummyJson == "" {
+					if query == "" || dummyJSON == "" {
 						log.Fatal("set sql params on tool...")
 					}
 					cacheKey := fmt.Sprintf("%s_%s", uniqueKey, query)
@@ -263,9 +265,9 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					}
 					defer rows.Close()
 					dummy := []map[string]json.RawMessage{}
-					errJson := json.Unmarshal([]byte(dummyJson), &dummy)
-					if errJson != nil {
-						log.Fatal(errJson)
+					errJSON := json.Unmarshal([]byte(dummyJSON), &dummy)
+					if errJSON != nil {
+						log.Fatal(errJSON)
 					}
 					keys := []string{}
 					for k := range dummy[0] {
@@ -416,11 +418,11 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						key := v2["key"].(string)
 						id := int(v2["srcId"].(float64))
 						if id == -1 {
-							var funcJson []map[string]interface{}
-							if err := json.Unmarshal([]byte(functions), &funcJson); err != nil {
+							var funcJSON []map[string]interface{}
+							if err := json.Unmarshal([]byte(functions), &funcJSON); err != nil {
 								log.Fatal(err)
 							}
-							for _, v4 := range funcJson {
+							for _, v4 := range funcJSON {
 								funcName := v4["name"].(string)
 								if funcName == key {
 									funcType := v4["func"].(string)
@@ -431,29 +433,29 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 											matched := re.FindStringSubmatch(param1)
 											tempKey := matched[4]
 											inputIndex, _ := strconv.Atoi(matched[1])
-											nodeId := srcMap[inputIndex]
-											if len(ctxsArray[nodeId]) == 0 && len(ctxsSimpleArray[nodeId]) == 0 {
-												newObj[key] = ctxArray[nodeId][tempKey]
+											nodeID := srcMap[inputIndex]
+											if len(ctxsArray[nodeID]) == 0 && len(ctxsSimpleArray[nodeID]) == 0 {
+												newObj[key] = ctxArray[nodeID][tempKey]
 											} else {
 												if reIsNum.MatchString(tempKey) {
 													index, err := strconv.Atoi(tempKey)
 													if err != nil {
 														log.Fatal(err)
 													} else {
-														if len(ctxsSimpleArray[nodeId]) == 0 {
-															newObj[key] = ctxsArray[nodeId][index]
+														if len(ctxsSimpleArray[nodeID]) == 0 {
+															newObj[key] = ctxsArray[nodeID][index]
 														} else {
-															newObj[key] = ctxsSimpleArray[nodeId][index]
+															newObj[key] = ctxsSimpleArray[nodeID][index]
 														}
 													}
 												} else {
 													if tempKey != "" {
-														newObj[key] = ctxArray[nodeId][tempKey]
+														newObj[key] = ctxArray[nodeID][tempKey]
 													} else {
-														if len(ctxsSimpleArray[nodeId]) == 0 {
-															newObj[key] = ctxsArray[nodeId]
+														if len(ctxsSimpleArray[nodeID]) == 0 {
+															newObj[key] = ctxsArray[nodeID]
 														} else {
-															newObj[key] = ctxsSimpleArray[nodeId]
+															newObj[key] = ctxsSimpleArray[nodeID]
 														}
 													}
 												}
@@ -469,12 +471,12 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 											matched := re.FindStringSubmatch(param1)
 											tempKey := matched[4]
 											inputIndex, _ := strconv.Atoi(matched[1])
-											nodeId := srcMap[inputIndex]
+											nodeID := srcMap[inputIndex]
 											// tempKeyが空ケースを記載する
-											if reflect.TypeOf(ctxArray[nodeId][tempKey]).Kind() == reflect.String {
-												unSeparated = ctxArray[nodeId][tempKey].(string)
+											if reflect.TypeOf(ctxArray[nodeID][tempKey]).Kind() == reflect.String {
+												unSeparated = ctxArray[nodeID][tempKey].(string)
 											} else {
-												unSeparated = strconv.FormatFloat(ctxArray[nodeId][tempKey].(float64), 'f', -1, 64)
+												unSeparated = strconv.FormatFloat(ctxArray[nodeID][tempKey].(float64), 'f', -1, 64)
 											}
 										} else {
 											unSeparated = param1
