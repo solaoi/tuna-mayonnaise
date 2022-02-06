@@ -4,6 +4,8 @@ import { EndpointControl } from "../controls/EndpointControl";
 import { BooleanControl } from "../controls/BooleanControl";
 import { TextControl } from "../controls/TextControl";
 import { PathControl } from "../controls/PathControl";
+import { NumControl } from "../controls/NumControl";
+import { SelectControl } from "../controls/SelectControl";
 
 export class EndpointComponent extends Rete.Component {
   path = ["New"];
@@ -31,6 +33,37 @@ export class EndpointComponent extends Rete.Component {
       )
       .addControl(
         new PathControl(this.editor, "path", node, false, "Path", "/foo")
+      )
+      .addControl(
+        new BooleanControl(
+          this.editor,
+          "ratelimitEnableFlag",
+          node,
+          false,
+          "RateLimit"
+        )
+      )
+      .addControl(
+        new SelectControl(this.editor, "ratelimitUnit", node, false, "Unit", [
+          "any",
+          "ip",
+        ])
+      )
+      .addControl(
+        new NumControl(this.editor, "ratelimitLimit", node, false, "Limit", 30)
+      )
+      .addControl(
+        new NumControl(this.editor, "ratelimitBurst", node, false, "Burst", 0)
+      )
+      .addControl(
+        new NumControl(
+          this.editor,
+          "ratelimitExpireSecond",
+          node,
+          false,
+          "ExpireSecond",
+          60
+        )
       );
   }
 
@@ -54,5 +87,17 @@ export class EndpointComponent extends Rete.Component {
       .find((n) => n.id === node.id)
       .controls.get("endpoint")
       .setValue(inputs, content, contentType, enabledFlag, path);
+
+    [
+      "ratelimitUnit",
+      "ratelimitLimit",
+      "ratelimitBurst",
+      "ratelimitExpireSecond",
+    ].forEach((v) => {
+      this.editor.nodes
+        .find((n) => n.id === node.id)
+        .controls.get(v)
+        .setValue(node.data[v], !node.data.ratelimitEnableFlag);
+    });
   }
 }

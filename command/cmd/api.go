@@ -18,14 +18,17 @@ import (
 
 	"github.com/aymerick/raymond"
 	"github.com/eknkc/pug"
+	// valid usage.
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/kpango/gache"
 	prom "github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	// valid usage.
 	_ "github.com/lib/pq"
 	"github.com/mohae/deepcopy"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/solaoi/tuna-mayonnaise/cmd/config"
 	"github.com/spf13/cobra"
 )
 
@@ -57,29 +60,62 @@ type body struct {
 	APIResponses []apiResponse
 }
 
-type response struct {
+type staticResponse struct {
+	ContentType string
+	Content     string
+}
+
+type dynamicResponse struct {
 	ContentType    string
 	ContentBuilder func() body
 }
 
-var re *regexp.Regexp
-var reIsNum *regexp.Regexp
-var endpoints map[string]map[string]string
-var dbs map[string]*sql.DB
-
-func endpointHandler(c echo.Context) error {
-	return c.Blob(http.StatusOK, endpoints[c.Path()]["contentType"], []byte(endpoints[c.Path()]["content"]))
+type ratelimitConfig struct {
+	enable       bool
+	unit         string
+	limit        float64
+	burst        float64
+	expireSecond float64
 }
 
-var dynamicEndpoints map[string]response
-var dynamicEndpointCounter *prometheus.CounterVec
-var promRet bool
+type staticEndpointContent struct {
+	staticResponse
+	ratelimitConfig
+}
+
+type dynamicEndpointContent struct {
+	dynamicResponse
+	ratelimitConfig
+}
+
+var re *regexp.Regexp
+var reIsNum *regexp.Regexp
+var staticEndpoints map[string]staticEndpointContent
+var dbs map[string]*sql.DB
+
+func isJSONNode(name string) bool {
+	return name == "JSON" || name == "API" || name == "MySQL" || name == "PostgreSQL" || name == "JSONManager"
+}
+
+func isJSONorHTMLNode(name string) bool {
+	return isJSONNode(name) || name == "Template"
+}
+
+func endpointHandler(c echo.Context) error {
+	return c.Blob(http.StatusOK, staticEndpoints[c.Path()].ContentType, []byte(staticEndpoints[c.Path()].Content))
+}
+
+var dynamicEndpoints map[string]dynamicEndpointContent
+var reqAPICounter *prometheus.CounterVec
+var reqDBCounter *prometheus.CounterVec
 
 func dynamicEndpointHandler(c echo.Context) error {
 	body := dynamicEndpoints[c.Path()].ContentBuilder()
 	if !noMetrics {
 		for _, v := range body.APIResponses {
-			dynamicEndpointCounter.WithLabelValues(v.StatusCode, v.Method, v.URL).Inc()
+			if reqAPICounter != nil {
+				reqAPICounter.WithLabelValues(v.StatusCode, v.Method, v.URL).Inc()
+			}
 		}
 	}
 	return c.Blob(body.StatusCode, dynamicEndpoints[c.Path()].ContentType, []byte(body.Content))
@@ -198,17 +234,17 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					cached := fmt.Sprintf("%v", content["cached"])
 
 					query := ""
-					dummyJson := ""
+					dummyJSON := ""
 					for _, v1 := range c[i+1] {
 						if v1["parent"] == k {
 							if v1["name"] == "SQL" {
 								query = v1["content"].(string)
 							} else if v1["name"] == "JSON" {
-								dummyJson = v1["content"].(string)
+								dummyJSON = v1["content"].(string)
 							}
 						}
 					}
-					if query == "" || dummyJson == "" {
+					if query == "" || dummyJSON == "" {
 						log.Fatal("set sql params on tool...")
 					}
 					cacheKey := fmt.Sprintf("%s_%s", uniqueKey, query)
@@ -224,15 +260,14 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					db := dbs[uniqueKey]
 					rows, err := db.Query(query)
 					if err != nil {
-						// TODO: set Application Metrics
-						// fmt.Println(err.Error())
+						reqDBCounter.WithLabelValues(err.Error()).Inc()
 						return body{http.StatusInternalServerError, "", []apiResponse{}}
 					}
 					defer rows.Close()
 					dummy := []map[string]json.RawMessage{}
-					errJson := json.Unmarshal([]byte(dummyJson), &dummy)
-					if errJson != nil {
-						log.Fatal(errJson)
+					errJSON := json.Unmarshal([]byte(dummyJSON), &dummy)
+					if errJSON != nil {
+						log.Fatal(errJSON)
 					}
 					keys := []string{}
 					for k := range dummy[0] {
@@ -293,7 +328,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						} else if v2["parent"] == k && v2["name"] == "Pug" {
 							engine = "Pug"
 							tmpl = v2["content"].(string)
-						} else if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "MySQL" || v2["name"] == "PostgreSQL" || v2["name"] == "JSONManager") {
+						} else if v2["parent"] == k && isJSONNode(v2["name"].(string)) {
 							if strings.HasPrefix(v2["content"].(string), "[") {
 								json.Unmarshal([]byte(v2["content"].(string)), &ctxs)
 							} else {
@@ -342,7 +377,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					ctxsArray := map[int][]map[string]interface{}{}
 					ctxsSimpleArray := map[int][]string{}
 					for k2, v2 := range c[i+1] {
-						if v2["parent"] == k && (v2["name"] == "JSON" || v2["name"] == "API" || v2["name"] == "MySQL" || v2["name"] == "PostgreSQL" || v2["name"] == "JSONManager") {
+						if v2["parent"] == k && isJSONNode(v2["name"].(string)) {
 							ctx := map[string]interface{}{}
 							ctxs := []map[string]interface{}{}
 							ctxsSimple := []string{}
@@ -383,11 +418,11 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						key := v2["key"].(string)
 						id := int(v2["srcId"].(float64))
 						if id == -1 {
-							var funcJson []map[string]interface{}
-							if err := json.Unmarshal([]byte(functions), &funcJson); err != nil {
+							var funcJSON []map[string]interface{}
+							if err := json.Unmarshal([]byte(functions), &funcJSON); err != nil {
 								log.Fatal(err)
 							}
-							for _, v4 := range funcJson {
+							for _, v4 := range funcJSON {
 								funcName := v4["name"].(string)
 								if funcName == key {
 									funcType := v4["func"].(string)
@@ -395,33 +430,32 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 									if funcType == "Naming" {
 										param1 := funcParams[0].(string)
 										if strings.HasPrefix(param1, "inputs[") {
-											reg := re.Copy()
-											matched := reg.FindStringSubmatch(param1)
+											matched := re.FindStringSubmatch(param1)
 											tempKey := matched[4]
 											inputIndex, _ := strconv.Atoi(matched[1])
-											nodeId := srcMap[inputIndex]
-											if len(ctxsArray[nodeId]) == 0 && len(ctxsSimpleArray[nodeId]) == 0 {
-												newObj[key] = ctxArray[nodeId][tempKey]
+											nodeID := srcMap[inputIndex]
+											if len(ctxsArray[nodeID]) == 0 && len(ctxsSimpleArray[nodeID]) == 0 {
+												newObj[key] = ctxArray[nodeID][tempKey]
 											} else {
 												if reIsNum.MatchString(tempKey) {
 													index, err := strconv.Atoi(tempKey)
 													if err != nil {
 														log.Fatal(err)
 													} else {
-														if len(ctxsSimpleArray[nodeId]) == 0 {
-															newObj[key] = ctxsArray[nodeId][index]
+														if len(ctxsSimpleArray[nodeID]) == 0 {
+															newObj[key] = ctxsArray[nodeID][index]
 														} else {
-															newObj[key] = ctxsSimpleArray[nodeId][index]
+															newObj[key] = ctxsSimpleArray[nodeID][index]
 														}
 													}
 												} else {
 													if tempKey != "" {
-														newObj[key] = ctxArray[nodeId][tempKey]
+														newObj[key] = ctxArray[nodeID][tempKey]
 													} else {
-														if len(ctxsSimpleArray[nodeId]) == 0 {
-															newObj[key] = ctxsArray[nodeId]
+														if len(ctxsSimpleArray[nodeID]) == 0 {
+															newObj[key] = ctxsArray[nodeID]
 														} else {
-															newObj[key] = ctxsSimpleArray[nodeId]
+															newObj[key] = ctxsSimpleArray[nodeID]
 														}
 													}
 												}
@@ -434,16 +468,15 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 										param1 := funcParams[0].(string)
 										var unSeparated string
 										if strings.HasPrefix(param1, "inputs[") {
-											reg := re.Copy()
-											matched := reg.FindStringSubmatch(param1)
+											matched := re.FindStringSubmatch(param1)
 											tempKey := matched[4]
 											inputIndex, _ := strconv.Atoi(matched[1])
-											nodeId := srcMap[inputIndex]
+											nodeID := srcMap[inputIndex]
 											// tempKeyが空ケースを記載する
-											if reflect.TypeOf(ctxArray[nodeId][tempKey]).Kind() == reflect.String {
-												unSeparated = ctxArray[nodeId][tempKey].(string)
+											if reflect.TypeOf(ctxArray[nodeID][tempKey]).Kind() == reflect.String {
+												unSeparated = ctxArray[nodeID][tempKey].(string)
 											} else {
-												unSeparated = strconv.FormatFloat(ctxArray[nodeId][tempKey].(float64), 'f', -1, 64)
+												unSeparated = strconv.FormatFloat(ctxArray[nodeID][tempKey].(float64), 'f', -1, 64)
 											}
 										} else {
 											unSeparated = param1
@@ -482,7 +515,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					c[i][k]["content"] = string(json)
 				} else if v["name"] == "Endpoint" {
 					for _, v3 := range c[i+1] {
-						if v3["parent"] == k && (v3["name"] == "JSON" || v3["name"] == "API" || v3["name"] == "MySQL" || v3["name"] == "PostgreSQL" || v3["name"] == "Template" || v3["name"] == "JSONManager") {
+						if v3["parent"] == k && isJSONorHTMLNode(v3["name"].(string)) {
 							content := v3["content"].(string)
 							return body{http.StatusOK, content, apiResponses}
 						}
@@ -496,18 +529,15 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 
 // urlSkipper ignores metrics route on some middleware
 func urlSkipper(c echo.Context) bool {
-	if strings.HasPrefix(c.Path(), "/favicon.ico") {
-		return true
-	}
-	return false
+	return strings.HasPrefix(c.Path(), "/favicon.ico")
 }
 
 func api(cmd *cobra.Command, args []string) {
-	re = regexp.MustCompile("^inputs\\[(\\d+)\\](([^.]?)|\\.(.*))$")
-	reIsNum = regexp.MustCompile("^\\d+$")
-	endpoints = map[string]map[string]string{}
+	re = regexp.MustCompile(`^inputs\[(\d+)\](([^.]?)|\.(.*))$`)
+	reIsNum = regexp.MustCompile(`^\d+$`)
+	staticEndpoints = map[string]staticEndpointContent{}
 	dbs = map[string]*sql.DB{}
-	dynamicEndpoints = map[string]response{}
+	dynamicEndpoints = map[string]dynamicEndpointContent{}
 	bytes, err := os.ReadFile("tuna-mayonnaise.json")
 	if err != nil {
 		log.Fatal(err)
@@ -525,6 +555,12 @@ func api(cmd *cobra.Command, args []string) {
 			data := node["data"].(map[string]interface{})
 			path := data["path"].(string)
 			contentType := data["contentType"].(string)
+			// ratelimit config
+			ratelimitEnableFlag := data["ratelimitEnableFlag"].(bool)
+			ratelimitUnit := data["ratelimitUnit"].(string)
+			ratelimitLimit := data["ratelimitLimit"].(float64)
+			ratelimitBurst := data["ratelimitBurst"].(float64)
+			ratelimitExpireSecond := data["ratelimitExpireSecond"].(float64)
 
 			id := fmt.Sprint(node["id"])
 			setContents(nodes, id, 0, "0", contents, &isDynamic)
@@ -532,9 +568,17 @@ func api(cmd *cobra.Command, args []string) {
 			if data["enabledFlag"].(bool) {
 				if !isDynamic {
 					content := data["content"].(string)
-					endpoints[path] = map[string]string{"content": content, "contentType": contentType}
+					if ratelimitEnableFlag {
+						staticEndpoints[path] = staticEndpointContent{staticResponse{contentType, content}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
+					} else {
+						staticEndpoints[path] = staticEndpointContent{staticResponse{contentType, content}, ratelimitConfig{false, "any", 0, 0, 0}}
+					}
 				} else {
-					dynamicEndpoints[path] = response{contentType, contentBuilder(contents)}
+					if ratelimitEnableFlag {
+						dynamicEndpoints[path] = dynamicEndpointContent{dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
+					} else {
+						dynamicEndpoints[path] = dynamicEndpointContent{dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{false, "any", 0, 0, 0}}
+					}
 				}
 			}
 		}
@@ -547,7 +591,7 @@ func api(cmd *cobra.Command, args []string) {
 
 			passEnv := strings.ToUpper(dbName) + "_PASS_ON_" + strings.ToUpper(user)
 			pass, ret := os.LookupEnv(passEnv)
-			if ret == false {
+			if !ret {
 				log.Fatal(passEnv + " is not found, set this env.")
 			}
 			uniqueKey := fmt.Sprintf("%s_%s_%s_%s", user, host, port, dbName)
@@ -591,8 +635,15 @@ func api(cmd *cobra.Command, args []string) {
 			Description: "How many HTTP requests to APIs processed, partitioned by status code and HTTP method.",
 			Type:        "counter_vec",
 			Args:        []string{"code", "method", "url"}}
-		p := prom.NewPrometheus("tuna", urlSkipper, []*prom.Metric{reqAPICnt})
-		dynamicEndpointCounter = reqAPICnt.MetricCollector.(*prometheus.CounterVec)
+		reqDBCnt := &prom.Metric{
+			ID:          "reqDBCnt",
+			Name:        "requests_db_total",
+			Description: "How many HTTP requests to APIs processed, partitioned by status code and HTTP method.",
+			Type:        "counter_vec",
+			Args:        []string{"error"}}
+		p := prom.NewPrometheus("tuna", urlSkipper, []*prom.Metric{reqAPICnt, reqDBCnt})
+		reqAPICounter = reqAPICnt.MetricCollector.(*prometheus.CounterVec)
+		reqDBCounter = reqDBCnt.MetricCollector.(*prometheus.CounterVec)
 		p.Use(e)
 	}
 
@@ -611,11 +662,28 @@ func api(cmd *cobra.Command, args []string) {
 	e.GET("/health", func(ctx echo.Context) error {
 		return ctx.String(http.StatusOK, "OK")
 	})
-	for path := range endpoints {
-		e.GET(path, endpointHandler)
+
+	for path, endpointContent := range staticEndpoints {
+		if endpointContent.ratelimitConfig.enable {
+			unit := endpointContent.ratelimitConfig.unit
+			limit := endpointContent.ratelimitConfig.limit
+			burst := endpointContent.ratelimitConfig.burst
+			expireSecond := endpointContent.ratelimitConfig.expireSecond
+			e.GET(path, endpointHandler, middleware.RateLimiterWithConfig(config.GetRateLimiterConfig(unit, limit, burst, expireSecond)))
+		} else {
+			e.GET(path, endpointHandler)
+		}
 	}
-	for path := range dynamicEndpoints {
-		e.GET(path, dynamicEndpointHandler)
+	for path, endpointContent := range dynamicEndpoints {
+		if endpointContent.ratelimitConfig.enable {
+			unit := endpointContent.ratelimitConfig.unit
+			limit := endpointContent.ratelimitConfig.limit
+			burst := endpointContent.ratelimitConfig.burst
+			expireSecond := endpointContent.ratelimitConfig.expireSecond
+			e.GET(path, dynamicEndpointHandler, middleware.RateLimiterWithConfig(config.GetRateLimiterConfig(unit, limit, burst, expireSecond)))
+		} else {
+			e.GET(path, dynamicEndpointHandler)
+		}
 	}
 
 	// Start server

@@ -1,7 +1,7 @@
 import Rete from "rete";
 
 export class SelectControl extends Rete.Control {
-  static component = ({ title, value, values, onChange }) => (
+  static component = ({ title, value, values, onChange, disabled }) => (
     <>
       {title && (
         <label style={{ color: "white", display: "block", textAlign: "left" }}>
@@ -15,15 +15,26 @@ export class SelectControl extends Rete.Control {
           ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
         }
         onChange={(e) => onChange(String(e.target.value))}
+        disabled={disabled}
       >
-        {values.map((v) => (
-          <option value={v}>{v}</option>
+        {values.map((v, i) => (
+          <option key={`${v}_${i}`} value={v}>
+            {v}
+          </option>
         ))}
       </select>
     </>
   );
 
-  constructor(emitter, key, node, readonly = false, title = "", values = []) {
+  constructor(
+    emitter,
+    key,
+    node,
+    readonly = false,
+    title = "",
+    values = [],
+    disabled = false
+  ) {
     super(key);
     this.emitter = emitter;
     this.key = key;
@@ -38,6 +49,7 @@ export class SelectControl extends Rete.Control {
       value: initial,
       title,
       values,
+      disabled,
       onChange: (v) => {
         this.setValue(v);
         this.emitter.trigger("process");
@@ -45,8 +57,9 @@ export class SelectControl extends Rete.Control {
     };
   }
 
-  setValue(val) {
+  setValue(val, disabled = false) {
     this.props.value = val;
+    this.props.disabled = disabled;
     this.putData(this.key, val);
     this.putData("output", val);
     this.update();
