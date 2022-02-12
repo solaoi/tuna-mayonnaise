@@ -107,7 +107,11 @@ export class EndpointComponent extends Rete.Component {
       this.editor.nodes
         .find((n) => n.id === node.id)
         .controls.get(v)
-        .setValue(node.data[v], !node.data.ratelimitEnableFlag);
+        .setValue(
+          node.data[v],
+          !node.data.ratelimitEnableFlag,
+          !node.data.ratelimitEnableFlag
+        );
     });
   }
 }
