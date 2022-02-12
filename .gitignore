@@ -7,6 +7,9 @@ command/cmd/static/*
 tuna
 tuna-mayonnaise.json
 
+// db
+*.db
+
 // documentation
 !samples/**/tuna-mayonnaise.json
 

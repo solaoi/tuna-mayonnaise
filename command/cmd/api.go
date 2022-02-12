@@ -30,6 +30,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/solaoi/tuna-mayonnaise/cmd/config"
 	"github.com/spf13/cobra"
+	// valid usage.
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var (
@@ -97,8 +99,12 @@ var reIsNum *regexp.Regexp
 var staticEndpoints map[string]staticEndpointContent
 var dbs map[string]*sql.DB
 
+func isDBNode(name string) bool {
+	return name == "MySQL" || name == "PostgreSQL" || name == "SQLite"
+}
+
 func isJSONNode(name string) bool {
-	return name == "JSON" || name == "API" || name == "MySQL" || name == "PostgreSQL" || name == "JSONManager"
+	return isDBNode(name) || name == "JSON" || name == "API" || name == "JSONManager"
 }
 
 func isJSONorHTMLNode(name string) bool {
@@ -134,6 +140,8 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 		content = map[string]interface{}{"method": data["method"], "url": data["url"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "MySQL" || name == "PostgreSQL" {
 		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
+	} else if name == "SQLite" {
+		content = map[string]interface{}{"filename": data["filename"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "JSONManager" {
 		content = map[string]interface{}{"content": data["output"], "functions": data["outputFunctions"]}
 	} else {
@@ -155,7 +163,7 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 func setContents(nodes map[string]interface{}, id string, depth int, parent string, contents map[int]map[string]map[string]interface{}, isDynamic *bool) {
 	node := nodes[id].(map[string]interface{})
 	name, content, nexts := findNext(node)
-	if !*isDynamic && (name == "API" || name == "MySQL" || name == "PostgreSQL") {
+	if !*isDynamic && (name == "API" || isDBNode(name)) {
 		*isDynamic = true
 	}
 	if _, exist := contents[depth]; !exist {
@@ -229,13 +237,19 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						}
 					}
 					c[i][k]["content"] = res
-				} else if v["name"] == "MySQL" || v["name"] == "PostgreSQL" {
+				} else if isDBNode(v["name"].(string)) {
+					dbType := v["name"].(string)
 					content := v["content"].(map[string]interface{})
-					user := fmt.Sprintf("%v", content["user"])
-					host := fmt.Sprintf("%v", content["host"])
-					port := fmt.Sprintf("%v", content["port"])
-					dbName := fmt.Sprintf("%v", content["db"])
-					uniqueKey := fmt.Sprintf("%s_%s_%s_%s", user, host, port, dbName)
+					var uniqueKey string
+					if dbType == "MySQL" || dbType == "PostgreSQL" {
+						user := fmt.Sprintf("%v", content["user"])
+						host := fmt.Sprintf("%v", content["host"])
+						port := fmt.Sprintf("%v", content["port"])
+						dbName := fmt.Sprintf("%v", content["db"])
+						uniqueKey = fmt.Sprintf("%s_%s_%s_%s", user, host, port, dbName)
+					} else {
+						uniqueKey = fmt.Sprintf("%v", content["filename"])
+					}
 					cached := fmt.Sprintf("%v", content["cached"])
 
 					query := ""
@@ -266,7 +280,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					rows, err := db.Query(query)
 					if err != nil {
 						if reqDBCounter != nil {
-							reqDBCounter.WithLabelValues(err.Error()).Inc()
+							reqDBCounter.WithLabelValues(dbType, err.Error()).Inc()
 						}
 						return body{http.StatusInternalServerError, "", []apiResponse{}}
 					}
@@ -590,8 +604,7 @@ func api(cmd *cobra.Command, args []string) {
 					}
 				}
 			}
-		}
-		if node["name"] == "MySQL" || node["name"] == "PostgreSQL" {
+		} else if node["name"] == "MySQL" || node["name"] == "PostgreSQL" {
 			data := node["data"].(map[string]interface{})
 			user := data["user"].(string)
 			host := data["host"].(string)
@@ -622,6 +635,15 @@ func api(cmd *cobra.Command, args []string) {
 				log.Fatal(err.Error())
 			}
 			dbs[uniqueKey] = db
+		} else if node["name"] == "SQLite" {
+			data := node["data"].(map[string]interface{})
+			filename := data["filename"].(string)
+			uniqueKey := filename
+			db, err := sql.Open("sqlite3", fmt.Sprintf("./%s", filename))
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			dbs[uniqueKey] = db
 		}
 	}
 
@@ -647,9 +669,9 @@ func api(cmd *cobra.Command, args []string) {
 		reqDBCnt := &prom.Metric{
 			ID:          "reqDBCnt",
 			Name:        "requests_db_total",
-			Description: "How many errors to process a query on DBs, partitioned by error name.",
+			Description: "How many errors to process a query on DBs, partitioned by db type and error name.",
 			Type:        "counter_vec",
-			Args:        []string{"error"}}
+			Args:        []string{"type", "error"}}
 		botBlockCnt := &prom.Metric{
 			ID:          "botBlockCnt",
 			Name:        "bot_block_total",
