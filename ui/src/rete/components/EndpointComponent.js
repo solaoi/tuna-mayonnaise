@@ -47,6 +47,15 @@ export class EndpointComponent extends Rete.Component {
       .addControl(
         new BooleanControl(
           this.editor,
+          "botblockerEnableFlag",
+          node,
+          false,
+          "BotBlocker"
+        )
+      )
+      .addControl(
+        new BooleanControl(
+          this.editor,
           "ratelimitEnableFlag",
           node,
           false,

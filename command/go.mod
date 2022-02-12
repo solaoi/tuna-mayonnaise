@@ -55,4 +55,5 @@ require (
 	google.golang.org/protobuf v1.26.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	sigs.k8s.io/yaml v1.2.0 // indirect
+	zgo.at/isbot v0.0.0-20211017231009-742e7be1c6d8
 )
