@@ -79,13 +79,15 @@ type ratelimitConfig struct {
 }
 
 type staticEndpointContent struct {
-	method string
+	method           string
+	botblockerEnable bool
 	staticResponse
 	ratelimitConfig
 }
 
 type dynamicEndpointContent struct {
-	method string
+	method           string
+	botblockerEnable bool
 	dynamicResponse
 	ratelimitConfig
 }
@@ -110,6 +112,7 @@ func endpointHandler(c echo.Context) error {
 var dynamicEndpoints map[string]dynamicEndpointContent
 var reqAPICounter *prometheus.CounterVec
 var reqDBCounter *prometheus.CounterVec
+var botBlockCounter *prometheus.CounterVec
 
 func dynamicEndpointHandler(c echo.Context) error {
 	body := dynamicEndpoints[c.Path()].ContentBuilder()
@@ -262,7 +265,9 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 					db := dbs[uniqueKey]
 					rows, err := db.Query(query)
 					if err != nil {
-						reqDBCounter.WithLabelValues(err.Error()).Inc()
+						if reqDBCounter != nil {
+							reqDBCounter.WithLabelValues(err.Error()).Inc()
+						}
 						return body{http.StatusInternalServerError, "", []apiResponse{}}
 					}
 					defer rows.Close()
@@ -558,6 +563,7 @@ func api(cmd *cobra.Command, args []string) {
 			method := data["method"].(string)
 			path := data["path"].(string)
 			contentType := data["contentType"].(string)
+			botblockerEnable := data["botblockerEnableFlag"].(bool)
 			// ratelimit config
 			ratelimitEnableFlag := data["ratelimitEnableFlag"].(bool)
 			ratelimitUnit := data["ratelimitUnit"].(string)
@@ -572,15 +578,15 @@ func api(cmd *cobra.Command, args []string) {
 				if !isDynamic {
 					content := data["content"].(string)
 					if ratelimitEnableFlag {
-						staticEndpoints[path] = staticEndpointContent{method, staticResponse{contentType, content}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
+						staticEndpoints[path] = staticEndpointContent{method, botblockerEnable, staticResponse{contentType, content}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
 					} else {
-						staticEndpoints[path] = staticEndpointContent{method, staticResponse{contentType, content}, ratelimitConfig{false, "any", 0, 0, 0}}
+						staticEndpoints[path] = staticEndpointContent{method, botblockerEnable, staticResponse{contentType, content}, ratelimitConfig{false, "any", 0, 0, 0}}
 					}
 				} else {
 					if ratelimitEnableFlag {
-						dynamicEndpoints[path] = dynamicEndpointContent{method, dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
+						dynamicEndpoints[path] = dynamicEndpointContent{method, botblockerEnable, dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
 					} else {
-						dynamicEndpoints[path] = dynamicEndpointContent{method, dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{false, "any", 0, 0, 0}}
+						dynamicEndpoints[path] = dynamicEndpointContent{method, botblockerEnable, dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{false, "any", 0, 0, 0}}
 					}
 				}
 			}
@@ -635,18 +641,25 @@ func api(cmd *cobra.Command, args []string) {
 		reqAPICnt := &prom.Metric{
 			ID:          "reqAPICnt",
 			Name:        "requests_api_total",
-			Description: "How many HTTP requests to APIs processed, partitioned by status code and HTTP method.",
+			Description: "How many HTTP requests to APIs are processed, partitioned by status code and HTTP method.",
 			Type:        "counter_vec",
 			Args:        []string{"code", "method", "url"}}
 		reqDBCnt := &prom.Metric{
 			ID:          "reqDBCnt",
 			Name:        "requests_db_total",
-			Description: "How many HTTP requests to APIs processed, partitioned by status code and HTTP method.",
+			Description: "How many errors to process a query on DBs, partitioned by error name.",
 			Type:        "counter_vec",
 			Args:        []string{"error"}}
-		p := prom.NewPrometheus("tuna", urlSkipper, []*prom.Metric{reqAPICnt, reqDBCnt})
+		botBlockCnt := &prom.Metric{
+			ID:          "botBlockCnt",
+			Name:        "bot_block_total",
+			Description: "How many bot blocks, partitioned by block reason",
+			Type:        "counter_vec",
+			Args:        []string{"reason"}}
+		p := prom.NewPrometheus("tuna", urlSkipper, []*prom.Metric{reqAPICnt, reqDBCnt, botBlockCnt})
 		reqAPICounter = reqAPICnt.MetricCollector.(*prometheus.CounterVec)
 		reqDBCounter = reqDBCnt.MetricCollector.(*prometheus.CounterVec)
+		botBlockCounter = botBlockCnt.MetricCollector.(*prometheus.CounterVec)
 		p.Use(e)
 	}
 
@@ -673,9 +686,17 @@ func api(cmd *cobra.Command, args []string) {
 			limit := endpointContent.ratelimitConfig.limit
 			burst := endpointContent.ratelimitConfig.burst
 			expireSecond := endpointContent.ratelimitConfig.expireSecond
-			e.Match([]string{method}, path, endpointHandler, middleware.RateLimiterWithConfig(config.GetRateLimiterConfig(unit, limit, burst, expireSecond)))
+			if endpointContent.botblockerEnable {
+				e.Match([]string{method}, path, endpointHandler, config.BotBlockerMiddleware(botBlockCounter), middleware.RateLimiterWithConfig(config.GetRateLimiterConfig(unit, limit, burst, expireSecond)))
+			} else {
+				e.Match([]string{method}, path, endpointHandler, middleware.RateLimiterWithConfig(config.GetRateLimiterConfig(unit, limit, burst, expireSecond)))
+			}
 		} else {
-			e.Match([]string{method}, path, endpointHandler)
+			if endpointContent.botblockerEnable {
+				e.Match([]string{method}, path, endpointHandler, config.BotBlockerMiddleware(botBlockCounter))
+			} else {
+				e.Match([]string{method}, path, endpointHandler)
+			}
 		}
 	}
 	for path, endpointContent := range dynamicEndpoints {
