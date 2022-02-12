@@ -1,8 +1,8 @@
 import Rete from "rete";
 
 export class NumControl extends Rete.Control {
-  static component = ({ value, onChange, title, disabled }) => (
-    <>
+  static component = ({ value, onChange, title, disabled, hidden }) => (
+    <div style={{ display: hidden ? "none" : "block" }}>
       {title && (
         <label style={{ color: "white", display: "block", textAlign: "left" }}>
           {title}
@@ -17,7 +17,7 @@ export class NumControl extends Rete.Control {
         onChange={(e) => onChange(+e.target.value)}
         disabled={disabled}
       />
-    </>
+    </div>
   );
 
   constructor(
@@ -27,7 +27,8 @@ export class NumControl extends Rete.Control {
     readonly = false,
     title = "",
     defalut = 0,
-    disabled = false
+    disabled = false,
+    hidden = false
   ) {
     super(key);
     this.emitter = emitter;
@@ -43,6 +44,7 @@ export class NumControl extends Rete.Control {
       value: initial,
       title,
       disabled,
+      hidden,
       onChange: (v) => {
         this.setValue(v);
         this.emitter.trigger("process");
@@ -50,9 +52,10 @@ export class NumControl extends Rete.Control {
     };
   }
 
-  setValue(val, disabled = false) {
+  setValue(val, disabled = false, hidden = false) {
     this.props.value = val;
     this.props.disabled = disabled;
+    this.props.hidden = hidden;
     this.putData(this.key, val);
     this.putData("output", val);
     this.update();
