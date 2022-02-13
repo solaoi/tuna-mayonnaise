@@ -2,7 +2,7 @@ import Rete from "rete";
 import { TextControl } from "../controls/TextControl";
 import { BooleanControl } from "../controls/BooleanControl";
 import { NumControl } from "../controls/NumControl";
-import { ApiNode } from "../nodes/ApiNode";
+import { DefaultNode } from "../nodes/DefaultNode";
 import { SelectControl } from "../controls/SelectControl";
 
 export class ApiComponent extends Rete.Component {
@@ -10,7 +10,7 @@ export class ApiComponent extends Rete.Component {
 
   constructor(jsonSocket) {
     super("API");
-    this.data.component = ApiNode; // optional
+    this.data.component = DefaultNode; // optional
     this.jsonSocket = jsonSocket;
   }
 

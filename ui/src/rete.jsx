@@ -25,6 +25,7 @@ import { ApiComponent } from "./rete/components/ApiComponent";
 import { MySQLComponent } from "./rete/components/MySQLComponent";
 import { PostgreSQLComponent } from "./rete/components/PostgreSQLComponent";
 import { SQLiteComponent } from "./rete/components/SQLiteComponent";
+import { RequestComponent } from "./rete/components/RequestComponent";
 
 export async function createEditor(container) {
   // 各種Socket定義
@@ -60,6 +61,7 @@ export async function createEditor(container) {
     new MySQLComponent(jsonSocket, sqlSocket),
     new PostgreSQLComponent(jsonSocket, sqlSocket),
     new SQLiteComponent(jsonSocket, sqlSocket),
+    new RequestComponent(jsonSocket),
   ];
 
   const ua = window.navigator.userAgent.toLowerCase();
