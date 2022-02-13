@@ -69,7 +69,7 @@ type staticResponse struct {
 
 type dynamicResponse struct {
 	ContentType    string
-	ContentBuilder func() body
+	ContentBuilder func(request *http.Request) body
 }
 
 type ratelimitConfig struct {
@@ -104,7 +104,7 @@ func isDBNode(name string) bool {
 }
 
 func isJSONNode(name string) bool {
-	return isDBNode(name) || name == "JSON" || name == "API" || name == "JSONManager"
+	return isDBNode(name) || name == "JSON" || name == "API" || name == "JSONManager" || name == "Request"
 }
 
 func isJSONorHTMLNode(name string) bool {
@@ -121,7 +121,7 @@ var reqDBCounter *prometheus.CounterVec
 var botBlockCounter *prometheus.CounterVec
 
 func dynamicEndpointHandler(c echo.Context) error {
-	body := dynamicEndpoints[c.Path()].ContentBuilder()
+	body := dynamicEndpoints[c.Path()].ContentBuilder(c.Request())
 	if !noMetrics {
 		for _, v := range body.APIResponses {
 			if reqAPICounter != nil {
@@ -144,6 +144,8 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 		content = map[string]interface{}{"filename": data["filename"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "JSONManager" {
 		content = map[string]interface{}{"content": data["output"], "functions": data["outputFunctions"]}
+	} else if name == "Request" {
+		content = map[string]interface{}{"type": data["type"]}
 	} else {
 		content = data["output"]
 	}
@@ -163,7 +165,7 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 func setContents(nodes map[string]interface{}, id string, depth int, parent string, contents map[int]map[string]map[string]interface{}, isDynamic *bool) {
 	node := nodes[id].(map[string]interface{})
 	name, content, nexts := findNext(node)
-	if !*isDynamic && (name == "API" || isDBNode(name)) {
+	if !*isDynamic && (name == "API" || isDBNode(name) || name == "Request") {
 		*isDynamic = true
 	}
 	if _, exist := contents[depth]; !exist {
@@ -181,8 +183,8 @@ func setContents(nodes map[string]interface{}, id string, depth int, parent stri
 	}
 }
 
-func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (content body) {
-	return func() (content body) {
+func contentBuilder(contents map[int]map[string]map[string]interface{}) func(request *http.Request) (content body) {
+	return func(request *http.Request) (content body) {
 		var apiResponses []apiResponse
 		c := deepcopy.Copy(contents).(map[int]map[string]map[string]interface{})
 		for i := len(c) - 1; i >= 0; i-- {
@@ -237,6 +239,45 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func() (
 						}
 					}
 					c[i][k]["content"] = res
+				} else if v["name"] == "Request" {
+					content := v["content"].(map[string]interface{})
+					requestType := fmt.Sprintf("%v", content["type"])
+
+					if requestType == "QUERY" {
+						tmp := request.URL.Query()
+						unique := map[string]string{}
+						// first query params duplicated is used.
+						for key, values := range tmp {
+							unique[key] = values[0]
+						}
+						json, err := json.Marshal(unique)
+						if err != nil {
+							return body{http.StatusBadRequest, "", apiResponses}
+						}
+						c[i][k]["content"] = string(json)
+					} else if requestType == "COOKIE" {
+						tmp := request.Cookies()
+						formatted := map[string]string{}
+						for _, cookie := range tmp {
+							formatted[cookie.Name] = cookie.Value
+						}
+						json, err := json.Marshal(formatted)
+						if err != nil {
+							return body{http.StatusBadRequest, "", apiResponses}
+						}
+						c[i][k]["content"] = string(json)
+					} else {
+						byteArray, err := io.ReadAll(request.Body)
+						if err != nil {
+							return body{http.StatusBadRequest, "", apiResponses}
+						}
+						dummy := json.RawMessage{}
+						errJSON := json.Unmarshal(byteArray, &dummy)
+						if errJSON != nil {
+							return body{http.StatusBadRequest, "", apiResponses}
+						}
+						c[i][k]["content"] = string(byteArray)
+					}
 				} else if isDBNode(v["name"].(string)) {
 					dbType := v["name"].(string)
 					content := v["content"].(map[string]interface{})
