@@ -23,26 +23,6 @@ object-assign
  */
 
 /*!
- * Pug
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/*!
- * The buffer module from node.js, for the browser.
- *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
- * @license  MIT
- */
-
-/*!
- * The buffer module from node.js, for the browser.
- *
- * @author   Feross Aboukhadijeh <http://feross.org>
- * @license  MIT
- */
-
-/*!
  * Vue.js v2.5.17
  * (c) 2014-2018 Evan You
  * Released under the MIT License.
@@ -107,8 +87,6 @@ object-assign
 * (c) 2020  
 * Released under the ISC license.
 */
-
-/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /**
  * Prism: Lightweight, robust, elegant syntax highlighting
