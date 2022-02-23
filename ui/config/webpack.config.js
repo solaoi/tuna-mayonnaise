@@ -145,6 +145,7 @@ module.exports = (webpackEnv) => {
 
   return {
     mode: isEnvProduction ? "production" : isEnvDevelopment && "development",
+    externals: { pug: "pug" },
     // Stop compilation early in production
     bail: isEnvProduction,
     // eslint-disable-next-line no-nested-ternary
@@ -599,10 +600,6 @@ module.exports = (webpackEnv) => {
             }),
           },
         },
-      }),
-      new webpack.ContextReplacementPlugin(/\/pug-filters\//, (data) => {
-        delete data.dependencies[0].critical;
-        return data;
       }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
