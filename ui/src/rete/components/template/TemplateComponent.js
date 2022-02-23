@@ -1,5 +1,6 @@
 import Rete from "rete";
-import * as pug from "pug";
+/* eslint import/no-unresolved: 0 */
+import pug from "pug";
 import Handlebars from "handlebars";
 import { TemplateNode } from "../../nodes/TemplateNode";
 import { JsonControl } from "../../controls/JsonControl";

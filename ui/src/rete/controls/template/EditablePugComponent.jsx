@@ -5,7 +5,8 @@ import "prismjs/components/prism-markup";
 import "prismjs/components/prism-markup-templating";
 import "prismjs/components/prism-pug";
 import "prismjs/themes/prism.css";
-import * as pug from "pug";
+/* eslint import/no-unresolved: 0 */
+import pug from "pug";
 import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 

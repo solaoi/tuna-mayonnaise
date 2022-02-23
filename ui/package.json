@@ -17,7 +17,6 @@
     "js-sql-parser": "1.4.1",
     "jsonlint-mod": "1.7.6",
     "prismjs": "1.26.0",
-    "pug": "^3.0.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-modal": "3.14.4",
