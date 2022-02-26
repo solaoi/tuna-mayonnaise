@@ -26,6 +26,7 @@ import { MySQLComponent } from "./rete/components/MySQLComponent";
 import { PostgreSQLComponent } from "./rete/components/PostgreSQLComponent";
 import { SQLiteComponent } from "./rete/components/SQLiteComponent";
 import { RequestComponent } from "./rete/components/RequestComponent";
+import { RedirectEndpointComponent } from "./rete/components/RedirectEndpointComponent";
 
 export async function createEditor(container) {
   // 各種Socket定義
@@ -62,6 +63,7 @@ export async function createEditor(container) {
     new PostgreSQLComponent(jsonSocket, sqlSocket),
     new SQLiteComponent(jsonSocket, sqlSocket),
     new RequestComponent(jsonSocket),
+    new RedirectEndpointComponent(),
   ];
 
   const ua = window.navigator.userAgent.toLowerCase();

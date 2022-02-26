@@ -94,6 +94,10 @@ type dynamicEndpointContent struct {
 	ratelimitConfig
 }
 
+type redirectEndpointContent struct {
+	destinationURL string
+}
+
 var re *regexp.Regexp
 var reIsNum *regexp.Regexp
 var staticEndpoints map[string]staticEndpointContent
@@ -115,6 +119,7 @@ func endpointHandler(c echo.Context) error {
 	return c.Blob(http.StatusOK, staticEndpoints[c.Path()].ContentType, []byte(staticEndpoints[c.Path()].Content))
 }
 
+var redirectEndpoints map[string]redirectEndpointContent
 var dynamicEndpoints map[string]dynamicEndpointContent
 var reqAPICounter *prometheus.CounterVec
 var reqDBCounter *prometheus.CounterVec
@@ -600,6 +605,7 @@ func api(cmd *cobra.Command, args []string) {
 	staticEndpoints = map[string]staticEndpointContent{}
 	dbs = map[string]*sql.DB{}
 	dynamicEndpoints = map[string]dynamicEndpointContent{}
+	redirectEndpoints = map[string]redirectEndpointContent{}
 	bytes, err := os.ReadFile("tuna-mayonnaise.json")
 	if err != nil {
 		log.Fatal(err)
@@ -685,6 +691,13 @@ func api(cmd *cobra.Command, args []string) {
 				log.Fatal(err.Error())
 			}
 			dbs[uniqueKey] = db
+		} else if node["name"] == "RedirectEndpoint" {
+			data := node["data"].(map[string]interface{})
+			path := data["path"].(string)
+			url := data["url"].(string)
+			if data["enabledFlag"].(bool) {
+				redirectEndpoints[path] = redirectEndpointContent{url}
+			}
 		}
 	}
 
@@ -773,6 +786,11 @@ func api(cmd *cobra.Command, args []string) {
 		} else {
 			e.Match([]string{method}, path, dynamicEndpointHandler)
 		}
+	}
+	for path, endpointContent := range redirectEndpoints {
+		e.GET(path, func(c echo.Context) error {
+			return c.Redirect(http.StatusTemporaryRedirect, endpointContent.destinationURL)
+		})
 	}
 
 	// Start server
