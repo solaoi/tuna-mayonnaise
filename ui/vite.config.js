@@ -6,6 +6,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 // https://vitejs.dev/config/
 // eslint-disable-next-line import/no-default-export
 export default defineConfig(({ mode }) => ({
+  base: "./",
   build: {
     rollupOptions: {
       plugins: [
