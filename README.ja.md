@@ -72,7 +72,7 @@ brew upgrade tuna
 ```sh
 # wget または curl でインストール
 ## releasesタブの最新のバージョンを指定してください。
-VERSION=v0.0.8
+VERSION=v0.0.15
 ## 利用OSを指定してください。
 OS=linux_amd64
 ## wget経由の場合
@@ -127,6 +127,7 @@ WEB APIにリクエストし、そのレスポンスを利用できます。
 
 - MySQL
 - PostgreSQL
+- SQLite3
 
 データは、JSON形式で利用できます。
 
@@ -205,6 +206,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
  | [github.com/lib/pq](https://github.com/lib/pq) | MIT License |
+ | [github.com/mattn/go-sqlite3](https://github.com/mattn/go-sqlite3) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
  | [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) | Apache License 2.0 |
  | [github.com/rhysd/go-github-selfupdate](https://github.com/rhysd/go-github-selfupdate) | MIT License |
@@ -228,6 +230,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
  | [react-use](https://www.npmjs.com/package/react-use) | Unlicense License |
+ | [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) | MIT License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
  | [rete-area-plugin](https://www.npmjs.com/package/rete-area-plugin) | ISC |
  | [rete-auto-arrange-plugin](https://www.npmjs.com/package/rete-auto-arrange-plugin) | MIT License |
@@ -243,9 +246,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
 
  | ライブラリ  | ライセンス |
  | :------------- | :------------- |
- | [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser) | MIT License |
- | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
- | [customize-cra-eslint](https://www.npmjs.com/package/customize-cra-eslint) | MIT License |
+ | [@vitejs/plugin-react](https://www.npmjs.com/package/@vitejs/plugin-react) | MIT License |
  | [eslint](https://www.npmjs.com/package/eslint) | MIT License |
  | [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) | MIT License |
  | [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier) | MIT License |
@@ -256,10 +257,11 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [husky](https://www.npmjs.com/package/husky) | MIT License |
  | [lint-staged](https://www.npmjs.com/package/lint-staged) | MIT License |
  | [prettier](https://www.npmjs.com/package/prettier) | MIT License |
- | [react-app-rewired](https://www.npmjs.com/package/react-app-rewired) | MIT License |
- | [react-scripts](https://www.npmjs.com/package/react-scripts) | MIT License |
+ | [rollup-plugin-visualizer](https://www.npmjs.com/package/rollup-plugin-visualizer) | MIT License |
  | [stylelint](https://www.npmjs.com/package/stylelint) | MIT License |
  | [stylelint-config-prettier](https://www.npmjs.com/package/stylelint-config-prettier) | MIT License |
  | [stylelint-config-recommended](https://www.npmjs.com/package/stylelint-config-recommended) | MIT License |
  | [stylelint-order](https://www.npmjs.com/package/stylelint-order) | MIT License |
  | [stylelint-prettier](https://www.npmjs.com/package/stylelint-prettier) | MIT License |
+ | [vite](https://www.npmjs.com/package/vite) | MIT License |
+ | [vite-plugin-externals](https://www.npmjs.com/package/vite-plugin-externals) | MIT License |

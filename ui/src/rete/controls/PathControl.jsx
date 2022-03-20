@@ -1,5 +1,4 @@
 import Rete from "rete";
-import { toast } from "react-toastify";
 
 export class PathControl extends Rete.Control {
   static component = ({ value, onChange, title, placeHolder, warn }) => (
@@ -51,7 +50,9 @@ export class PathControl extends Rete.Control {
           this.props.warn = true;
         } else if (v === "/metrics" || v === "/health") {
           this.props.warn = true;
-          toast.error("this Path is reserved, use another Path.");
+          import("react-toastify").then(({ toast }) =>
+            toast.error("this Path is reserved, use another Path.")
+          );
         } else {
           this.props.warn = false;
         }

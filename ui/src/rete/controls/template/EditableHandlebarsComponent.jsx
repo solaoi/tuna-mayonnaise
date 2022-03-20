@@ -5,8 +5,6 @@ import "prismjs/components/prism-markup";
 import "prismjs/components/prism-markup-templating";
 import "prismjs/components/prism-handlebars";
 import "prismjs/themes/prism.css";
-import Handlebars from "handlebars";
-import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 
 export const EditableHandlebarsComponent = ({ value, onChange }) => {
@@ -15,7 +13,7 @@ export const EditableHandlebarsComponent = ({ value, onChange }) => {
   const [stack, setStack] = useState(null);
   useInterval(() => {
     if (stack !== null) {
-      toast.error(stack);
+      import("react-toastify").then(({ toast }) => toast.error(stack));
       setStack(null);
     }
   }, 10000);
@@ -30,14 +28,16 @@ export const EditableHandlebarsComponent = ({ value, onChange }) => {
         preClassName="line-numbers"
         value={code}
         onValueChange={(c) => {
-          try {
-            Handlebars.precompile(c);
-            setWarn(false);
-            setStack(null);
-          } catch (e) {
-            setStack(e.message);
-            setWarn(true);
-          }
+          import("handlebars")
+            .then((h) => {
+              h.precompile(c);
+              setWarn(false);
+              setStack(null);
+            })
+            .catch((e) => {
+              setStack(e.message);
+              setWarn(true);
+            });
           setCode(c);
           onChange(c);
         }}

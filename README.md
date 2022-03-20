@@ -18,25 +18,33 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node
 <details>
 <summary>CLICK</summary>
 
-- [Why](#why)
-- [Get Started](#get-started)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Tool Features](#tool-features)
-  - [Template Engine](#template-engine)
-  - [API](#api)
-  - [Database](#database)
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-- [UseCases](#usecases)
-  - [1. Serve Static JSON](#1-serve-static-json)
-  - [2. Serve Static HTML](#2-serve-static-html)
-  - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
-  - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Why](#why)
+  - [Get Started](#get-started)
+    - [Install](#install)
+      - [For MacOS (Homebrew)](#for-macos-homebrew)
+      - [For Others (Binary Releases)](#for-others-binary-releases)
+    - [Usage](#usage)
+      - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
+      - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
+  - [Tool Features](#tool-features)
+    - [Template Engine](#template-engine)
+    - [API](#api)
+    - [Database](#database)
+      - [Connection Options](#connection-options)
+        - [TLS / SSL](#tls--ssl)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+  - [UseCases](#usecases)
+    - [1. Serve Static JSON](#1-serve-static-json)
+    - [2. Serve Static HTML](#2-serve-static-html)
+    - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
+    - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -74,7 +82,7 @@ you can download a binary release [here](https://github.com/solaoi/tuna-mayonnai
 ```sh
 # Install with wget or curl
 ## set the latest version on releases.
-VERSION=v0.0.8
+VERSION=v0.0.15
 ## set the OS you use.
 OS=linux
 ## case you use wget
@@ -129,6 +137,7 @@ This tool supports databases below.
 
 - MySQL
 - PostgreSQL
+- SQLite3
 
 You could access the data in JSON format.
 
@@ -208,6 +217,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
  | [github.com/lib/pq](https://github.com/lib/pq) | MIT License |
+ | [github.com/mattn/go-sqlite3](https://github.com/mattn/go-sqlite3) | MIT License |
  | [github.com/mohae/deepcopy](https://github.com/mohae/deepcopy) | MIT License |
  | [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) | Apache License 2.0 |
  | [github.com/rhysd/go-github-selfupdate](https://github.com/rhysd/go-github-selfupdate) | MIT License |
@@ -231,6 +241,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
  | [react-use](https://www.npmjs.com/package/react-use) | Unlicense License |
+ | [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) | MIT License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
  | [rete-area-plugin](https://www.npmjs.com/package/rete-area-plugin) | ISC |
  | [rete-auto-arrange-plugin](https://www.npmjs.com/package/rete-auto-arrange-plugin) | MIT License |
@@ -246,9 +257,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
 
  | Dependency  | License |
  | :------------- | :------------- |
- | [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser) | MIT License |
- | [customize-cra](https://www.npmjs.com/package/customize-cra) | MIT License |
- | [customize-cra-eslint](https://www.npmjs.com/package/customize-cra-eslint) | MIT License |
+ | [@vitejs/plugin-react](https://www.npmjs.com/package/@vitejs/plugin-react) | MIT License |
  | [eslint](https://www.npmjs.com/package/eslint) | MIT License |
  | [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) | MIT License |
  | [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier) | MIT License |
@@ -259,10 +268,11 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [husky](https://www.npmjs.com/package/husky) | MIT License |
  | [lint-staged](https://www.npmjs.com/package/lint-staged) | MIT License |
  | [prettier](https://www.npmjs.com/package/prettier) | MIT License |
- | [react-app-rewired](https://www.npmjs.com/package/react-app-rewired) | MIT License |
- | [react-scripts](https://www.npmjs.com/package/react-scripts) | MIT License |
+ | [rollup-plugin-visualizer](https://www.npmjs.com/package/rollup-plugin-visualizer) | MIT License |
  | [stylelint](https://www.npmjs.com/package/stylelint) | MIT License |
  | [stylelint-config-prettier](https://www.npmjs.com/package/stylelint-config-prettier) | MIT License |
  | [stylelint-config-recommended](https://www.npmjs.com/package/stylelint-config-recommended) | MIT License |
  | [stylelint-order](https://www.npmjs.com/package/stylelint-order) | MIT License |
  | [stylelint-prettier](https://www.npmjs.com/package/stylelint-prettier) | MIT License |
+ | [vite](https://www.npmjs.com/package/vite) | MIT License |
+ | [vite-plugin-externals](https://www.npmjs.com/package/vite-plugin-externals) | MIT License |
