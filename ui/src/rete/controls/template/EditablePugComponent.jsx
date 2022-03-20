@@ -7,7 +7,6 @@ import "prismjs/components/prism-pug";
 import "prismjs/themes/prism.css";
 /* eslint import/no-unresolved: 0 */
 import pug from "pug";
-import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 
 export const EditablePugComponent = ({ value, onChange }) => {
@@ -16,7 +15,7 @@ export const EditablePugComponent = ({ value, onChange }) => {
   const [stack, setStack] = useState(null);
   useInterval(() => {
     if (stack !== null) {
-      toast.error(stack);
+      import("react-toastify").then(({ toast }) => toast.error(stack));
       setStack(null);
     }
   }, 10000);

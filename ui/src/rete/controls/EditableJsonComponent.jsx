@@ -4,7 +4,6 @@ import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-json";
 import "prismjs/themes/prism.css";
 import * as jsonlint from "jsonlint-mod";
-import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 
 export const EditableJsonComponent = ({ value, onChange }) => {
@@ -13,7 +12,7 @@ export const EditableJsonComponent = ({ value, onChange }) => {
   const [stack, setStack] = useState(null);
   useInterval(() => {
     if (stack !== null) {
-      toast.error(stack);
+      import("react-toastify").then(({ toast }) => toast.error(stack));
       setStack(null);
     }
   }, 10000);

@@ -1,6 +1,6 @@
 // ui
 node_modules
-build
+dist
 
 // command
 command/cmd/static/*

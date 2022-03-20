@@ -4,7 +4,6 @@ import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-sql";
 import "prismjs/themes/prism.css";
 import * as parser from "js-sql-parser";
-import { toast } from "react-toastify";
 import { useInterval } from "react-use";
 
 export const EditableSqlComponent = ({ value, onChange }) => {
@@ -13,7 +12,7 @@ export const EditableSqlComponent = ({ value, onChange }) => {
   const [stack, setStack] = useState(null);
   useInterval(() => {
     if (stack !== null) {
-      toast.error(stack);
+      import("react-toastify").then(({ toast }) => toast.error(stack));
       setStack(null);
     }
   }, 10000);

@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime";
 import React from "react";
 import ReactDOM from "react-dom";
 import Modal from "react-modal";
@@ -11,7 +12,7 @@ const App = () => (
     <ToastContainer />
     <img
       className="rightClick"
-      src="right-click.svg"
+      src="/right-click.svg"
       width="200"
       height="200"
       alt="RightClick for Menu"

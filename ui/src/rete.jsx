@@ -10,10 +10,7 @@ import ConnectionPathPlugin from "rete-connection-path-plugin";
 import ConnectionReroutePlugin from "rete-connection-reroute-plugin";
 import AutoArrangePlugin from "rete-auto-arrange-plugin";
 import HistoryPlugin from "rete-history-plugin";
-import { toast } from "react-toastify";
 
-import axios from "axios";
-import { saveAs } from "file-saver";
 import { JsonComponent } from "./rete/components/input/JsonComponent";
 import { SqlComponent } from "./rete/components/input/SqlComponent";
 import { TemplateComponent } from "./rete/components/template/TemplateComponent";
@@ -99,16 +96,28 @@ export async function createEditor(container) {
         editor.trigger("redo");
       },
       Save() {
-        axios
-          .post("/regist", editor.toJSON())
-          .then(() => toast.success("SAVED :)"))
-          .catch(() => toast.error("NOT CONNECTED :("));
+        import("axios").then((client) => {
+          client
+            .post("/regist", editor.toJSON())
+            .then(() =>
+              import("react-toastify").then(({ toast }) =>
+                toast.success("SAVED :)")
+              )
+            )
+            .catch(() =>
+              import("react-toastify").then(({ toast }) =>
+                toast.error("NOT CONNECTED :(")
+              )
+            );
+        });
       },
       Download() {
         const blob = new Blob([JSON.stringify(editor.toJSON())], {
           type: "application/json; charset=utf-8",
         });
-        saveAs(blob, "tuna-mayonnaise.json");
+        import("file-saver").then(({ saveAs }) =>
+          saveAs(blob, "tuna-mayonnaise.json")
+        );
       },
       Debug() {
         // eslint-disable-next-line no-console
@@ -196,17 +205,20 @@ export async function createEditor(container) {
     engine.register(c);
   });
 
-  const data = await axios
-    .get("/tuna-configuration")
-    .then((res) => res.data)
-    .catch(() => {
-      document.getElementsByClassName("rightClick")[0].style.display = "block";
-      return null;
-    });
+  const data = await import("axios").then((client) =>
+    client
+      .get("/tuna-configuration")
+      .then((res) => res.data)
+      .catch(() => {
+        document.getElementsByClassName("rightClick")[0].style.display =
+          "block";
+        return null;
+      })
+  );
 
   if (data !== null) {
     await editor.fromJSON(data);
-    toast.success("RESUMED :)");
+    import("react-toastify").then(({ toast }) => toast.success("RESUMED :)"));
   } else {
     const endpoint = await components[0].createNode();
     endpoint.position = [1000, 200];
