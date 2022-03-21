@@ -12,11 +12,13 @@ import AutoArrangePlugin from "rete-auto-arrange-plugin";
 import HistoryPlugin from "rete-history-plugin";
 
 import { JsonComponent } from "./rete/components/input/JsonComponent";
+import { HtmlComponent } from "./rete/components/input/HtmlComponent";
 import { SqlComponent } from "./rete/components/input/SqlComponent";
 import { TemplateComponent } from "./rete/components/template/TemplateComponent";
 import { HandlebarsComponent } from "./rete/components/template/HandlebarsComponent";
 import { PugComponent } from "./rete/components/template/PugComponent";
 import { EndpointComponent } from "./rete/components/EndpointComponent";
+import { EndpointWithErrorComponent } from "./rete/components/EndpointWithErrorComponent";
 import { JsonManagerComponent } from "./rete/components/JsonManagerComponent";
 import { ApiComponent } from "./rete/components/ApiComponent";
 import { MySQLComponent } from "./rete/components/MySQLComponent";
@@ -29,10 +31,14 @@ export async function createEditor(container) {
   // 各種Socket定義
   // primitive
   const stringSocket = new Rete.Socket("String value");
-
+  const errorSocket = new Rete.Socket("Error value");
   // json
   const jsonSocket = new Rete.Socket("Json value");
   jsonSocket.combineWith(stringSocket);
+  const rawJsonSocket = new Rete.Socket("raw Json value");
+  rawJsonSocket.combineWith(errorSocket);
+  rawJsonSocket.combineWith(jsonSocket);
+  rawJsonSocket.combineWith(stringSocket);
   // template
   const templateSocket = new Rete.Socket("Template value");
   templateSocket.combineWith(stringSocket);
@@ -43,14 +49,20 @@ export async function createEditor(container) {
   // html
   const htmlSocket = new Rete.Socket("HTML value");
   htmlSocket.combineWith(stringSocket);
+  const rawHtmlSocket = new Rete.Socket("HTML Json value");
+  rawHtmlSocket.combineWith(errorSocket);
+  rawHtmlSocket.combineWith(htmlSocket);
+  rawHtmlSocket.combineWith(stringSocket);
   // sql
   const sqlSocket = new Rete.Socket("SQL value");
 
   // 利用可能なコンポーネント一覧
   const components = [
     new EndpointComponent(stringSocket),
+    new EndpointWithErrorComponent(stringSocket, errorSocket),
     new JsonManagerComponent(jsonSocket),
-    new JsonComponent(jsonSocket),
+    new JsonComponent(rawJsonSocket),
+    new HtmlComponent(rawHtmlSocket),
     new TemplateComponent(jsonSocket, templateSocket, htmlSocket),
     new HandlebarsComponent(handlebarsSocket),
     new PugComponent(pugSocket),
