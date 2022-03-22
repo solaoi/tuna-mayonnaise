@@ -30,8 +30,8 @@ jobs:
           node-version: '16.x'
 
       - run: npm ci
-      - run: npm run build
-      - run: mv build/* ../command/cmd/static/
+      - run: npm run vite-build
+      - run: mv dist/* ../command/cmd/static/
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
