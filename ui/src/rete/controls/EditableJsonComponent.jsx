@@ -4,7 +4,7 @@ import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-json";
 import "prismjs/themes/prism.css";
 import * as jsonlint from "jsonlint-mod";
-import { useInterval } from "react-use";
+import useInterval from "use-interval";
 
 export const EditableJsonComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);

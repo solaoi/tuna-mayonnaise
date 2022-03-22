@@ -7,7 +7,7 @@ import "prismjs/components/prism-pug";
 import "prismjs/themes/prism.css";
 /* eslint import/no-unresolved: 0 */
 import pug from "pug";
-import { useInterval } from "react-use";
+import useInterval from "use-interval";
 
 export const EditablePugComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);

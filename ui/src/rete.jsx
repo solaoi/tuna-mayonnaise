@@ -86,6 +86,11 @@ export async function createEditor(container) {
   editor.use(ReactRenderPlugin);
   // Nodeのサブメニュー（削除・複製機能）を追加
   // 及びNode外を右クリックでコンテキストメニューを表示
+  const errorHandlerOnSave = () => {
+    import("react-toastify").then(({ toast }) =>
+      toast.error("NOT CONNECTED :(")
+    );
+  };
   editor.use(ContextMenuPlugin, {
     searchBar: false,
     delay: 100,
@@ -108,20 +113,21 @@ export async function createEditor(container) {
         editor.trigger("redo");
       },
       Save() {
-        import("axios").then((client) => {
-          client
-            .post("/regist", editor.toJSON())
-            .then(() =>
-              import("react-toastify").then(({ toast }) =>
-                toast.success("SAVED :)")
-              )
-            )
-            .catch(() =>
-              import("react-toastify").then(({ toast }) =>
-                toast.error("NOT CONNECTED :(")
-              )
-            );
-        });
+        fetch("/regist", {
+          method: "POST",
+          body: JSON.stringify(editor.toJSON()),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => {
+            res.ok
+              ? import("react-toastify").then(({ toast }) =>
+                  toast.success("SAVED :)")
+                )
+              : errorHandlerOnSave();
+          })
+          .catch(() => errorHandlerOnSave());
       },
       Download() {
         const blob = new Blob([JSON.stringify(editor.toJSON())], {
@@ -217,16 +223,13 @@ export async function createEditor(container) {
     engine.register(c);
   });
 
-  const data = await import("axios").then((client) =>
-    client
-      .get("/tuna-configuration")
-      .then((res) => res.data)
-      .catch(() => {
-        document.getElementsByClassName("rightClick")[0].style.display =
-          "block";
-        return null;
-      })
-  );
+  const errorHandlerOnGetConfig = () => {
+    document.getElementsByClassName("rightClick")[0].style.display = "block";
+    return null;
+  };
+  const data = await fetch("/tuna-configuration")
+    .then((res) => (res.ok ? res.json() : errorHandlerOnGetConfig()))
+    .catch(() => errorHandlerOnGetConfig());
 
   if (data !== null) {
     await editor.fromJSON(data);
