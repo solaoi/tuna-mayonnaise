@@ -217,7 +217,6 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
 
  | ライブラリ  | ライセンス |
  | :------------- | :------------- |
- | [axios](https://www.npmjs.com/package/axios) | MIT License |
  | [file-saver](https://www.npmjs.com/package/file-saver) | MIT License |
  | [handlebars](https://www.npmjs.com/package/handlebars) | MIT License |
  | [js-sql-parser](https://github.com/JavaScriptor/js-sql-parser) | MIT License |

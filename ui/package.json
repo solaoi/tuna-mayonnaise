@@ -10,7 +10,6 @@
     "npm": ">=8.3"
   },
   "dependencies": {
-    "axios": "^0.26.1",
     "file-saver": "^2.0.5",
     "handlebars": "^4.7.7",
     "js-sql-parser": "1.4.1",
