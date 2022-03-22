@@ -4,7 +4,7 @@ import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-sql";
 import "prismjs/themes/prism.css";
 import * as parser from "js-sql-parser";
-import { useInterval } from "react-use";
+import useInterval from "use-interval";
 
 export const EditableSqlComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);

@@ -239,7 +239,6 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [react-modal](https://www.npmjs.com/package/react-modal) | MIT License |
  | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
- | [react-use](https://www.npmjs.com/package/react-use) | Unlicense License |
  | [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) | MIT License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
  | [rete-area-plugin](https://www.npmjs.com/package/rete-area-plugin) | ISC |
@@ -251,6 +250,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [rete-history-plugin](https://www.npmjs.com/package/rete-history-plugin) | MIT License |
  | [rete-minimap-plugin](https://www.npmjs.com/package/rete-minimap-plugin) | MIT License |
  | [rete-react-render-plugin](https://www.npmjs.com/package/rete-react-render-plugin) | ISC |
+ | [use-interval](https://www.npmjs.com/package/use-interval) | MIT License |
 
 ### FRONTEND DEV Dependencies
 

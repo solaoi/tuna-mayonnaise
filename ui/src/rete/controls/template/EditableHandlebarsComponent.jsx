@@ -5,7 +5,7 @@ import "prismjs/components/prism-markup";
 import "prismjs/components/prism-markup-templating";
 import "prismjs/components/prism-handlebars";
 import "prismjs/themes/prism.css";
-import { useInterval } from "react-use";
+import useInterval from "use-interval";
 
 export const EditableHandlebarsComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);
