@@ -12,6 +12,14 @@ body {
 .context-menu .item:hover {
   background-color: rgba(110, 136, 255, 1);
 }
+/* メニュー上のDelete項目 */
+.context-menu .item:first-child {
+  background-color: rgba(255, 0, 80, 0.8);
+}
+/* メニュー上のDelete項目 */
+.context-menu .item:first-child:hover {
+  background-color: rgba(255, 0, 80, 1);
+}
 /* サブメニューを持つコンテクストメニュー */
 .context-menu .item.hasSubitems {
   background-color: rgba(110, 161, 255, 0.8);

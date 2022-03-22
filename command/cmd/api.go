@@ -70,6 +70,8 @@ type staticResponse struct {
 type dynamicResponse struct {
 	ContentType    string
 	ContentBuilder func(request *http.Request) body
+	HasError       bool
+	ErrorContent   string
 }
 
 type ratelimitConfig struct {
@@ -134,6 +136,9 @@ func dynamicEndpointHandler(c echo.Context) error {
 			}
 		}
 	}
+	if dynamicEndpoints[c.Path()].HasError && body.StatusCode != http.StatusOK {
+		return c.Blob(http.StatusOK, dynamicEndpoints[c.Path()].ContentType, []byte(dynamicEndpoints[c.Path()].ErrorContent))
+	}
 	return c.Blob(body.StatusCode, dynamicEndpoints[c.Path()].ContentType, []byte(body.Content))
 }
 
@@ -155,12 +160,21 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 		content = data["output"]
 	}
 	inputs := node["inputs"].(map[string]interface{})
-	for _, v := range inputs {
-		input := v.(map[string]interface{})
+	if name == "EndpointWithError" {
+		input := inputs["content"].(map[string]interface{})
 		connections := input["connections"].([]interface{})
 		for _, v2 := range connections {
 			connection := v2.(map[string]interface{})
 			nexts = append(nexts, fmt.Sprint(connection["node"]))
+		}
+	} else {
+		for _, v := range inputs {
+			input := v.(map[string]interface{})
+			connections := input["connections"].([]interface{})
+			for _, v2 := range connections {
+				connection := v2.(map[string]interface{})
+				nexts = append(nexts, fmt.Sprint(connection["node"]))
+			}
 		}
 	}
 
@@ -580,7 +594,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 						log.Fatal(err)
 					}
 					c[i][k]["content"] = string(json)
-				} else if v["name"] == "Endpoint" {
+				} else if v["name"] == "Endpoint" || v["name"] == "EndpointWithError" {
 					for _, v3 := range c[i+1] {
 						if v3["parent"] == k && isJSONorHTMLNode(v3["name"].(string)) {
 							content := v3["content"].(string)
@@ -617,7 +631,7 @@ func api(cmd *cobra.Command, args []string) {
 	nodes := objmap["nodes"].(map[string]interface{})
 	for _, v := range nodes {
 		node := v.(map[string]interface{})
-		if node["name"] == "Endpoint" {
+		if node["name"] == "Endpoint" || node["name"] == "EndpointWithError" {
 			var contents = map[int]map[string]map[string]interface{}{}
 			isDynamic := false
 			data := node["data"].(map[string]interface{})
@@ -631,6 +645,12 @@ func api(cmd *cobra.Command, args []string) {
 			ratelimitLimit := data["ratelimitLimit"].(float64)
 			ratelimitBurst := data["ratelimitBurst"].(float64)
 			ratelimitExpireSecond := data["ratelimitExpireSecond"].(float64)
+			// with error json/html
+			hasError := node["name"] == "EndpointWithError"
+			errorContent := ""
+			if hasError {
+				errorContent = data["error"].(string)
+			}
 
 			id := fmt.Sprint(node["id"])
 			setContents(nodes, id, 0, "0", contents, &isDynamic)
@@ -645,9 +665,9 @@ func api(cmd *cobra.Command, args []string) {
 					}
 				} else {
 					if ratelimitEnableFlag {
-						dynamicEndpoints[path] = dynamicEndpointContent{method, botblockerEnable, dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
+						dynamicEndpoints[path] = dynamicEndpointContent{method, botblockerEnable, dynamicResponse{contentType, contentBuilder(contents), hasError, errorContent}, ratelimitConfig{true, ratelimitUnit, ratelimitLimit, ratelimitBurst, ratelimitExpireSecond}}
 					} else {
-						dynamicEndpoints[path] = dynamicEndpointContent{method, botblockerEnable, dynamicResponse{contentType, contentBuilder(contents)}, ratelimitConfig{false, "any", 0, 0, 0}}
+						dynamicEndpoints[path] = dynamicEndpointContent{method, botblockerEnable, dynamicResponse{contentType, contentBuilder(contents), hasError, errorContent}, ratelimitConfig{false, "any", 0, 0, 0}}
 					}
 				}
 			}
