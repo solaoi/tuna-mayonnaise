@@ -138,9 +138,8 @@ func dynamicEndpointHandler(c echo.Context) error {
 	}
 	if dynamicEndpoints[c.Path()].HasError && body.StatusCode != http.StatusOK {
 		return c.Blob(http.StatusOK, dynamicEndpoints[c.Path()].ContentType, []byte(dynamicEndpoints[c.Path()].ErrorContent))
-	} else {
-		return c.Blob(body.StatusCode, dynamicEndpoints[c.Path()].ContentType, []byte(body.Content))
 	}
+	return c.Blob(body.StatusCode, dynamicEndpoints[c.Path()].ContentType, []byte(body.Content))
 }
 
 func findNext(node map[string]interface{}) (name string, content interface{}, nexts []string) {
