@@ -72,7 +72,7 @@ brew upgrade tuna
 ```sh
 # wget または curl でインストール
 ## releasesタブの最新のバージョンを指定してください。
-VERSION=v0.0.15
+VERSION=v0.0.16
 ## 利用OSを指定してください。
 OS=linux_amd64
 ## wget経由の場合
@@ -80,7 +80,7 @@ wget https://github.com/solaoi/tuna-mayonnaise/releases/download/$VERSION/tuna_$
 ## curl経由の場合
 curl -LO  https://github.com/solaoi/tuna-mayonnaise/releases/download/$VERSION/tuna_${OS}.tar.gz
 ## 解凍
-tar xvf ./tuna_${OS}.tar.gz
+tar xvf ./tuna_${OS}_amd64.tar.gz
 ## /usr/local/binなどのPATHの通った場所に移動してください。
 mv ./tuna /usr/local/bin/
 
