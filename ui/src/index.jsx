@@ -1,11 +1,11 @@
 import "regenerator-runtime/runtime";
-import React from "react";
-import ReactDOM from "react-dom";
 import Modal from "react-modal";
 import { ToastContainer } from "react-toastify";
-import { createEditor } from "./rete";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles.css";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { createEditor } from "./rete";
 
 const App = () => (
   <div className="App">
@@ -33,4 +33,9 @@ const App = () => (
 
 Modal.setAppElement("#root");
 const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+const root = createRoot(rootElement);
+root.render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);

@@ -69,5 +69,12 @@ export class SQLiteComponent extends Rete.Component {
       .find((n) => n.id === node.id)
       .controls.get("cacheTime")
       .setValue(node.data.cacheTime, !node.data.cached, !node.data.cached);
+
+    const conns = this.editor.nodes
+      .find((n) => n.id === node.id)
+      .getConnections();
+    if (conns.length > 0) {
+      conns.forEach((c) => this.editor.view.connections.get(c).update());
+    }
   }
 }
