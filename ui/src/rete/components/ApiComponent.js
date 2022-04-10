@@ -8,22 +8,25 @@ import { SelectControl } from "../controls/SelectControl";
 export class ApiComponent extends Rete.Component {
   path = ["New"];
 
-  constructor(jsonSocket) {
+  constructor(jsonSocket, dummyJsonSocket) {
     super("API");
     this.data.component = DefaultNode; // optional
     this.jsonSocket = jsonSocket;
+    this.dummyJsonSocket = dummyJsonSocket;
   }
 
   builder(node) {
-    const jsonInput = new Rete.Input(
+    const queryInput = new Rete.Input("query", "Query (JSON)", this.jsonSocket);
+    const dummyJsonInput = new Rete.Input(
       "json",
-      "Dummy Output (JSON)",
-      this.jsonSocket
+      "Output (DummyJSON)",
+      this.dummyJsonSocket
     );
     const out = new Rete.Output("json", "JSON", this.jsonSocket);
 
     return node
-      .addInput(jsonInput)
+      .addInput(queryInput)
+      .addInput(dummyJsonInput)
       .addControl(
         new SelectControl(this.editor, "method", node, false, "Method", [
           "GET",
@@ -67,6 +70,7 @@ export class ApiComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
+    outputs.query = inputs.query.length ? inputs.query[0] : node.data.query;
     outputs.json = inputs.json.length ? inputs.json[0] : node.data.json;
     outputs.url = node.data.url;
     outputs.cached = node.data.cached;

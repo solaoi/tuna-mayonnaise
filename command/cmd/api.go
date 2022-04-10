@@ -110,7 +110,7 @@ func isDBNode(name string) bool {
 }
 
 func isJSONNode(name string) bool {
-	return isDBNode(name) || name == "JSON" || name == "API" || name == "JSONManager" || name == "Request"
+	return isDBNode(name) || name == "JSON" || name == "DummyJSON" || name == "API" || name == "JSONManager" || name == "Request"
 }
 
 func isJSONorHTMLNode(name string) bool {
@@ -213,9 +213,17 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 					url := fmt.Sprintf("%v", content["url"])
 					cached := fmt.Sprintf("%v", content["cached"])
 					method := fmt.Sprintf("%v", content["method"])
+					query := ""
+					for _, v1 := range c[i+1] {
+						if v1["parent"] == k {
+							if v1["name"] != "DummyJSON" {
+								query = v1["content"].(string)
+							}
+						}
+					}
 
 					if cached == "true" {
-						v, ok := gache.Get(url)
+						v, ok := gache.Get(url+query)
 						if ok {
 							apiResponses = append(apiResponses, apiResponse{method, url, "cached"})
 							c[i][k]["content"] = v
@@ -224,6 +232,18 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 					}
 
 					req, _ := http.NewRequest(method, url, nil)
+					if(query != ""){
+						params := request.URL.Query()
+						tmp := map[string]string{}
+						err := json.Unmarshal([]byte(query), &tmp)
+						if err != nil {
+							log.Fatal(err)
+						}
+						for k, v := range tmp {
+							params.Add(k,v)
+						}
+						req.URL.RawQuery = params.Encode()
+					}
 					resp, err := client.Do(req)
 					if err == nil && resp.StatusCode >= 400 {
 						apiResponses = append(apiResponses, apiResponse{method, url, strconv.Itoa(resp.StatusCode)})
@@ -247,13 +267,13 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 					if cached == "true" {
 						cacheTime := fmt.Sprintf("%v", content["cacheTime"])
 						if cacheTime == "" {
-							gache.Set(url, res)
+							gache.Set(url+query, res)
 						} else {
 							cacheTime, err := strconv.Atoi(cacheTime)
 							if err != nil {
-								gache.Set(url, res)
+								log.Fatal(err)
 							} else {
-								gache.SetWithExpire(url, res, time.Second*time.Duration(cacheTime))
+								gache.SetWithExpire(url+query, res, time.Second*time.Duration(cacheTime))
 							}
 						}
 					}
@@ -318,7 +338,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 						if v1["parent"] == k {
 							if v1["name"] == "SQL" {
 								query = v1["content"].(string)
-							} else if v1["name"] == "JSON" {
+							} else if v1["name"] == "DummyJSON" {
 								dummyJSON = v1["content"].(string)
 							}
 						}
