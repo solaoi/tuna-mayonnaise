@@ -130,5 +130,12 @@ export class EndpointWithErrorComponent extends Rete.Component {
           !node.data.ratelimitEnableFlag
         );
     });
+
+    const conns = this.editor.nodes
+      .find((n) => n.id === node.id)
+      .getConnections();
+    if (conns.length > 0) {
+      conns.forEach((c) => this.editor.view.connections.get(c).update());
+    }
   }
 }
