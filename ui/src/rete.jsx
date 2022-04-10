@@ -12,6 +12,7 @@ import AutoArrangePlugin from "rete-auto-arrange-plugin";
 import HistoryPlugin from "rete-history-plugin";
 
 import { JsonComponent } from "./rete/components/input/JsonComponent";
+import { DummyJsonComponent } from "./rete/components/input/DummyJsonComponent";
 import { HtmlComponent } from "./rete/components/input/HtmlComponent";
 import { SqlComponent } from "./rete/components/input/SqlComponent";
 import { TemplateComponent } from "./rete/components/template/TemplateComponent";
@@ -39,6 +40,8 @@ export async function createEditor(container) {
   rawJsonSocket.combineWith(errorSocket);
   rawJsonSocket.combineWith(jsonSocket);
   rawJsonSocket.combineWith(stringSocket);
+  // dummyJson
+  const dummyJsonSocket = new Rete.Socket("DummyJson value");
   // template
   const templateSocket = new Rete.Socket("Template value");
   templateSocket.combineWith(stringSocket);
@@ -62,15 +65,16 @@ export async function createEditor(container) {
     new EndpointWithErrorComponent(stringSocket, errorSocket),
     new JsonManagerComponent(jsonSocket),
     new JsonComponent(rawJsonSocket),
+    new DummyJsonComponent(dummyJsonSocket),
     new HtmlComponent(rawHtmlSocket),
     new TemplateComponent(jsonSocket, templateSocket, htmlSocket),
     new HandlebarsComponent(handlebarsSocket),
     new PugComponent(pugSocket),
     new SqlComponent(sqlSocket),
-    new ApiComponent(jsonSocket),
-    new MySQLComponent(jsonSocket, sqlSocket),
-    new PostgreSQLComponent(jsonSocket, sqlSocket),
-    new SQLiteComponent(jsonSocket, sqlSocket),
+    new ApiComponent(jsonSocket, dummyJsonSocket),
+    new MySQLComponent(jsonSocket, dummyJsonSocket, sqlSocket),
+    new PostgreSQLComponent(jsonSocket, dummyJsonSocket, sqlSocket),
+    new SQLiteComponent(jsonSocket, dummyJsonSocket, sqlSocket),
     new RequestComponent(jsonSocket),
     new RedirectEndpointComponent(),
   ];

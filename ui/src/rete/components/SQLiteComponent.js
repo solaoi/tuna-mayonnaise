@@ -7,25 +7,26 @@ import { SQLiteNode } from "../nodes/SQLiteNode";
 export class SQLiteComponent extends Rete.Component {
   path = ["New"];
 
-  constructor(jsonSocket, sqlSocket) {
+  constructor(jsonSocket, dummyJsonSocket, sqlSocket) {
     super("SQLite");
     this.data.component = SQLiteNode; // optional
+    this.dummyJsonSocket = dummyJsonSocket;
     this.jsonSocket = jsonSocket;
     this.sqlSocket = sqlSocket;
   }
 
   builder(node) {
-    const jsonInput = new Rete.Input(
+    const dummyJsonInput = new Rete.Input(
       "json",
-      "Dummy Output (JSON)",
-      this.jsonSocket
+      "Output (DummyJSON)",
+      this.dummyJsonSocket
     );
     const out = new Rete.Output("json", "JSON", this.jsonSocket);
     const sqlInput = new Rete.Input("sql", "SQL", this.sqlSocket);
 
     return node
       .addInput(sqlInput)
-      .addInput(jsonInput)
+      .addInput(dummyJsonInput)
       .addControl(
         new TextControl(
           this.editor,
