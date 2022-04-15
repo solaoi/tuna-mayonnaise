@@ -8,11 +8,12 @@ import { SelectControl } from "../controls/SelectControl";
 export class ApiComponent extends Rete.Component {
   path = ["New"];
 
-  constructor(jsonSocket, dummyJsonSocket) {
+  constructor(jsonSocket, dummyJsonSocket, urlSocket) {
     super("API");
     this.data.component = DefaultNode; // optional
     this.jsonSocket = jsonSocket;
     this.dummyJsonSocket = dummyJsonSocket;
+    this.urlSocket = urlSocket;
   }
 
   builder(node) {
@@ -22,9 +23,11 @@ export class ApiComponent extends Rete.Component {
       "Output (DummyJSON)",
       this.dummyJsonSocket
     );
+    const urlInput = new Rete.Input("url", "URL", this.urlSocket);
     const out = new Rete.Output("json", "JSON", this.jsonSocket);
 
     return node
+      .addInput(urlInput)
       .addInput(queryInput)
       .addInput(dummyJsonInput)
       .addControl(
@@ -40,11 +43,11 @@ export class ApiComponent extends Rete.Component {
       .addControl(
         new TextControl(
           this.editor,
-          "url",
+          "headers",
           node,
           false,
-          "URL",
-          "https://example.com/bar"
+          "Headers",
+          '{"KEY":"VALUE"}'
         )
       )
       .addControl(
@@ -72,7 +75,8 @@ export class ApiComponent extends Rete.Component {
   worker(node, inputs, outputs) {
     outputs.query = inputs.query.length ? inputs.query[0] : node.data.query;
     outputs.json = inputs.json.length ? inputs.json[0] : node.data.json;
-    outputs.url = node.data.url;
+    outputs.url = inputs.url.length ? inputs.url[0] : node.data.url;
+    outputs.headers = node.data.headers;
     outputs.cached = node.data.cached;
 
     this.editor.nodes

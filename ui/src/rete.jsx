@@ -13,6 +13,8 @@ import HistoryPlugin from "rete-history-plugin";
 
 import { JsonComponent } from "./rete/components/input/JsonComponent";
 import { DummyJsonComponent } from "./rete/components/input/DummyJsonComponent";
+import { UrlComponent } from "./rete/components/input/UrlComponent";
+import { UrlWithPathParamComponent } from "./rete/components/input/UrlWithPathParamComponent";
 import { HtmlComponent } from "./rete/components/input/HtmlComponent";
 import { SqlComponent } from "./rete/components/input/SqlComponent";
 import { TemplateComponent } from "./rete/components/template/TemplateComponent";
@@ -58,6 +60,8 @@ export async function createEditor(container) {
   rawHtmlSocket.combineWith(stringSocket);
   // sql
   const sqlSocket = new Rete.Socket("SQL value");
+  // url
+  const urlSocket = new Rete.Socket("URL value");
 
   // 利用可能なコンポーネント一覧
   const components = [
@@ -66,16 +70,18 @@ export async function createEditor(container) {
     new JsonManagerComponent(jsonSocket),
     new JsonComponent(rawJsonSocket),
     new DummyJsonComponent(dummyJsonSocket),
+    new UrlComponent(urlSocket),
+    new UrlWithPathParamComponent(urlSocket, jsonSocket),
     new HtmlComponent(rawHtmlSocket),
     new TemplateComponent(jsonSocket, templateSocket, htmlSocket),
     new HandlebarsComponent(handlebarsSocket),
     new PugComponent(pugSocket),
     new SqlComponent(sqlSocket),
-    new ApiComponent(jsonSocket, dummyJsonSocket),
+    new ApiComponent(jsonSocket, dummyJsonSocket, urlSocket),
     new MySQLComponent(jsonSocket, dummyJsonSocket, sqlSocket),
     new PostgreSQLComponent(jsonSocket, dummyJsonSocket, sqlSocket),
     new SQLiteComponent(jsonSocket, dummyJsonSocket, sqlSocket),
-    new RequestComponent(jsonSocket),
+    new RequestComponent(jsonSocket, dummyJsonSocket),
     new RedirectEndpointComponent(),
   ];
 
