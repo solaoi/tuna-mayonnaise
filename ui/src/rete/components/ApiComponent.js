@@ -1,5 +1,5 @@
 import Rete from "rete";
-import { TextControl } from "../controls/TextControl";
+import { TextAreaControl } from "../controls/TextAreaControl";
 import { BooleanControl } from "../controls/BooleanControl";
 import { NumControl } from "../controls/NumControl";
 import { DefaultNode } from "../nodes/DefaultNode";
@@ -41,7 +41,7 @@ export class ApiComponent extends Rete.Component {
         ])
       )
       .addControl(
-        new TextControl(
+        new TextAreaControl(
           this.editor,
           "headers",
           node,
