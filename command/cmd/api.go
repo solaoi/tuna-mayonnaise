@@ -292,7 +292,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 					}
 					c[i][k]["content"] = res
 				} else if v["name"] == "URLWithPathParam" {
-					unformattedUrl := v["content"].(string)
+					unformattedURL := v["content"].(string)
 					pathParams := ""
 					for _, v1 := range c[i+1] {
 						if v1["parent"] == k {
@@ -306,10 +306,10 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 							log.Fatal(err)
 						}
 						for k, v := range tmp {
-							unformattedUrl = strings.ReplaceAll(unformattedUrl, ":"+k, v)
+							unformattedURL = strings.ReplaceAll(unformattedURL, ":"+k, v)
 						}
 					}
-					c[i][k]["content"] = unformattedUrl
+					c[i][k]["content"] = unformattedURL
 				} else if v["name"] == "Request" {
 					content := v["content"].(map[string]interface{})
 					requestType := fmt.Sprintf("%v", content["type"])
