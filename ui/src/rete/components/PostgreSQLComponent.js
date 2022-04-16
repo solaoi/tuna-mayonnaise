@@ -19,7 +19,7 @@ export class PostgreSQLComponent extends Rete.Component {
   builder(node) {
     const dummyJsonInput = new Rete.Input(
       "json",
-      "Output (DummyJSON)",
+      "Expected (DummyJSON)",
       this.dummyJsonSocket
     );
     const out = new Rete.Output("json", "JSON", this.jsonSocket);

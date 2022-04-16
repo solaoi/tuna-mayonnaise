@@ -1,20 +1,12 @@
 import Rete from "rete";
 
 export class HTMLControl extends Rete.Control {
-  static component = ({ value, onChange }) => (
+  static component = ({ value }) => (
     <>
       <label style={{ color: "white", display: "block", textAlign: "left" }}>
         Preview
       </label>
-      <textarea
-        value={value}
-        rows={10}
-        ref={(ref) =>
-          ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
-        }
-        onChange={(e) => onChange(String(e.target.value))}
-        disabled
-      />
+      <textarea value={value} rows={10} disabled />
     </>
   );
 
@@ -27,7 +19,6 @@ export class HTMLControl extends Rete.Control {
     this.props = {
       readonly,
       value: "",
-      onChange: () => {},
     };
     node.data.output = "";
   }

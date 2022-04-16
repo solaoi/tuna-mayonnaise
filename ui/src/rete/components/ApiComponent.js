@@ -1,5 +1,5 @@
 import Rete from "rete";
-import { TextControl } from "../controls/TextControl";
+import { TextAreaControl } from "../controls/TextAreaControl";
 import { BooleanControl } from "../controls/BooleanControl";
 import { NumControl } from "../controls/NumControl";
 import { DefaultNode } from "../nodes/DefaultNode";
@@ -8,23 +8,26 @@ import { SelectControl } from "../controls/SelectControl";
 export class ApiComponent extends Rete.Component {
   path = ["New"];
 
-  constructor(jsonSocket, dummyJsonSocket) {
+  constructor(jsonSocket, dummyJsonSocket, urlSocket) {
     super("API");
     this.data.component = DefaultNode; // optional
     this.jsonSocket = jsonSocket;
     this.dummyJsonSocket = dummyJsonSocket;
+    this.urlSocket = urlSocket;
   }
 
   builder(node) {
     const queryInput = new Rete.Input("query", "Query (JSON)", this.jsonSocket);
     const dummyJsonInput = new Rete.Input(
       "json",
-      "Output (DummyJSON)",
+      "Expected (DummyJSON)",
       this.dummyJsonSocket
     );
+    const urlInput = new Rete.Input("url", "URL", this.urlSocket);
     const out = new Rete.Output("json", "JSON", this.jsonSocket);
 
     return node
+      .addInput(urlInput)
       .addInput(queryInput)
       .addInput(dummyJsonInput)
       .addControl(
@@ -38,13 +41,13 @@ export class ApiComponent extends Rete.Component {
         ])
       )
       .addControl(
-        new TextControl(
+        new TextAreaControl(
           this.editor,
-          "url",
+          "headers",
           node,
           false,
-          "URL",
-          "https://example.com/bar"
+          "Headers",
+          '{"KEY":"VALUE"}'
         )
       )
       .addControl(
@@ -72,7 +75,8 @@ export class ApiComponent extends Rete.Component {
   worker(node, inputs, outputs) {
     outputs.query = inputs.query.length ? inputs.query[0] : node.data.query;
     outputs.json = inputs.json.length ? inputs.json[0] : node.data.json;
-    outputs.url = node.data.url;
+    outputs.url = inputs.url.length ? inputs.url[0] : node.data.url;
+    outputs.headers = node.data.headers;
     outputs.cached = node.data.cached;
 
     this.editor.nodes

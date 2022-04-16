@@ -5,22 +5,23 @@ import { SelectControl } from "../controls/SelectControl";
 export class RequestComponent extends Rete.Component {
   path = ["New"];
 
-  constructor(jsonSocket) {
+  constructor(jsonSocket, dummyJsonSocket) {
     super("Request");
     this.data.component = DefaultNode; // optional
     this.jsonSocket = jsonSocket;
+    this.dummyJsonSocket = dummyJsonSocket;
   }
 
   builder(node) {
-    const jsonInput = new Rete.Input(
+    const dummyJsonInput = new Rete.Input(
       "json",
-      "Dummy Output (JSON)",
-      this.jsonSocket
+      "Expected (DummyJSON)",
+      this.dummyJsonSocket
     );
     const out = new Rete.Output("json", "JSON", this.jsonSocket);
 
     return node
-      .addInput(jsonInput)
+      .addInput(dummyJsonInput)
       .addControl(
         new SelectControl(this.editor, "type", node, false, "Type", [
           "QUERY",

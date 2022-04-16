@@ -10,7 +10,7 @@ export class DummyJsonComponent extends Rete.Component {
   }
 
   builder(node) {
-    const out = new Rete.Output("json", "JSON", this.socket);
+    const out = new Rete.Output("json", "DummyJSON", this.socket);
 
     return node
       .addControl(new JsonControl(this.editor, "json", node))
