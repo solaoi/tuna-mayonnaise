@@ -147,7 +147,7 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 	data := node["data"].(map[string]interface{})
 
 	if name == "API" {
-		content = map[string]interface{}{"method": data["method"], "url": data["url"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
+		content = map[string]interface{}{"method": data["method"], "headers": data["headers"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "MySQL" || name == "PostgreSQL" {
 		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "SQLite" {
@@ -210,20 +210,23 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 			for k, v := range c[i] {
 				if v["name"] == "API" {
 					content := v["content"].(map[string]interface{})
-					url := fmt.Sprintf("%v", content["url"])
+					headers := fmt.Sprintf("%v", content["headers"])
 					cached := fmt.Sprintf("%v", content["cached"])
 					method := fmt.Sprintf("%v", content["method"])
+					url := ""
 					query := ""
 					for _, v1 := range c[i+1] {
 						if v1["parent"] == k {
-							if v1["name"] != "DummyJSON" {
+							if v1["name"] == "URL" || v1["name"] == "URLWithPathParam" {
+								url = v1["content"].(string)
+							} else if v1["name"] != "DummyJSON" {
 								query = v1["content"].(string)
 							}
 						}
 					}
 
 					if cached == "true" {
-						v, ok := gache.Get(url+query)
+						v, ok := gache.Get(url + query)
 						if ok {
 							apiResponses = append(apiResponses, apiResponse{method, url, "cached"})
 							c[i][k]["content"] = v
@@ -232,7 +235,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 					}
 
 					req, _ := http.NewRequest(method, url, nil)
-					if(query != ""){
+					if query != "" {
 						params := request.URL.Query()
 						tmp := map[string]string{}
 						err := json.Unmarshal([]byte(query), &tmp)
@@ -240,9 +243,19 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 							log.Fatal(err)
 						}
 						for k, v := range tmp {
-							params.Add(k,v)
+							params.Add(k, v)
 						}
 						req.URL.RawQuery = params.Encode()
+					}
+					if headers != "" {
+						tmp := map[string]string{}
+						err := json.Unmarshal([]byte(headers), &tmp)
+						if err != nil {
+							log.Fatal(err)
+						}
+						for k, v := range tmp {
+							req.Header.Set(k, v)
+						}
 					}
 					resp, err := client.Do(req)
 					if err == nil && resp.StatusCode >= 400 {
@@ -278,6 +291,25 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 						}
 					}
 					c[i][k]["content"] = res
+				} else if v["name"] == "URLWithPathParam" {
+					unformattedUrl := v["content"].(string)
+					pathParams := ""
+					for _, v1 := range c[i+1] {
+						if v1["parent"] == k {
+							pathParams = v1["content"].(string)
+						}
+					}
+					if pathParams != "" {
+						tmp := map[string]string{}
+						err := json.Unmarshal([]byte(pathParams), &tmp)
+						if err != nil {
+							log.Fatal(err)
+						}
+						for k, v := range tmp {
+							unformattedUrl = strings.ReplaceAll(unformattedUrl, ":"+k, v)
+						}
+					}
+					c[i][k]["content"] = unformattedUrl
 				} else if v["name"] == "Request" {
 					content := v["content"].(map[string]interface{})
 					requestType := fmt.Sprintf("%v", content["type"])
