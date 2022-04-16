@@ -20,7 +20,7 @@ export class ApiComponent extends Rete.Component {
     const queryInput = new Rete.Input("query", "Query (JSON)", this.jsonSocket);
     const dummyJsonInput = new Rete.Input(
       "json",
-      "Output (DummyJSON)",
+      "Expected (DummyJSON)",
       this.dummyJsonSocket
     );
     const urlInput = new Rete.Input("url", "URL", this.urlSocket);

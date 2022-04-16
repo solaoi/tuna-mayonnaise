@@ -24,7 +24,7 @@ export class UrlWithPathParamControl extends Rete.Control {
     this.key = key;
     this.component = UrlWithPathParamControl.component;
 
-    const initial = node.data[key] || `https://example.com`;
+    const initial = node.data[key] || `https://example.com/:id`;
 
     node.data[key] = initial;
     node.data.output = initial;
