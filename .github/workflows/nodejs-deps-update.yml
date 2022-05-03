@@ -4,8 +4,6 @@ on:
   schedule:
     - cron: '0 3 * * 3' # 毎週水曜日の正午に実行 ( 12+JST = 3+UTC )
   workflow_dispatch:
-    branches:
-      - main
 
 defaults:
   run:
