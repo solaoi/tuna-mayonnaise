@@ -117,6 +117,21 @@ func isJSONorHTMLNode(name string) bool {
 	return isJSONNode(name) || name == "Template"
 }
 
+func isSQLInjectionParams(value string) bool {
+	regs := [...] *regexp.Regexp {
+		regexp.MustCompile(`(%27)|(')|(--)|(%23)|(#)`),
+		regexp.MustCompile(`((%3D)|(=))[^\n]*((%27)|(')|(--)|(%3B)|(;))`),
+		regexp.MustCompile(`w*((%27)|('))((%6F)|o|(%4F))((%72)|r|(%52))`),
+		regexp.MustCompile(`((%27)|('))union`),
+	}
+	val := strings.ToLower(value)
+	for _, reg := range regs {
+			isSQLInjection := reg.MatchString(val)
+			if isSQLInjection {return true}
+	}
+	return false
+}
+
 func endpointHandler(c echo.Context) error {
 	return c.Blob(http.StatusOK, staticEndpoints[c.Path()].ContentType, []byte(staticEndpoints[c.Path()].Content))
 }
@@ -303,13 +318,42 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 						tmp := map[string]string{}
 						err := json.Unmarshal([]byte(pathParams), &tmp)
 						if err != nil {
-							log.Fatal(err)
+							return body{http.StatusBadRequest, "", []apiResponse{}}
 						}
 						for k, v := range tmp {
 							unformattedURL = strings.ReplaceAll(unformattedURL, ":"+k, v)
 						}
 					}
 					c[i][k]["content"] = unformattedURL
+				} else if v["name"] == "SqlWithPlaceHolder" {
+					unformattedSQL := v["content"].(string)
+					placeHolderParams := ""
+					for _, v1 := range c[i+1] {
+						if v1["parent"] == k {
+							placeHolderParams = v1["content"].(string)
+						}
+					}
+					if placeHolderParams != "" {
+						tmp := map[string]string{}
+						err := json.Unmarshal([]byte(placeHolderParams), &tmp)
+						dbType := "Common"
+						if err != nil {
+							if reqDBCounter != nil {
+								reqDBCounter.WithLabelValues(dbType, err.Error()).Inc()
+							}
+							return body{http.StatusBadRequest, "", []apiResponse{}}
+						}
+						for k, v := range tmp {
+							if (isSQLInjectionParams(v)){
+								if reqDBCounter != nil {
+									reqDBCounter.WithLabelValues(dbType, "Reject SQL Injection: " + v).Inc()
+								}
+								return body{http.StatusBadRequest, "", []apiResponse{}}
+							}
+							unformattedSQL = strings.ReplaceAll(unformattedSQL, "${"+k+"}", v)
+						}
+					}
+					c[i][k]["content"] = unformattedSQL
 				} else if v["name"] == "Request" {
 					content := v["content"].(map[string]interface{})
 					requestType := fmt.Sprintf("%v", content["type"])
@@ -368,7 +412,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 					dummyJSON := ""
 					for _, v1 := range c[i+1] {
 						if v1["parent"] == k {
-							if v1["name"] == "SQL" {
+							if v1["name"] == "SQL" || v1["name"] == "SqlWithPlaceHolder" {
 								query = v1["content"].(string)
 							} else if v1["name"] == "DummyJSON" {
 								dummyJSON = v1["content"].(string)

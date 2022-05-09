@@ -7,17 +7,12 @@ export class EndpointControl extends Rete.Control {
         Preview
       </label>
       {contentType === "text/html; charset=utf-8" ? (
-        <div
-          className="hasScrollbar"
-          style={{
-            backgroundColor: "white",
-            overflowY: "auto",
-            maxHeight: "500px",
-          }}
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{
-            __html: value,
-          }}
+        <iframe
+          style={{ backgroundColor: "white" }}
+          title="preview"
+          srcDoc={value}
+          width={600}
+          height={400}
         />
       ) : (
         <textarea

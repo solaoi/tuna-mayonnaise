@@ -22,7 +22,8 @@ export const EditableSqlComponent = ({ value, onChange }) => {
       value={code}
       onValueChange={(c) => {
         try {
-          parser.parse(c);
+          const replacedForPlaceHolder = c.replaceAll(/\$\{.*?\}/g, "dummy");
+          parser.parse(replacedForPlaceHolder);
           setWarn(false);
           setStack(null);
         } catch (e) {
