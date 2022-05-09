@@ -17,6 +17,7 @@ import { UrlComponent } from "./rete/components/input/UrlComponent";
 import { UrlWithPathParamComponent } from "./rete/components/input/UrlWithPathParamComponent";
 import { HtmlComponent } from "./rete/components/input/HtmlComponent";
 import { SqlComponent } from "./rete/components/input/SqlComponent";
+import { SqlWithPlaceHolderComponent } from "./rete/components/input/SqlWithPlaceHolderComponent";
 import { TemplateComponent } from "./rete/components/template/TemplateComponent";
 import { HandlebarsComponent } from "./rete/components/template/HandlebarsComponent";
 import { PugComponent } from "./rete/components/template/PugComponent";
@@ -77,6 +78,7 @@ export async function createEditor(container) {
     new HandlebarsComponent(handlebarsSocket),
     new PugComponent(pugSocket),
     new SqlComponent(sqlSocket),
+    new SqlWithPlaceHolderComponent(sqlSocket, jsonSocket),
     new ApiComponent(jsonSocket, dummyJsonSocket, urlSocket),
     new MySQLComponent(jsonSocket, dummyJsonSocket, sqlSocket),
     new PostgreSQLComponent(jsonSocket, dummyJsonSocket, sqlSocket),
