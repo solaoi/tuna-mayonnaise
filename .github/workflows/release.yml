@@ -21,6 +21,7 @@ jobs:
 
       - name: OSXCross for CGO Support
         run: |
+          pwd
           mkdir ../../osxcross
           git clone https://github.com/plentico/osxcross-target.git ../../osxcross/target
 
