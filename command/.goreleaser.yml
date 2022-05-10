@@ -6,7 +6,7 @@ before:
     - go mod tidy
 builds:
   - main: .
-    id: uncompressed
+    id: uncompressed-darwin
     binary: tuna
     ldflags:
       - -s -w
@@ -16,18 +16,33 @@ builds:
       - -X github.com/solaoi/tuna-mayonnaise/cmd.commit={{.FullCommit}}
       - -X github.com/solaoi/tuna-mayonnaise/cmd.date={{.Date}}
     env:
-      - CGO_ENABLED=0
+      - CGO_ENABLED=1
+      - CC=/home/runner/work/osxcross/target/bin/o64-clang
+      - CXX=/home/runner/work/osxcross/target/bin/o64-clang++
     goos:
       - darwin
-      - freebsd
-      - netbsd
-      - openbsd
-      - dragonfly
+    goarch:
+      - amd64
+  - main: .
+    id: uncompressed-windows
+    binary: tuna
+    ldflags:
+      - -s -w
+      - -X main.Version={{.Version}}
+      - -X main.Revision={{.ShortCommit}}
+      - -X github.com/solaoi/tuna-mayonnaise/cmd.version={{.Version}}
+      - -X github.com/solaoi/tuna-mayonnaise/cmd.commit={{.FullCommit}}
+      - -X github.com/solaoi/tuna-mayonnaise/cmd.date={{.Date}}
+    env:
+      - CGO_ENABLED=1
+      - CC=x86_64-w64-mingw32-gcc
+      - CXX=x86_64-w64-mingw32-g++
+    goos:
       - windows
     goarch:
       - amd64
   - main: .
-    id: compressed
+    id: compressed-linux
     binary: tuna
     ldflags:
       - -s -w
@@ -37,7 +52,7 @@ builds:
       - -X github.com/solaoi/tuna-mayonnaise/cmd.commit={{.FullCommit}}
       - -X github.com/solaoi/tuna-mayonnaise/cmd.date={{.Date}}
     env:
-      - CGO_ENABLED=0
+      - CGO_ENABLED=1
     goos:
       - linux
     goarch:
