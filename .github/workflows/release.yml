@@ -19,6 +19,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: OSXCross for CGO Support
+        run: |
+          mkdir ../../osxcross
+          git clone https://github.com/plentico/osxcross-target.git ../../osxcross/target
+
       - name: Downgrade libssl
         run: |
           echo 'deb http://security.ubuntu.com/ubuntu bionic-security main' | sudo tee -a /etc/apt/sources.list
@@ -28,11 +33,6 @@ jobs:
       - name: Install compiler for windows
         run: |
           sudo apt install gcc-mingw-w64
-
-      - name: OSXCross for CGO Support
-        run: |
-          mkdir ../../osxcross
-          git clone https://github.com/plentico/osxcross-target.git ../../osxcross/target
 
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -51,7 +51,6 @@ jobs:
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
-          version: v1.7.0
           args: release --rm-dist
           workdir: ./command/
         env:
