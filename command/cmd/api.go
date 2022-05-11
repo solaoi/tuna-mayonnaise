@@ -19,6 +19,7 @@ import (
 	"github.com/eknkc/pug"
 	// valid usage.
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/iancoleman/orderedmap"
 	"github.com/kpango/gache"
 	prom "github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
@@ -31,7 +32,6 @@ import (
 	"github.com/spf13/cobra"
 	// valid usage.
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/iancoleman/orderedmap"
 )
 
 var (
@@ -118,7 +118,7 @@ func isJSONorHTMLNode(name string) bool {
 }
 
 func isSQLInjectionParams(value string) bool {
-	regs := [...] *regexp.Regexp {
+	regs := [...]*regexp.Regexp{
 		regexp.MustCompile(`(%27)|(')|(--)|(%23)|(#)`),
 		regexp.MustCompile(`((%3D)|(=))[^\n]*((%27)|(')|(--)|(%3B)|(;))`),
 		regexp.MustCompile(`w*((%27)|('))((%6F)|o|(%4F))((%72)|r|(%52))`),
@@ -126,8 +126,10 @@ func isSQLInjectionParams(value string) bool {
 	}
 	val := strings.ToLower(value)
 	for _, reg := range regs {
-			isSQLInjection := reg.MatchString(val)
-			if isSQLInjection {return true}
+		isSQLInjection := reg.MatchString(val)
+		if isSQLInjection {
+			return true
+		}
 	}
 	return false
 }
@@ -344,9 +346,9 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 							return body{http.StatusBadRequest, "", []apiResponse{}}
 						}
 						for k, v := range tmp {
-							if (isSQLInjectionParams(v)){
+							if isSQLInjectionParams(v) {
 								if reqDBCounter != nil {
-									reqDBCounter.WithLabelValues(dbType, "Reject SQL Injection: " + v).Inc()
+									reqDBCounter.WithLabelValues(dbType, "Reject SQL Injection: "+v).Inc()
 								}
 								return body{http.StatusBadRequest, "", []apiResponse{}}
 							}
@@ -447,7 +449,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 						log.Fatal(errJSON)
 					}
 					keys := []string{}
-					for _,k := range dummy[0].Keys() {
+					for _, k := range dummy[0].Keys() {
 						keys = append(keys, k)
 					}
 					count := len(keys)
