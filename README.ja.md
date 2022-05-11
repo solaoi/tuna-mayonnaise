@@ -72,7 +72,7 @@ brew upgrade tuna
 ```sh
 # wget または curl でインストール
 ## releasesタブの最新のバージョンを指定してください。
-VERSION=v0.0.19
+VERSION=v0.0.24
 ## 利用OSを指定してください。
 OS=linux_amd64
 ## wget経由の場合
@@ -169,24 +169,6 @@ WEB APIにリクエストし、そのレスポンスを利用できます。
 2. TUNA-Mayonnaise（ツナマヨ）は、ヘルスチェックを `/health` で提供します。
 3. TUNA-Mayonnaise（ツナマヨ）は、Labeled Tab-separated Values ( `LTSV` ) フォーマット形式でログ出力します。
 
-## 活用例
-
-### 1. 静的なJSONを返すサーバー作成
-
-詳しくは[こちら](samples/serve-static-json/README.ja.md)
-
-### 2. 静的なHTMLを返すサーバー作成
-
-詳しくは[こちら](samples/serve-static-html/README.ja.md)
-
-### 3. 外部APIからのレスポンスを元に、動的なJSONを返すサーバー作成
-
-詳しくは[こちら](samples/serve-dynamic-json/README.ja.md)
-
-### 4. 外部APIからのレスポンスを元に、動的なHTMLを返すサーバー作成
-
-詳しくは[こちら](samples/serve-dynamic-html/README.ja.md)
-
 ## 依存関係
 
 TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立ってます。
@@ -202,6 +184,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
  | [github.com/fatih/color](https://github.com/fatih/color) | MIT License |
  | [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) | MPL-2.0 License |
+ | [github.com/iancoleman/orderedmap](https://github.com/iancoleman/orderedmap) | MIT License |
  | [github.com/kpango/gache](https://github.com/kpango/gache) | MIT License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |

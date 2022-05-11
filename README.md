@@ -18,25 +18,33 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node
 <details>
 <summary>CLICK</summary>
 
-- [Why](#why)
-- [Get Started](#get-started)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Tool Features](#tool-features)
-  - [Template Engine](#template-engine)
-  - [API](#api)
-  - [Database](#database)
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-- [UseCases](#usecases)
-  - [1. Serve Static JSON](#1-serve-static-json)
-  - [2. Serve Static HTML](#2-serve-static-html)
-  - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
-  - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Why](#why)
+  - [Get Started](#get-started)
+    - [Install](#install)
+      - [For MacOS (Homebrew)](#for-macos-homebrew)
+      - [For Others (Binary Releases)](#for-others-binary-releases)
+    - [Usage](#usage)
+      - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
+      - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
+  - [Tool Features](#tool-features)
+    - [Template Engine](#template-engine)
+    - [API](#api)
+    - [Database](#database)
+      - [Connection Options](#connection-options)
+        - [TLS / SSL](#tls--ssl)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+  - [UseCases](#usecases)
+    - [1. Serve Static JSON](#1-serve-static-json)
+    - [2. Serve Static HTML](#2-serve-static-html)
+    - [3. Serve Dynamic JSON](#3-serve-dynamic-json)
+    - [4. Serve Dynamic HTML](#4-serve-dynamic-html)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -74,7 +82,7 @@ you can download a binary release [here](https://github.com/solaoi/tuna-mayonnai
 ```sh
 # Install with wget or curl
 ## set the latest version on releases.
-VERSION=v0.0.19
+VERSION=v0.0.24
 ## set the OS you use.
 OS=linux
 ## case you use wget
@@ -172,24 +180,6 @@ List of metrics includes two stats.
 
 3. TUNA-Mayonnaise Logging with Labeled Tab-separated Values ( `LTSV` ) format.
 
-## UseCases
-
-### 1. Serve Static JSON
-
-see [here](samples/serve-static-json/README.md).
-
-### 2. Serve Static HTML
-
-see [here](samples/serve-static-html/README.md).
-
-### 3. Serve Dynamic JSON
-
-see [here](samples/serve-dynamic-json/README.md).
-
-### 4. Serve Dynamic HTML
-
-see [here](samples/serve-dynamic-html/README.md).
-
 ## Dependencies
 
 TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in lexical order:
@@ -205,6 +195,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [github.com/eknkc/pug](https://github.com/eknkc/pug) | MIT License |
  | [github.com/fatih/color](https://github.com/fatih/color) | MIT License |
  | [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) | MPL-2.0 License |
+ | [github.com/iancoleman/orderedmap](https://github.com/iancoleman/orderedmap) | MIT License |
  | [github.com/kpango/gache](https://github.com/kpango/gache) | MIT License |
  | [github.com/labstack/echo](https://github.com/labstack/echo) | MIT License |
  | [github.com/labstack/echo-contrib](https://github.com/labstack/echo-contrib) | MIT License |
