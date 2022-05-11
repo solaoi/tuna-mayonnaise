@@ -11,7 +11,6 @@ import (
 	"os"
 	"reflect"
 	"regexp"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -32,6 +31,7 @@ import (
 	"github.com/spf13/cobra"
 	// valid usage.
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/iancoleman/orderedmap"
 )
 
 var (
@@ -441,16 +441,15 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 						return body{http.StatusInternalServerError, "", []apiResponse{}}
 					}
 					defer rows.Close()
-					dummy := []map[string]json.RawMessage{}
+					dummy := []*orderedmap.OrderedMap{}
 					errJSON := json.Unmarshal([]byte(dummyJSON), &dummy)
 					if errJSON != nil {
 						log.Fatal(errJSON)
 					}
 					keys := []string{}
-					for k := range dummy[0] {
+					for _,k := range dummy[0].Keys() {
 						keys = append(keys, k)
 					}
-					sort.Strings(keys)
 					count := len(keys)
 					results := []map[string]string{}
 					for rows.Next() {
