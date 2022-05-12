@@ -18,20 +18,28 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node
 <details>
 <summary>CLICK</summary>
 
-- [Why](#why)
-- [Get Started](#get-started)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Tool Features](#tool-features)
-  - [Template Engine](#template-engine)
-  - [API](#api)
-  - [Database](#database)
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Why](#why)
+  - [Get Started](#get-started)
+    - [Install](#install)
+      - [For MacOS (Homebrew)](#for-macos-homebrew)
+      - [For Others (Binary Releases)](#for-others-binary-releases)
+    - [Usage](#usage)
+      - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
+      - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
+  - [Tool Features](#tool-features)
+    - [Template Engine](#template-engine)
+    - [API](#api)
+    - [Database](#database)
+      - [Connection Options](#connection-options)
+        - [TLS / SSL](#tls--ssl)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -208,7 +216,7 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
  | [react-modal](https://www.npmjs.com/package/react-modal) | MIT License |
  | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
- | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
+ | [react-hot-toast](https://www.npmjs.com/package/react-hot-toast) | MIT License |
  | [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) | MIT License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
  | [rete-area-plugin](https://www.npmjs.com/package/rete-area-plugin) | ISC |

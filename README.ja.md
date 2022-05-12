@@ -205,7 +205,7 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
  | [react-modal](https://www.npmjs.com/package/react-modal) | MIT License |
  | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
- | [react-toastify](https://www.npmjs.com/package/react-toastify) | MIT License |
+ | [react-hot-toast](https://www.npmjs.com/package/react-hot-toast) | MIT License |
  | [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) | MIT License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
  | [rete-area-plugin](https://www.npmjs.com/package/rete-area-plugin) | ISC |

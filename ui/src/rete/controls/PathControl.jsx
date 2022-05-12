@@ -50,8 +50,8 @@ export class PathControl extends Rete.Control {
           this.props.warn = true;
         } else if (v === "/metrics" || v === "/health") {
           this.props.warn = true;
-          import("react-toastify").then(({ toast }) =>
-            toast.error("this Path is reserved, use another Path.")
+          import("react-hot-toast").then((_) =>
+            _.toast.error("this Path is reserved, use another Path.")
           );
         } else {
           this.props.warn = false;

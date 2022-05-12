@@ -99,9 +99,7 @@ export async function createEditor(container) {
   // Nodeのサブメニュー（削除・複製機能）を追加
   // 及びNode外を右クリックでコンテキストメニューを表示
   const errorHandlerOnSave = () => {
-    import("react-toastify").then(({ toast }) =>
-      toast.error("NOT CONNECTED :(")
-    );
+    import("react-hot-toast").then((_) => _.toast.error("NOT CONNECTED :("));
   };
   editor.use(ContextMenuPlugin, {
     searchBar: false,
@@ -134,8 +132,8 @@ export async function createEditor(container) {
         })
           .then((res) => {
             res.ok
-              ? import("react-toastify").then(({ toast }) =>
-                  toast.success("SAVED :)")
+              ? import("react-hot-toast").then((_) =>
+                  _.toast.success("SAVED :)")
                 )
               : errorHandlerOnSave();
           })
@@ -245,7 +243,7 @@ export async function createEditor(container) {
 
   if (data !== null) {
     await editor.fromJSON(data);
-    import("react-toastify").then(({ toast }) => toast.success("RESUMED :)"));
+    import("react-hot-toast").then((_) => _.toast.success("RESUMED :)"));
   } else {
     const endpoint = await components[0].createNode();
     endpoint.position = [1000, 200];

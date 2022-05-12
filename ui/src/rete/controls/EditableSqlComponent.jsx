@@ -12,7 +12,7 @@ export const EditableSqlComponent = ({ value, onChange }) => {
   const [stack, setStack] = useState(null);
   useInterval(() => {
     if (stack !== null) {
-      import("react-toastify").then(({ toast }) => toast.error(stack));
+      import("react-hot-toast").then((_) => _.toast.error(stack));
       setStack(null);
     }
   }, 10000);
