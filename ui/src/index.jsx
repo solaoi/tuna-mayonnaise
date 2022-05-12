@@ -1,7 +1,6 @@
 import "regenerator-runtime/runtime";
 import Modal from "react-modal";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "react-hot-toast";
 import "./styles.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -9,7 +8,7 @@ import { createEditor } from "./rete";
 
 const App = () => (
   <div className="App">
-    <ToastContainer />
+    <Toaster position="top-right" />
     <img
       className="rightClick"
       src="./right-click.svg"
