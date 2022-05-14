@@ -1,6 +1,7 @@
 project_name: tuna
 env:
   - GO111MODULE=on
+  - CGO_ENABLED=1
 before:
   hooks:
     - go mod tidy
@@ -16,7 +17,6 @@ builds:
       - -X github.com/solaoi/tuna-mayonnaise/cmd.commit={{.FullCommit}}
       - -X github.com/solaoi/tuna-mayonnaise/cmd.date={{.Date}}
     env:
-      - CGO_ENABLED=1
       - CC=/home/runner/work/osxcross/target/bin/o64-clang
       - CXX=/home/runner/work/osxcross/target/bin/o64-clang++
     goos:
@@ -34,7 +34,6 @@ builds:
       - -X github.com/solaoi/tuna-mayonnaise/cmd.commit={{.FullCommit}}
       - -X github.com/solaoi/tuna-mayonnaise/cmd.date={{.Date}}
     env:
-      - CGO_ENABLED=1
       - CC=x86_64-w64-mingw32-gcc
       - CXX=x86_64-w64-mingw32-g++
     goos:
@@ -51,8 +50,9 @@ builds:
       - -X github.com/solaoi/tuna-mayonnaise/cmd.version={{.Tag}}
       - -X github.com/solaoi/tuna-mayonnaise/cmd.commit={{.FullCommit}}
       - -X github.com/solaoi/tuna-mayonnaise/cmd.date={{.Date}}
+      - -linkmode external -extldflags "-static"
     env:
-      - CGO_ENABLED=1
+      - CC=musl-gcc
     goos:
       - linux
     goarch:
