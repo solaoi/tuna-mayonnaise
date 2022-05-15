@@ -7,11 +7,11 @@ import useInterval from "use-interval";
 export const EditablePugComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);
   const [warn, setWarn] = useState(false);
-  const [stack, setStack] = useState(null);
+  const [stack, setStack] = useState("");
   useInterval(() => {
-    if (stack !== null) {
+    if (stack !== "") {
       import("react-hot-toast").then((_) => _.toast.error(stack));
-      setStack(null);
+      setStack("");
     }
   }, 8000);
 
@@ -26,7 +26,7 @@ export const EditablePugComponent = ({ value, onChange }) => {
         try {
           if (c) pug.compile(c);
           setWarn(false);
-          setStack(null);
+          setStack("");
         } catch (e) {
           setStack(e.message);
           setWarn(true);

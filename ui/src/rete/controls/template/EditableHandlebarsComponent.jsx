@@ -5,11 +5,11 @@ import useInterval from "use-interval";
 export const EditableHandlebarsComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);
   const [warn, setWarn] = useState(false);
-  const [stack, setStack] = useState(null);
+  const [stack, setStack] = useState("");
   useInterval(() => {
-    if (stack !== null) {
+    if (stack !== "") {
       import("react-hot-toast").then((_) => _.toast.error(stack));
-      setStack(null);
+      setStack("");
     }
   }, 8000);
 
@@ -25,7 +25,7 @@ export const EditableHandlebarsComponent = ({ value, onChange }) => {
           .then((h) => {
             h.precompile(c);
             setWarn(false);
-            setStack(null);
+            setStack("");
           })
           .catch((e) => {
             setStack(e.message);
