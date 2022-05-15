@@ -13,7 +13,7 @@ declare module 'rete' {
         readonly update: () => void
     }
     export interface NodeEditor {
-        readonly trigger: (string, T?) => void
-        readonly on: (string, handler: () => T) => void
+        readonly trigger: (readonly string, readonly T?) => void
+        readonly on: (readonly string, readonly handler: () => T) => void
     }
 }
