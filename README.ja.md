@@ -195,16 +195,14 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
 
  | ライブラリ  | ライセンス |
  | :------------- | :------------- |
+ | [@monaco-editor/react](https://www.npmjs.com/package/@monaco-editor/react) | MIT License |
  | [file-saver](https://www.npmjs.com/package/file-saver) | MIT License |
  | [handlebars](https://www.npmjs.com/package/handlebars) | MIT License |
  | [js-sql-parser](https://github.com/JavaScriptor/js-sql-parser) | MIT License |
- | [jsonlint-mod](https://github.com/circlecell/jsonlint-mod) | MIT License |
- | [prismjs](https://www.npmjs.com/package/prismjs) | MIT License |
  | [pug](https://www.npmjs.com/package/pug) | MIT License |
  | [react](https://www.npmjs.com/package/react) | MIT License |
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
  | [react-modal](https://www.npmjs.com/package/react-modal) | MIT License |
- | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-hot-toast](https://www.npmjs.com/package/react-hot-toast) | MIT License |
  | [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) | MIT License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
@@ -223,6 +221,10 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
 
  | ライブラリ  | ライセンス |
  | :------------- | :------------- |
+ | [@types/pug](https://www.npmjs.com/package/@types/pug) | MIT License |
+ | [@types/react](https://www.npmjs.com/package/@types/react) | MIT License |
+ | [@types/react-dom](https://www.npmjs.com/package/@types/react-dom) | MIT License |
+ | [@types/react-modal](https://www.npmjs.com/package/@types/react-modal) | MIT License |
  | [@vitejs/plugin-react](https://www.npmjs.com/package/@vitejs/plugin-react) | MIT License |
  | [eslint](https://www.npmjs.com/package/eslint) | MIT License |
  | [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) | MIT License |
@@ -240,5 +242,6 @@ TUNA-Mayonnaise（ツナマヨ）は、多くのOSSによって成り立って�
  | [stylelint-config-recommended](https://www.npmjs.com/package/stylelint-config-recommended) | MIT License |
  | [stylelint-order](https://www.npmjs.com/package/stylelint-order) | MIT License |
  | [stylelint-prettier](https://www.npmjs.com/package/stylelint-prettier) | MIT License |
+ | [typescript](https://www.npmjs.com/package/typescript) | Apache License 2.0 |
  | [vite](https://www.npmjs.com/package/vite) | MIT License |
  | [vite-plugin-externals](https://www.npmjs.com/package/vite-plugin-externals) | MIT License |
