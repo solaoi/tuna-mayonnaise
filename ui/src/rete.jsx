@@ -261,7 +261,11 @@ export async function createEditor(container) {
       // テキスト入力欄のスクロールを有効化
       document.querySelectorAll(".editorTextarea").forEach((area) => {
         area.addEventListener("wheel", (e) => {
-          if (isInputFocused()) {
+          if (
+            isInputFocused() &&
+            area.parentElement !== null &&
+            area.parentElement.parentElement !== null
+          ) {
             area.parentElement.parentElement.scrollTop += e.deltaY;
           }
         });

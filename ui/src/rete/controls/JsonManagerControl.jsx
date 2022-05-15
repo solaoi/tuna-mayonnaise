@@ -318,7 +318,7 @@ export class JsonManagerControl extends Rete.Control {
                 {v.key}
                 <span
                   role="button"
-                  tabIndex="0"
+                  tabIndex={0}
                   className="removeBtn"
                   onClick={onClickCloseBtn}
                   data-key={v.key}

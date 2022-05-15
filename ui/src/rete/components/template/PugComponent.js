@@ -17,7 +17,7 @@ export class PugComponent extends Rete.Component {
       .addOutput(out);
   }
 
-  worker(node, inputs, outputs) {
+  worker(node, _, outputs) {
     outputs.pug = node.data.pug;
   }
 }
