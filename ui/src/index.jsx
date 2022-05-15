@@ -32,6 +32,7 @@ const App = () => (
 
 Modal.setAppElement("#root");
 const rootElement = document.getElementById("root");
+if (rootElement === null) throw Error;
 const root = createRoot(rootElement);
 root.render(
   <StrictMode>

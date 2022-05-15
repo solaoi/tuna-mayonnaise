@@ -53,7 +53,7 @@ export class DbNode extends Node {
                   DB_PASS
                 </label>
                 <textarea
-                  rows="3"
+                  rows={3}
                   placeholder={`set ${pass} when tuna api starting`}
                   value=""
                   disabled

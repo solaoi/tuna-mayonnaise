@@ -8,11 +8,11 @@ import useInterval from "use-interval";
 export const EditableUrlComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);
   const [warn, setWarn] = useState(false);
-  const [stack, setStack] = useState(null);
+  const [stack, setStack] = useState("");
   useInterval(() => {
-    if (stack !== null) {
+    if (stack !== "") {
       import("react-hot-toast").then((_) => _.toast.error(stack));
-      setStack(null);
+      setStack("");
     }
   }, 10000);
 
@@ -22,7 +22,7 @@ export const EditableUrlComponent = ({ value, onChange }) => {
       onValueChange={(c) => {
         if (c.startsWith("https://") || c.startsWith("http://")) {
           setWarn(false);
-          setStack(null);
+          setStack("");
         } else {
           setStack("URL doesn't start with https:// or http://");
           setWarn(true);

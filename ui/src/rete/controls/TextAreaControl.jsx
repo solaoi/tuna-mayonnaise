@@ -15,7 +15,7 @@ export class TextAreaControl extends Rete.Control {
           ref && ref.addEventListener("pointerdown", (e) => e.stopPropagation())
         }
         onChange={(e) => onChange(String(e.target.value))}
-        raws={5}
+        rows={5}
         style={{ height: "100px" }}
       />
     </>

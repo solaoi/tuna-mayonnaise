@@ -17,7 +17,7 @@ export class HandlebarsComponent extends Rete.Component {
       .addOutput(out);
   }
 
-  worker(node, inputs, outputs) {
+  worker(node, _, outputs) {
     outputs.hbs = node.data.hbs;
   }
 }

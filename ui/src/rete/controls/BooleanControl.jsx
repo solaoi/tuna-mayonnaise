@@ -22,7 +22,7 @@ export class BooleanControl extends Rete.Control {
       <div className="switchArea">
         <input
           type="checkbox"
-          id={id}
+          id={`${id}`}
           checked={checked}
           ref={(ref) =>
             ref &&
@@ -30,7 +30,7 @@ export class BooleanControl extends Rete.Control {
           }
           onChange={(e) => onChange(+e.target.checked)}
         />
-        <label htmlFor={id}>
+        <label htmlFor={`${id}`}>
           <span />
         </label>
         <div className="swImg" />
