@@ -18,20 +18,28 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node
 <details>
 <summary>CLICK</summary>
 
-- [Why](#why)
-- [Get Started](#get-started)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Tool Features](#tool-features)
-  - [Template Engine](#template-engine)
-  - [API](#api)
-  - [Database](#database)
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Why](#why)
+  - [Get Started](#get-started)
+    - [Install](#install)
+      - [For MacOS (Homebrew)](#for-macos-homebrew)
+      - [For Others (Binary Releases)](#for-others-binary-releases)
+    - [Usage](#usage)
+      - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
+      - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
+  - [Tool Features](#tool-features)
+    - [Template Engine](#template-engine)
+    - [API](#api)
+    - [Database](#database)
+      - [Connection Options](#connection-options)
+        - [TLS / SSL](#tls--ssl)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -198,16 +206,14 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
 
  | Dependency  | License |
  | :------------- | :------------- |
+ | [@monaco-editor/react](https://www.npmjs.com/package/@monaco-editor/react) | MIT License |
  | [file-saver](https://www.npmjs.com/package/file-saver) | MIT License |
  | [handlebars](https://www.npmjs.com/package/handlebars) | MIT License |
  | [js-sql-parser](https://github.com/JavaScriptor/js-sql-parser) | MIT License |
- | [jsonlint-mod](https://github.com/circlecell/jsonlint-mod) | MIT License |
- | [prismjs](https://www.npmjs.com/package/prismjs) | MIT License |
  | [pug](https://www.npmjs.com/package/pug) | MIT License |
  | [react](https://www.npmjs.com/package/react) | MIT License |
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
  | [react-modal](https://www.npmjs.com/package/react-modal) | MIT License |
- | [react-simple-code-editor](https://www.npmjs.com/package/react-simple-code-editor) | MIT License |
  | [react-hot-toast](https://www.npmjs.com/package/react-hot-toast) | MIT License |
  | [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) | MIT License |
  | [rete](https://www.npmjs.com/package/rete) | MIT License |
@@ -226,6 +232,10 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
 
  | Dependency  | License |
  | :------------- | :------------- |
+ | [@types/pug](https://www.npmjs.com/package/@types/pug) | MIT License |
+ | [@types/react](https://www.npmjs.com/package/@types/react) | MIT License |
+ | [@types/react-dom](https://www.npmjs.com/package/@types/react-dom) | MIT License |
+ | [@types/react-modal](https://www.npmjs.com/package/@types/react-modal) | MIT License |
  | [@vitejs/plugin-react](https://www.npmjs.com/package/@vitejs/plugin-react) | MIT License |
  | [eslint](https://www.npmjs.com/package/eslint) | MIT License |
  | [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) | MIT License |
@@ -243,5 +253,6 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [stylelint-config-recommended](https://www.npmjs.com/package/stylelint-config-recommended) | MIT License |
  | [stylelint-order](https://www.npmjs.com/package/stylelint-order) | MIT License |
  | [stylelint-prettier](https://www.npmjs.com/package/stylelint-prettier) | MIT License |
+ | [typescript](https://www.npmjs.com/package/typescript) | Apache License 2.0 |
  | [vite](https://www.npmjs.com/package/vite) | MIT License |
  | [vite-plugin-externals](https://www.npmjs.com/package/vite-plugin-externals) | MIT License |

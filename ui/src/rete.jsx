@@ -255,26 +255,6 @@ export async function createEditor(container) {
     return true;
   });
 
-  editor.on(
-    "process nodecreated noderemoved connectioncreated connectionremoved",
-    async () => {
-      // テキスト入力欄のスクロールを有効化
-      document.querySelectorAll(".editorTextarea").forEach((area) => {
-        area.addEventListener("wheel", (e) => {
-          if (
-            isInputFocused() &&
-            area.parentElement !== null &&
-            area.parentElement.parentElement !== null
-          ) {
-            area.parentElement.parentElement.scrollTop += e.deltaY;
-          }
-        });
-      });
-      await engine.abort();
-      await engine.process(editor.toJSON());
-    }
-  );
-
   editor.view.resize();
   editor.trigger("process");
   AreaPlugin.zoomAt(editor, editor.nodes);

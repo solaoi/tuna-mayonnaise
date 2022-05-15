@@ -87,24 +87,11 @@ body {
   border-radius: 4px;
   box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
-
-/* 行番号を表示 */
-.line-numbers {
-  counter-reset: line;
+.warningCode .minimap-decorations-layer {
+  background: rgba(255, 0, 80);
 }
-.container_editor_line_number:before {
-  color: var(--vip-grey-60);
-  content: counter(line);
-  counter-increment: line;
-  left: 0;
-  letter-spacing: -1px;
-  opacity: 0.2;
-  pointer-events: none;
-  position: absolute;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.warningCode .monaco-editor div > div > div {
+  background: rgba(255, 0, 80);
 }
 
 /* checkboxのスタイル変更 */

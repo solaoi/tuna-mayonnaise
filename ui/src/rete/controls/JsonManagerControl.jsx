@@ -36,7 +36,7 @@ export class JsonManagerControl extends Rete.Control {
           </p>
           <span
             role="button"
-            tabIndex="0"
+            tabIndex={0}
             className="closeBtn"
             onClick={() => setModalOpen(false)}
           />
@@ -60,7 +60,7 @@ export class JsonManagerControl extends Rete.Control {
           </select>
           <div
             role="button"
-            tabIndex="0"
+            tabIndex={0}
             className="modalAddBtn"
             onClick={onClickAddBtn}
           >
@@ -72,7 +72,7 @@ export class JsonManagerControl extends Rete.Control {
                 {v.func}
                 <span
                   role="button"
-                  tabIndex="0"
+                  tabIndex={0}
                   className="removeBtn"
                   onClick={onClickRemoveBtn}
                   data-idx={idx}
@@ -232,7 +232,7 @@ export class JsonManagerControl extends Rete.Control {
             Functions
             <span
               role="button"
-              tabIndex="0"
+              tabIndex={0}
               className="addBtn"
               onClick={() => setModalOpen(true)}
             />
@@ -251,7 +251,7 @@ export class JsonManagerControl extends Rete.Control {
                     {v.name}
                     <span
                       role="button"
-                      tabIndex="0"
+                      tabIndex={0}
                       className="removeBtn"
                       onClick={onClickRemoveBtn}
                       data-idx={i}

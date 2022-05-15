@@ -1,45 +1,44 @@
 import React, { useState } from "react";
-import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs/components/prism-core";
-import "prismjs/components/prism-sql";
-import "prismjs/themes/prism.css";
+import Editor from "@monaco-editor/react";
 import * as parser from "js-sql-parser";
 import useInterval from "use-interval";
 
 export const EditableSqlComponent = ({ value, onChange }) => {
   const [code, setCode] = useState(value);
   const [warn, setWarn] = useState(false);
-  const [stack, setStack] = useState(null);
+  const [stack, setStack] = useState("");
   useInterval(() => {
-    if (stack !== null) {
+    if (stack !== "") {
       import("react-hot-toast").then((_) => _.toast.error(stack));
-      setStack(null);
+      setStack("");
     }
-  }, 10000);
+  }, 8000);
+  const options = {
+    minimap: { enabled: false },
+  };
 
   return (
     <Editor
+      className={warn ? "warningCode" : ""}
+      height="300px"
+      width="500px"
+      language="sql"
       value={code}
-      onValueChange={(c) => {
+      options={options}
+      onChange={(c) => {
         try {
-          const replacedForPlaceHolder = c.replaceAll(/\$\{.*?\}/g, "dummy");
+          const replacedForPlaceHolder = c
+            ? c.replaceAll(/\$\{.*?\}/g, "dummy")
+            : c;
           parser.parse(replacedForPlaceHolder);
           setWarn(false);
-          setStack(null);
+          setStack("");
         } catch (e) {
           setStack(e.message);
           setWarn(true);
         }
         setCode(c);
         onChange(c);
-      }}
-      highlight={(c) => highlight(c, languages.sql)}
-      padding={10}
-      style={{
-        fontFamily: '"Fira code", "Fira Mono", monospace',
-        fontSize: 12,
-        background: warn ? "rgba(255, 0, 80, 0.7)" : "#FFF",
-        maxWidth: "300px",
       }}
     />
   );

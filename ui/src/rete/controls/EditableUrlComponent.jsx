@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs/components/prism-core";
-import "prismjs/components/prism-uri";
-import "prismjs/themes/prism.css";
+import Editor from "@monaco-editor/react";
+
 import useInterval from "use-interval";
 
 export const EditableUrlComponent = ({ value, onChange }) => {
@@ -14,13 +12,25 @@ export const EditableUrlComponent = ({ value, onChange }) => {
       import("react-hot-toast").then((_) => _.toast.error(stack));
       setStack("");
     }
-  }, 10000);
-
+  }, 8000);
+  const options = {
+    minimap: { enabled: false },
+    scrollbar: {
+      vertical: "hidden",
+      horizontal: "hidden",
+      useShadows: false,
+    },
+  };
   return (
     <Editor
+      className={warn ? "warningCode" : ""}
+      height="1.2em"
+      width="500px"
+      language="uri"
       value={code}
-      onValueChange={(c) => {
-        if (c.startsWith("https://") || c.startsWith("http://")) {
+      options={options}
+      onChange={(c) => {
+        if (c && (c.startsWith("https://") || c.startsWith("http://"))) {
           setWarn(false);
           setStack("");
         } else {
@@ -29,14 +39,6 @@ export const EditableUrlComponent = ({ value, onChange }) => {
         }
         setCode(c);
         onChange(c);
-      }}
-      highlight={(c) => highlight(c, languages.uri)}
-      padding={10}
-      style={{
-        fontFamily: '"Fira code", "Fira Mono", monospace',
-        fontSize: 12,
-        background: warn ? "rgba(255, 0, 80, 0.7)" : "#FFF",
-        maxWidth: "450px",
       }}
     />
   );
