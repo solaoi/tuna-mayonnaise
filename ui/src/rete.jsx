@@ -255,6 +255,14 @@ export async function createEditor(container) {
     return true;
   });
 
+  editor.on(
+    "process nodecreated noderemoved connectioncreated connectionremoved",
+    async () => {
+      await engine.abort();
+      await engine.process(editor.toJSON());
+    }
+  );
+
   editor.view.resize();
   editor.trigger("process");
   AreaPlugin.zoomAt(editor, editor.nodes);
