@@ -1,15 +1,19 @@
 # ![tuna-mayonnaise](https://user-images.githubusercontent.com/46414076/107111813-4b248600-6896-11eb-885d-592b90af0b09.png)
 
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/solaoi/tuna-mayonnaise)
 ![CodeQL](https://github.com/solaoi/tuna-mayonnaise/workflows/CodeQL/badge.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9fe6fc4098164d938804cf1e011c6b3a)](https://app.codacy.com/gh/solaoi/tuna-mayonnaise?utm_source=github.com&utm_medium=referral&utm_content=solaoi/tuna-mayonnaise&utm_campaign=Badge_Grade_Settings)
 ![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/solaoi/tuna-mayonnaise?filename=command%2Fgo.mod)
 [![go deps scan](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml/badge.svg)](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml)
 [![nodejs deps scan](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/nodejs-deps-scan.yml/badge.svg)](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/nodejs-deps-scan.yml)
+[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://open.vscode.dev/solaoi/tuna-mayonnaise)
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 
 TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node-based editor.
+
+![tuna-mayonnaise-demo](https://user-images.githubusercontent.com/46414076/168936743-9af035eb-2cdd-42c8-9d5c-d2fdc2a70f01.gif)
 
 ## Table of Contents
 
@@ -18,20 +22,28 @@ TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node
 <details>
 <summary>CLICK</summary>
 
-- [Why](#why)
-- [Get Started](#get-started)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Tool Features](#tool-features)
-  - [Template Engine](#template-engine)
-  - [API](#api)
-  - [Database](#database)
-- [API Features](#api-features)
-  - [Monitoring](#monitoring)
-- [Dependencies](#dependencies)
-  - [BACKEND Dependencies](#backend-dependencies)
-  - [FRONTEND Dependencies](#frontend-dependencies)
-  - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
+- [!tuna-mayonnaise](#)
+  - [Table of Contents](#table-of-contents)
+  - [Why](#why)
+  - [Get Started](#get-started)
+    - [Install](#install)
+      - [For MacOS (Homebrew)](#for-macos-homebrew)
+      - [For Others (Binary Releases)](#for-others-binary-releases)
+    - [Usage](#usage)
+      - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
+      - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
+  - [Tool Features](#tool-features)
+    - [Template Engine](#template-engine)
+    - [API](#api)
+    - [Database](#database)
+      - [Connection Options](#connection-options)
+        - [TLS / SSL](#tls--ssl)
+  - [API Features](#api-features)
+    - [Monitoring](#monitoring)
+  - [Dependencies](#dependencies)
+    - [BACKEND Dependencies](#backend-dependencies)
+    - [FRONTEND Dependencies](#frontend-dependencies)
+    - [FRONTEND DEV Dependencies](#frontend-dev-dependencies)
 
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -69,7 +81,7 @@ you can download a binary release [here](https://github.com/solaoi/tuna-mayonnai
 ```sh
 # Install with wget or curl
 ## set the latest version on releases.
-VERSION=v0.0.24
+VERSION=v0.0.28
 ## set the OS you use.
 OS=linux
 ## case you use wget
@@ -92,8 +104,6 @@ tuna update
 `tuna tool` command launches a browser like below.
 
 this tool generate a configuration( `tuna-mayonnaise.json` ) with `Save` menu.
-
-![tuna-demo](https://user-images.githubusercontent.com/46414076/128729100-5f37d74d-3df8-4f4b-acac-81334b52dd3d.gif)
 
 [Tool Sample](https://solaoi.github.io/tuna-mayonnaise)
 

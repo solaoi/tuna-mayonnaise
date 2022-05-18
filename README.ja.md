@@ -1,15 +1,19 @@
 # ![tuna-mayonnaise](https://user-images.githubusercontent.com/46414076/107111813-4b248600-6896-11eb-885d-592b90af0b09.png)
 
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/solaoi/tuna-mayonnaise)
 ![CodeQL](https://github.com/solaoi/tuna-mayonnaise/workflows/CodeQL/badge.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9fe6fc4098164d938804cf1e011c6b3a)](https://app.codacy.com/gh/solaoi/tuna-mayonnaise?utm_source=github.com&utm_medium=referral&utm_content=solaoi/tuna-mayonnaise&utm_campaign=Badge_Grade_Settings)
 ![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/solaoi/tuna-mayonnaise?filename=command%2Fgo.mod)
 [![go deps scan](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml/badge.svg)](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/go-deps-scan.yml)
 [![nodejs deps scan](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/nodejs-deps-scan.yml/badge.svg)](https://github.com/solaoi/tuna-mayonnaise/actions/workflows/nodejs-deps-scan.yml)
+[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://open.vscode.dev/solaoi/tuna-mayonnaise)
 
 *他の言語で読む：[English](README.md)、[日本語](README.ja.md)*
 
 TUNA-Mayonnaise（ツナマヨ）は、ノードベースエディタ上でJSONやHTMLを作成し、APIとして提供するコマンドラインツールです。
+
+![tuna-mayonnaise-demo](https://user-images.githubusercontent.com/46414076/168936743-9af035eb-2cdd-42c8-9d5c-d2fdc2a70f01.gif)
 
 ## 目次
 
@@ -67,7 +71,7 @@ brew upgrade tuna
 ```sh
 # wget または curl でインストール
 ## releasesタブの最新のバージョンを指定してください。
-VERSION=v0.0.24
+VERSION=v0.0.28
 ## 利用OSを指定してください。
 OS=linux_amd64
 ## wget経由の場合
@@ -90,8 +94,6 @@ tuna update
 `tuna tool` コマンドを実行すると、下記のようにブラウザが起動します。
 
 このUI上で、 `Save` メニューから設定ファイル（ `tuna-mayonnaise.json` ）を作成できます。
-
-![tuna-demo](https://user-images.githubusercontent.com/46414076/128729100-5f37d74d-3df8-4f4b-acac-81334b52dd3d.gif)
 
 [UI サンプル](https://solaoi.github.io/tuna-mayonnaise)
 
