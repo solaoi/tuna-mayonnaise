@@ -1,4 +1,8 @@
-# ![tuna-mayonnaise](https://user-images.githubusercontent.com/46414076/107111813-4b248600-6896-11eb-885d-592b90af0b09.png)
+<div align="center">
+  <a href="https://github.com/solaoi/tuna-mayonnaise">
+    <img alt="tuna-mayonnaise" src="https://user-images.githubusercontent.com/46414076/107111813-4b248600-6896-11eb-885d-592b90af0b09.png">
+  </a>
+</div>
 
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/solaoi/tuna-mayonnaise)
@@ -11,9 +15,15 @@
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 
-TUNA-Mayonnaise is a CommandLineTool to generate and serve JSON/HTML on the node-based editor.
+<h2 align="center">
+TUNA-Mayonnaise generates and serves JSON/HTML with the node-based editor.
+</h2>
 
-![tuna-mayonnaise-demo](https://user-images.githubusercontent.com/46414076/168936743-9af035eb-2cdd-42c8-9d5c-d2fdc2a70f01.gif)
+<div align="center">
+  <a href="https://github.com/solaoi/tuna-mayonnaise">
+    <img alt="tuna-mayonnaise-demo" src="https://user-images.githubusercontent.com/46414076/168936743-9af035eb-2cdd-42c8-9d5c-d2fdc2a70f01.gif">
+  </a>
+</div>
 
 ## Table of Contents
 
@@ -107,7 +117,7 @@ this tool generate a configuration( `tuna-mayonnaise.json` ) with `Save` menu.
 
 this command use a configuration( `tuna-mayonnaise.json` ) on current directory.
 
-## Tool Features
+## Features
 
 ### Template Engine
 
@@ -154,8 +164,6 @@ You get the response like below.
 
 - MySQL: [tls](https://github.com/go-sql-driver/mysql#tls)
 - PostgreSQL: [sslmode](https://pkg.go.dev/github.com/lib/pq#hdr-Connection_String_Parameters)
-
-## API Features
 
 ### Monitoring
 
