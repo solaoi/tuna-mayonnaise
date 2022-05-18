@@ -1,4 +1,8 @@
-# ![tuna-mayonnaise](https://user-images.githubusercontent.com/46414076/107111813-4b248600-6896-11eb-885d-592b90af0b09.png)
+<div align="center">
+  <a href="https://github.com/solaoi/tuna-mayonnaise">
+    <img alt="tuna-mayonnaise" src="https://user-images.githubusercontent.com/46414076/107111813-4b248600-6896-11eb-885d-592b90af0b09.png">
+  </a>
+</div>
 
 ![license](https://img.shields.io/github/license/solaoi/tuna-mayonnaise)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/solaoi/tuna-mayonnaise)
@@ -11,9 +15,15 @@
 
 *他の言語で読む：[English](README.md)、[日本語](README.ja.md)*
 
-TUNA-Mayonnaise（ツナマヨ）は、ノードベースエディタ上でJSONやHTMLを作成し、APIとして提供するコマンドラインツールです。
+<h2 align="center">
+ツナマヨは、ノードベースエディタ上でJSONやHTMLを作成し、APIとして提供します。
+</h2>
 
-![tuna-mayonnaise-demo](https://user-images.githubusercontent.com/46414076/168936743-9af035eb-2cdd-42c8-9d5c-d2fdc2a70f01.gif)
+<div align="center">
+  <a href="https://github.com/solaoi/tuna-mayonnaise">
+    <img alt="tuna-mayonnaise-demo" src="https://user-images.githubusercontent.com/46414076/168936743-9af035eb-2cdd-42c8-9d5c-d2fdc2a70f01.gif">
+  </a>
+</div>
 
 ## 目次
 
@@ -105,7 +115,7 @@ tuna update
 
 このコマンドは、実行ディレクトリ内の設定ファイル（ `tuna-mayonnaise.json` ）を参照します。
 
-## ツールの機能
+## 機能一覧
 
 ### テンプレートエンジン
 
@@ -152,8 +162,6 @@ WEB APIにリクエストし、そのレスポンスを利用できます。
 
 - MySQL: [tls](https://github.com/go-sql-driver/mysql#tls)
 - PostgreSQL: [sslmode](https://pkg.go.dev/github.com/lib/pq#hdr-Connection_String_Parameters)
-
-## APIの機能
 
 ### 監視
 
