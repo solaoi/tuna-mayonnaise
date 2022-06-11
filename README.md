@@ -32,21 +32,14 @@ TUNA-Mayonnaise generates and serves JSON/HTML with the node-based editor.
 <details>
 <summary>CLICK</summary>
 
-- [Table of Contents](#table-of-contents)
 - [Why](#why)
 - [Get Started](#get-started)
   - [Install](#install)
-    - [For MacOS (Homebrew)](#for-macos-homebrew)
-    - [For Others (Binary Releases)](#for-others-binary-releases)
   - [Usage](#usage)
-    - [1. Launch a tool on your browser](#1-launch-a-tool-on-your-browser)
-    - [2. Serve your JSON/HTML](#2-serve-your-jsonhtml)
 - [Features](#features)
   - [Template Engine](#template-engine)
   - [API](#api)
   - [Database](#database)
-    - [Connection Options](#connection-options)
-      - [TLS / SSL](#tls--ssl)
   - [Monitoring](#monitoring)
 - [Dependencies](#dependencies)
   - [BACKEND Dependencies](#backend-dependencies)
