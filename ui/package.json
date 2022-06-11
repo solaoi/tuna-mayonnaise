@@ -59,7 +59,14 @@
   },
   "overrides": {
     "rete-context-menu-plugin": {
-      "lodash-es": "4.17.21"
+      "lodash-es": "4.17.21",
+      "vue": "2.6.14"
+    },
+    "rete-minimap-plugin": {
+      "vue": "2.6.14"
+    },
+    "rete-connection-reroute-plugin": {
+      "vue": "2.6.14"
     }
   },
   "scripts": {
