@@ -217,7 +217,6 @@ TUNA-Mayonnaise stands on the shoulder of many great open source libraries, in l
  | [@monaco-editor/react](https://www.npmjs.com/package/@monaco-editor/react) | MIT License |
  | [file-saver](https://www.npmjs.com/package/file-saver) | MIT License |
  | [handlebars](https://www.npmjs.com/package/handlebars) | MIT License |
- | [js-sql-parser](https://github.com/JavaScriptor/js-sql-parser) | MIT License |
  | [pug](https://www.npmjs.com/package/pug) | MIT License |
  | [react](https://www.npmjs.com/package/react) | MIT License |
  | [react-dom](https://www.npmjs.com/package/react-dom) | MIT License |
