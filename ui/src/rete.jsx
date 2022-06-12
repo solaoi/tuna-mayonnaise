@@ -25,9 +25,12 @@ import { EndpointComponent } from "./rete/components/EndpointComponent";
 import { EndpointWithErrorComponent } from "./rete/components/EndpointWithErrorComponent";
 import { JsonManagerComponent } from "./rete/components/JsonManagerComponent";
 import { ApiComponent } from "./rete/components/ApiComponent";
-import { QueryMySQLComponent } from "./rete/components/QueryMySQLComponent";
-import { QueryPostgreSQLComponent } from "./rete/components/QueryPostgreSQLComponent";
-import { QuerySQLiteComponent } from "./rete/components/QuerySQLiteComponent";
+import { QueryMySQLComponent } from "./rete/components/sql/query/QueryMySQLComponent";
+import { QueryPostgreSQLComponent } from "./rete/components/sql/query/QueryPostgreSQLComponent";
+import { QuerySQLiteComponent } from "./rete/components/sql/query/QuerySQLiteComponent";
+import { CommandMySQLComponent } from "./rete/components/sql/command/CommandMySQLComponent";
+import { CommandPostgreSQLComponent } from "./rete/components/sql/command/CommandPostgreSQLComponent";
+import { CommandSQLiteComponent } from "./rete/components/sql/command/CommandSQLiteComponent";
 import { RequestComponent } from "./rete/components/RequestComponent";
 import { RedirectEndpointComponent } from "./rete/components/RedirectEndpointComponent";
 
@@ -83,6 +86,9 @@ export async function createEditor(container) {
     new QueryMySQLComponent(jsonSocket, dummyJsonSocket, sqlSocket),
     new QueryPostgreSQLComponent(jsonSocket, dummyJsonSocket, sqlSocket),
     new QuerySQLiteComponent(jsonSocket, dummyJsonSocket, sqlSocket),
+    new CommandMySQLComponent(jsonSocket, sqlSocket),
+    new CommandPostgreSQLComponent(jsonSocket, sqlSocket),
+    new CommandSQLiteComponent(jsonSocket, sqlSocket),
     new RequestComponent(jsonSocket, dummyJsonSocket),
     new RedirectEndpointComponent(),
   ];

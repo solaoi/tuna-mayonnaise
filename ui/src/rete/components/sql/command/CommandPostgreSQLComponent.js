@@ -1,46 +1,39 @@
 import Rete from "rete";
-import { TextControl } from "../controls/TextControl";
-import { SelectControl } from "../controls/SelectControl";
-import { BooleanControl } from "../controls/BooleanControl";
-import { NumControl } from "../controls/NumControl";
-import { DbNode } from "../nodes/DbNode";
+import { TextControl } from "../../../controls/TextControl";
+import { SelectControl } from "../../../controls/SelectControl";
+import { BooleanControl } from "../../../controls/BooleanControl";
+import { NumControl } from "../../../controls/NumControl";
+import { DbNode } from "../../../nodes/DbNode";
 
-export class QueryMySQLComponent extends Rete.Component {
-  path = ["New"];
+export class CommandPostgreSQLComponent extends Rete.Component {
+  path = ["New/SQL"];
 
-  constructor(jsonSocket, dummyJsonSocket, sqlSocket) {
-    super("QueryMySQL");
+  constructor(jsonSocket, sqlSocket) {
+    super("CommandPostgreSQL");
     this.data.component = DbNode; // optional
-    this.dummyJsonSocket = dummyJsonSocket;
     this.jsonSocket = jsonSocket;
     this.sqlSocket = sqlSocket;
   }
 
   builder(node) {
-    const dummyJsonInput = new Rete.Input(
-      "json",
-      "Expected (DummyJSON)",
-      this.dummyJsonSocket
-    );
     const out = new Rete.Output("json", "JSON", this.jsonSocket);
     const sqlInput = new Rete.Input("sql", "SQL", this.sqlSocket);
 
     return node
       .addInput(sqlInput)
-      .addInput(dummyJsonInput)
       .addControl(
-        new SelectControl(this.editor, "tls", node, false, "TLS", [
-          "false",
-          "true",
-          "skip-verify",
-          "preferred",
+        new SelectControl(this.editor, "tls", node, false, "SSLMODE", [
+          "disable",
+          "require",
+          "verify-ca",
+          "verify-full",
         ])
       )
       .addControl(
         new TextControl(this.editor, "host", node, false, "HOST", "127.0.0.1")
       )
       .addControl(
-        new TextControl(this.editor, "port", node, false, "PORT", "3306")
+        new TextControl(this.editor, "port", node, false, "PORT", "5432")
       )
       .addControl(
         new TextControl(this.editor, "user", node, false, "USER", "guest")
@@ -71,9 +64,9 @@ export class QueryMySQLComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    outputs.json = inputs.json.length ? inputs.json[0] : node.data.json;
+    outputs.json = JSON.stringify({ status: "success" });
     outputs.sql = inputs.sql.length ? inputs.sql[0] : node.data.sql;
-    outputs.tls = node.data.tls;
+    outputs.sslmode = node.data.sslmode;
     outputs.host = node.data.host;
     outputs.port = node.data.port;
     outputs.user = node.data.user;

@@ -1,32 +1,25 @@
 import Rete from "rete";
-import { TextControl } from "../controls/TextControl";
-import { BooleanControl } from "../controls/BooleanControl";
-import { NumControl } from "../controls/NumControl";
-import { SQLiteNode } from "../nodes/SQLiteNode";
+import { TextControl } from "../../../controls/TextControl";
+import { BooleanControl } from "../../../controls/BooleanControl";
+import { NumControl } from "../../../controls/NumControl";
+import { SQLiteNode } from "../../../nodes/SQLiteNode";
 
-export class QuerySQLiteComponent extends Rete.Component {
-  path = ["New"];
+export class CommandSQLiteComponent extends Rete.Component {
+  path = ["New/SQL"];
 
-  constructor(jsonSocket, dummyJsonSocket, sqlSocket) {
-    super("QuerySQLite");
+  constructor(jsonSocket, sqlSocket) {
+    super("CommandSQLite");
     this.data.component = SQLiteNode; // optional
-    this.dummyJsonSocket = dummyJsonSocket;
     this.jsonSocket = jsonSocket;
     this.sqlSocket = sqlSocket;
   }
 
   builder(node) {
-    const dummyJsonInput = new Rete.Input(
-      "json",
-      "Expected (DummyJSON)",
-      this.dummyJsonSocket
-    );
     const out = new Rete.Output("json", "JSON", this.jsonSocket);
     const sqlInput = new Rete.Input("sql", "SQL", this.sqlSocket);
 
     return node
       .addInput(sqlInput)
-      .addInput(dummyJsonInput)
       .addControl(
         new TextControl(
           this.editor,
@@ -60,7 +53,7 @@ export class QuerySQLiteComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    outputs.json = inputs.json.length ? inputs.json[0] : node.data.json;
+    outputs.json = JSON.stringify({ status: "success" });
     outputs.sql = inputs.sql.length ? inputs.sql[0] : node.data.sql;
     outputs.filename = node.data.filename;
     outputs.cached = node.data.cached;

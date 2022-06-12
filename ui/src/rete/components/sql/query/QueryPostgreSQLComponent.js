@@ -1,12 +1,12 @@
 import Rete from "rete";
-import { TextControl } from "../controls/TextControl";
-import { SelectControl } from "../controls/SelectControl";
-import { BooleanControl } from "../controls/BooleanControl";
-import { NumControl } from "../controls/NumControl";
-import { DbNode } from "../nodes/DbNode";
+import { TextControl } from "../../../controls/TextControl";
+import { SelectControl } from "../../../controls/SelectControl";
+import { BooleanControl } from "../../../controls/BooleanControl";
+import { NumControl } from "../../../controls/NumControl";
+import { DbNode } from "../../../nodes/DbNode";
 
 export class QueryPostgreSQLComponent extends Rete.Component {
-  path = ["New"];
+  path = ["New/SQL"];
 
   constructor(jsonSocket, dummyJsonSocket, sqlSocket) {
     super("QueryPostgreSQL");

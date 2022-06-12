@@ -2,7 +2,7 @@ import Rete from "rete";
 import { SqlControl } from "../../controls/SqlControl";
 
 export class SqlComponent extends Rete.Component {
-  path = ["New"];
+  path = ["New/SQL"];
 
   constructor(socket) {
     super("SQL");

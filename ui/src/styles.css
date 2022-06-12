@@ -30,7 +30,7 @@ body {
 /* サブメニュー */
 .context-menu .item.hasSubitems .subitems .item {
   background-color: rgba(110, 161, 255, 0.8);
-  width: 160px;
+  width: 180px;
 }
 .context-menu .item.hasSubitems .subitems .item:hover {
   background-color: rgba(110, 161, 255, 1);

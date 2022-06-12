@@ -2,7 +2,7 @@ import Rete from "rete";
 import { SqlControl } from "../../controls/SqlControl";
 
 export class SqlWithPlaceHolderComponent extends Rete.Component {
-  path = ["New"];
+  path = ["New/SQL"];
 
   constructor(socket, jsonSocket) {
     super("SQLWithPlaceHolder");
