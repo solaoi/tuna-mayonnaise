@@ -106,7 +106,7 @@ var staticEndpoints map[string]staticEndpointContent
 var dbs map[string]*sql.DB
 
 func isDBNode(name string) bool {
-	return name == "MySQL" || name == "PostgreSQL" || name == "SQLite"
+	return name == "QueryMySQL" || name == "QueryPostgreSQL" || name == "QuerySQLite"
 }
 
 func isJSONNode(name string) bool {
@@ -165,9 +165,9 @@ func findNext(node map[string]interface{}) (name string, content interface{}, ne
 
 	if name == "API" {
 		content = map[string]interface{}{"method": data["method"], "headers": data["headers"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
-	} else if name == "MySQL" || name == "PostgreSQL" {
+	} else if name == "QueryMySQL" || name == "QueryPostgreSQL" {
 		content = map[string]interface{}{"host": data["host"], "port": data["port"], "user": data["user"], "db": data["db"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
-	} else if name == "SQLite" {
+	} else if name == "QuerySQLite" {
 		content = map[string]interface{}{"filename": data["filename"], "cached": data["cached"], "cacheTime": data["cacheTime"]}
 	} else if name == "JSONManager" {
 		content = map[string]interface{}{"content": data["output"], "functions": data["outputFunctions"]}
@@ -327,7 +327,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 						}
 					}
 					c[i][k]["content"] = unformattedURL
-				} else if v["name"] == "SqlWithPlaceHolder" {
+				} else if v["name"] == "SQLWithPlaceHolder" {
 					unformattedSQL := v["content"].(string)
 					placeHolderParams := ""
 					for _, v1 := range c[i+1] {
@@ -399,7 +399,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 					dbType := v["name"].(string)
 					content := v["content"].(map[string]interface{})
 					var uniqueKey string
-					if dbType == "MySQL" || dbType == "PostgreSQL" {
+					if dbType == "QueryMySQL" || dbType == "QueryPostgreSQL" {
 						user := fmt.Sprintf("%v", content["user"])
 						host := fmt.Sprintf("%v", content["host"])
 						port := fmt.Sprintf("%v", content["port"])
@@ -414,7 +414,7 @@ func contentBuilder(contents map[int]map[string]map[string]interface{}) func(req
 					dummyJSON := ""
 					for _, v1 := range c[i+1] {
 						if v1["parent"] == k {
-							if v1["name"] == "SQL" || v1["name"] == "SqlWithPlaceHolder" {
+							if v1["name"] == "SQL" || v1["name"] == "SQLWithPlaceHolder" {
 								query = v1["content"].(string)
 							} else if v1["name"] == "DummyJSON" {
 								dummyJSON = v1["content"].(string)
@@ -768,7 +768,7 @@ func api(cmd *cobra.Command, args []string) {
 					}
 				}
 			}
-		} else if node["name"] == "MySQL" || node["name"] == "PostgreSQL" {
+		} else if node["name"] == "QueryMySQL" || node["name"] == "QueryPostgreSQL" {
 			data := node["data"].(map[string]interface{})
 			user := data["user"].(string)
 			host := data["host"].(string)
@@ -786,7 +786,7 @@ func api(cmd *cobra.Command, args []string) {
 			}
 			var db *sql.DB
 			var err error
-			if node["name"] == "MySQL" {
+			if node["name"] == "QueryMySQL" {
 				tls := data["tls"].(string)
 				dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?tls=%s", user, pass, host, port, dbName, tls)
 				db, err = sql.Open("mysql", dsn)
@@ -799,7 +799,7 @@ func api(cmd *cobra.Command, args []string) {
 				log.Fatal(err.Error())
 			}
 			dbs[uniqueKey] = db
-		} else if node["name"] == "SQLite" {
+		} else if node["name"] == "QuerySQLite" {
 			data := node["data"].(map[string]interface{})
 			filename := data["filename"].(string)
 			uniqueKey := filename

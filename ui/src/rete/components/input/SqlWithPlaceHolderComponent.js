@@ -5,7 +5,7 @@ export class SqlWithPlaceHolderComponent extends Rete.Component {
   path = ["New"];
 
   constructor(socket, jsonSocket) {
-    super("SqlWithPlaceHolder");
+    super("SQLWithPlaceHolder");
     this.socket = socket;
     this.jsonSocket = jsonSocket;
   }

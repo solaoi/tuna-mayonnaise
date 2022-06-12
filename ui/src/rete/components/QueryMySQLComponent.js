@@ -5,11 +5,11 @@ import { BooleanControl } from "../controls/BooleanControl";
 import { NumControl } from "../controls/NumControl";
 import { DbNode } from "../nodes/DbNode";
 
-export class PostgreSQLComponent extends Rete.Component {
+export class QueryMySQLComponent extends Rete.Component {
   path = ["New"];
 
   constructor(jsonSocket, dummyJsonSocket, sqlSocket) {
-    super("PostgreSQL");
+    super("QueryMySQL");
     this.data.component = DbNode; // optional
     this.dummyJsonSocket = dummyJsonSocket;
     this.jsonSocket = jsonSocket;
@@ -29,18 +29,18 @@ export class PostgreSQLComponent extends Rete.Component {
       .addInput(sqlInput)
       .addInput(dummyJsonInput)
       .addControl(
-        new SelectControl(this.editor, "tls", node, false, "SSLMODE", [
-          "disable",
-          "require",
-          "verify-ca",
-          "verify-full",
+        new SelectControl(this.editor, "tls", node, false, "TLS", [
+          "false",
+          "true",
+          "skip-verify",
+          "preferred",
         ])
       )
       .addControl(
         new TextControl(this.editor, "host", node, false, "HOST", "127.0.0.1")
       )
       .addControl(
-        new TextControl(this.editor, "port", node, false, "PORT", "5432")
+        new TextControl(this.editor, "port", node, false, "PORT", "3306")
       )
       .addControl(
         new TextControl(this.editor, "user", node, false, "USER", "guest")
@@ -73,7 +73,7 @@ export class PostgreSQLComponent extends Rete.Component {
   worker(node, inputs, outputs) {
     outputs.json = inputs.json.length ? inputs.json[0] : node.data.json;
     outputs.sql = inputs.sql.length ? inputs.sql[0] : node.data.sql;
-    outputs.sslmode = node.data.sslmode;
+    outputs.tls = node.data.tls;
     outputs.host = node.data.host;
     outputs.port = node.data.port;
     outputs.user = node.data.user;

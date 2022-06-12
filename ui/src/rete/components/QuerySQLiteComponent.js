@@ -4,11 +4,11 @@ import { BooleanControl } from "../controls/BooleanControl";
 import { NumControl } from "../controls/NumControl";
 import { SQLiteNode } from "../nodes/SQLiteNode";
 
-export class SQLiteComponent extends Rete.Component {
+export class QuerySQLiteComponent extends Rete.Component {
   path = ["New"];
 
   constructor(jsonSocket, dummyJsonSocket, sqlSocket) {
-    super("SQLite");
+    super("QuerySQLite");
     this.data.component = SQLiteNode; // optional
     this.dummyJsonSocket = dummyJsonSocket;
     this.jsonSocket = jsonSocket;
